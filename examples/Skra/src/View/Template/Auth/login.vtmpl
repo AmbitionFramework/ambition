@@ -1,0 +1,18 @@
+@parameters( Form.Login login_form )
+@using Ambition.Form
+@process( "Common.header", "Login", false, "" )
+<div id="wikicontent">
+@if ( login_form.get_form_errors().size > 0 ) {
+	<div>
+@	foreach ( string error in login_form.get_form_errors() ) {
+		@{error}
+@	}
+	</div>
+@}
+<form method="post">
+	@{login_form.render_field( "username", new TextInput() )}
+	@{login_form.render_field( "password", new PasswordInput() )}
+	@{login_form.render_field( "login_button", new SubmitButton() )}
+</form>
+</div>
+@process("Common.footer")

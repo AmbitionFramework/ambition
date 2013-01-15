@@ -1,0 +1,7 @@
+@parameters( string node )
+@foreach ( string node_element in node.split("/") ) {
+@	if ( node_element != "Home" ) {
+	&gt;
+	<a href="/wiki/@{node.substring( 0, node.index_of(node_element) + node_element.length )}">@{node_element}</a>
+@	}
+@}

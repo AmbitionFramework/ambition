@@ -1,0 +1,5 @@
+@if ( state.has_user ) {
+		Logged in as <b>@{state.user.username}</b> | <a href="/auth/logout">Log out</a>
+@} else {
+		<a href="/auth/login">Log in</a>
+@}

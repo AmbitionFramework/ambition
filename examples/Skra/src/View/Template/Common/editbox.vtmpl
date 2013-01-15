@@ -1,0 +1,7 @@
+@parameters( bool exists, string node )
+@if ( state.has_user ) {
+		<a href="/wiki/@{node}/edit">Edit</a>
+@}
+@if ( exists == true ) {
+		<a href="/wiki/@{node}/history">History</a>
+@}

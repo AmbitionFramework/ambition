@@ -1,0 +1,11 @@
+{
+	"version": 1,
+	"name": "engine-scgi",
+	"config": [
+		"# Uncomment below to enable the SCGI engine.",
+		"# engine = SCGI"
+	],
+	"appends": [
+		"src/CMakeLists.txt"
+	]
+}

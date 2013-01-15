@@ -1,0 +1,7 @@
+/build
+*.c
+Makefile
+/*.pc
+doc/valadoc
+*.o
+*.lo

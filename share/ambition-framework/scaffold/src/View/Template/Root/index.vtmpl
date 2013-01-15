@@ -1,0 +1,54 @@
+@parameters( string application_name, HashMap<string,string> headers )
+@using Gee
+<html>
+<head>
+	<title>@{application_name} Test</title>
+	<style type="text/css">
+		body { background-color: #bfbfbc; font-family: verdana; font-size: 12px }
+		h1 { text-align: center; padding: 20px !important; margin: 0; }
+		h2 { margin: 0 0 8px 0; padding: 0;}
+		table { border: 1px solid #ddd; width: 622px; table-layout:fixed; border-collapse: collapse; }
+		td,th { border: 1px solid #ddd; padding: 8px; font-size: 12px; word-wrap:break-word }
+		th { text-align: left; font-weight: bold }
+		.box { margin: 20px auto; width: 640px; padding: 8px; background-color: #fff; border: 2px solid #888; }
+		#param_box { display: none; padding-top: 8px }
+		#footer { font-size: small; color: #333; margin: 0; padding: 5px 10%; border-top: 1px solid #888; text-align: right; }
+	</style>
+</head>
+<body>
+	<div class="box">
+		<h1>Welcome to @{application_name}</h1>
+	</div>
+	<div class="box">
+		<p>
+			Welcome to your new application using the Ambition framework for Vala!
+		</p>
+		<p>
+			You will find the controller for this page in src/Controller/Root.vala,
+			and the supporting template in src/View/Template/index.vtmpl. Have fun!
+		</p>
+	</div>
+	<div class="box">
+		<div style="" onclick="document.getElementById('param_box').style.display='block'">
+			<b>Show Environment</b>
+		</div>
+		<div id="param_box">
+			<table>
+				<tr>
+					<th>Header</th>
+					<th>Value</th>
+				</tr>
+@foreach( string header in headers.keys ) {
+				<tr>
+					<td>@{header}</td>
+					<td>@{headers.get(header)}</td>
+				</tr>
+@}
+			</table>
+		</div>
+	</div>
+	<div id="footer">
+		rendered in @{"%0.4f".printf( state.elapsed_ms() )} ms with Ambition.
+	</div>
+</body>
+</html>

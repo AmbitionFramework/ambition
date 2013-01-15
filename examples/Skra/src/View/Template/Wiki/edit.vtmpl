@@ -1,0 +1,39 @@
+@parameters( string node, string content, string rendered )
+@process( 'Common.header', node, false, node )
+<div id="wikicontent">
+<h1>Editing @{node}</h1>
+<div id="edit_container">
+	<div id="edit_pane">
+		<form method="post">
+			<textarea id="edit_textarea" name="edit">@{content}</textarea>
+			<div id="edit_buttons">
+				<button name="fa" type="submit">Save</button>
+				<button name="fa" onclick="doLoad(); return false;">Preview</button>
+				<button name="fa" onclick="document.location.href="/wiki/@{node}"; return false;">Cancel</button>
+			</div>
+			</div>
+		</form>
+	</div>
+	<div id="preview_pane">
+		<div id="preview_area">
+		@{rendered}
+		</div>
+	</div>
+	<div id="clr"></div>
+</div>
+</div>
+<script type="text/javascript">
+	$("#edit_textarea").keypress(function(e) {
+	    if (e.keyCode == 13) {
+	    	doLoad();
+	    }
+	});
+	function doLoad() {
+        $("#preview_area").load(
+        	"/wiki/@{node}/preview",
+        	{ edit: $("#edit_textarea").val() }
+        );
+	}
+	$("#edit_textarea").focus();
+</script>
+@process("Common.footer")

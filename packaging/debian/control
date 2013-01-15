@@ -1,0 +1,15 @@
+Source: ambition
+Section: devel
+Priority: extra
+Maintainer: Nicholas Melnick <nick@ambitionframework.org>
+Build-Depends: debhelper (>= 8.0.0), valac-0.14, libglib2.0-dev, libsoup2.4-dev, libgee-dev, gcc, make, almanna-0.1
+Standards-Version: 3.9.3
+Homepage: http://www.abstractwankery.com
+#Vcs-Git: git://git.debian.org/collab-maint/ambition.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/ambition.git;a=summary
+
+Package: ambition-0.1
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Ambition Framework, a full MVC framework for GObject/Vala.
+ Ambition Framework, a full MVC framework for GObject/Vala.

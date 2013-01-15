@@ -1,0 +1,77 @@
+body { background-color: #888; font-family: verdana; font-size: 12px; margin: 0; padding: 0 }
+a { color: #111; }
+#header {
+	background-color: #eee;
+	font-size: 22px;
+	font-weight: bold;
+	padding: 12px;
+	margin: 0;
+}
+#breadcrumbs {
+	background-color: #ddd;
+	padding: 6px 12px;
+	margin: 0;
+}
+#wikicontent {
+	background-color: #fff;
+	-moz-box-shadow: inset 0px 7px 7px -7px #aaa;
+	-webkit-box-shadow: inset 0px 7px 7px -7px #aaa;
+	box-shadow: inset 0px 8px 7px -7px #aaa;
+	padding: 12px;
+}
+#footer {
+	-moz-box-shadow: inset 0px 12px 7px -7px #222;
+	-webkit-box-shadow: inset 0px 12px 7px -7px #222;
+	box-shadow: inset 0px 8px 12px -7px #222;
+	min-height: 25px;
+}
+#loginbox {
+	float: right;
+	font-size: 12px;
+	font-weight: normal;
+}
+#node_options {
+	float: right;
+	margin: 0;
+}
+#clr {
+	float: clear;
+	clear: both;
+}
+h1 {
+	margin-top: 0;
+}
+#edit_pane {
+	float: left;
+	position: relative;
+	width: 49.8%;
+	height: 420px;
+}
+#edit_textarea {
+	position: absolute;
+	left: 4px;
+	right: 4px;
+	top: 4px;
+	bottom: 30px;
+}
+#edit_buttons {
+	position: absolute;
+	bottom: 4px;
+	left: 4px;
+}
+#preview_pane {
+	float: left;
+	width: 49.8%;
+}
+#preview_area {
+	overflow: scroll;
+	height: 372px;
+	margin: 6px;
+	border: 1px solid #999;
+	padding: 4px;
+}
+.errormessage {
+	padding: 6px;
+	background-color: #fdd;
+	border: 1px dotted #000;
+}

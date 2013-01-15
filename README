@@ -1,0 +1,50 @@
+Ambition Web Framework
+----------------------
+
+REQUIREMENTS
+
+Ambition is written in the Vala programming language, and relies on other
+libraries for its functionality. To build, you will need:
+
+* Vala 0.16.0 or higher
+* CMake 2.8 or higher
+* The GCC 4.x toolchain
+
+At minimum, the following libraries are required:
+
+* glib-2.0
+* gio-2.0
+* gee-1.0
+* readline
+* libsoup-2.4
+* json-glib-1.0
+
+For optional plugins, which default to ON, the following libraries are required:
+
+* libgscgi-1.0 (WITH_SCGI)
+* almanna-0.1 (WITH_ALMANNA)
+
+BUILDING/INSTALLING FROM GIT
+
+Ambition uses CMake to configure and prepare the source for installation. By
+default, Ambition will install into /usr. To build the framework using an "out
+of source" build:
+
+* Verify cmake is installed on your machine
+* Create a directory called "build", and cd into that directory
+* Enter "cmake .." without the quotes to prepare the build
+* Enter "make" without the quotes to build Ambition
+* Enter "make install" as root or under sudo to install Ambition
+
+If you would like to install into another prefix, use the -D option to provide
+CMAKE_INSTALL_PREFIX:PATH to cmake. For example, to install to /usr/local:
+
+cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr/local ..
+
+Note that your LD_LIBRARY_PATH must allow for libraries in /usr/local.
+
+OTHER
+
+http://www.ambitionframework.org
+http://ci.ambitionframework.org
+

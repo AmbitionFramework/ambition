@@ -1,0 +1,2 @@
+@parameters( string content )
+@{content}

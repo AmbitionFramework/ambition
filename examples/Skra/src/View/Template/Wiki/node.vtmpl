@@ -1,0 +1,13 @@
+@parameters( string content, string node, bool exists )
+@process( "Common.header", node, exists, node )
+<div id="wikicontent">
+@if (exists == true ) {
+@{content}
+@} else {
+The node "@{node}" was not found.
+@	if ( state.has_user ) {
+<a href="/wiki/@{node}/edit">Create</a> it now!
+@	}
+@}
+</div>
+@process("Common.footer")

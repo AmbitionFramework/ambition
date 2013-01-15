@@ -1,0 +1,21 @@
+@parameters( string node, HashMap<string,long> version_map )
+@using Gee
+@process( "Common.header", node, false, node )
+<div id="wikicontent">
+<div>
+	History for @{node}:
+</div>
+<table>
+	<tr>
+		<td>Version Number</td>
+		<td>Created</td>
+	</tr>
+@foreach ( string version in version_map.keys ) {
+	<tr>
+		<td><a href="/wiki/@{node}?version=@{version}">@{version}</a></td>
+		<td>@{(new DateTime.from_unix_utc(version_map.get(version)).to_string())}</td>
+	</tr>
+@}
+</table>
+</div>
+@process("Common.footer")

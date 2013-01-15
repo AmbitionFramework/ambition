@@ -1,0 +1,15 @@
+<snippet>
+	<content><![CDATA[
+using Ambition;
+using $1.View;
+namespace $1.Controller {
+	public class ${3:${TM_FILENAME/(.*)\.vala/$1/}} : Object {
+
+		$4
+
+	}
+}
+]]></content>
+	<tabTrigger>controller</tabTrigger>
+	<scope>source.vala</scope>
+</snippet>

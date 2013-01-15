@@ -1,0 +1,15 @@
+<div id="header">
+	<div id="loginbox">
+		|% loginbox %|
+	</div>
+	Skra
+	<div id="clr"></div>
+</div>
+<div id="breadcrumbs">
+	<div id="node_options">
+|% editbox %|
+	</div>
+<a href="/wiki">home</a>
+|% breadcrumbs %|
+	<div id="clr"></div>
+</div>

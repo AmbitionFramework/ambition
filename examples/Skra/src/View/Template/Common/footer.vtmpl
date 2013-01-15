@@ -1,0 +1,3 @@
+@{state.request.cache["footer_markdown"]}
+</body>
+</html>

@@ -1,0 +1,35 @@
+@using Gee
+<html>
+<head>
+	<title>Session</title>
+	<style type="text/css">
+		body { background-color: #bfbfbc; font-family: verdana; font-size: 12px }
+		h1 { text-align: center; padding: 20px !important; margin: 0; }
+		h2 { margin: 0 0 8px 0; padding: 0;}
+		table { border: 1px solid #ddd; width: 622px; table-layout:fixed; border-collapse: collapse; }
+		td,th { border: 1px solid #ddd; padding: 8px; font-size: 12px; word-wrap:break-word }
+		th { text-align: left; font-weight: bold }
+		.box { margin: 20px auto; width: 640px; padding: 8px; background-color: #fff; border: 2px solid #888; }
+		#param_box { display: none; padding-top: 8px }
+	</style>
+</head>
+<body>
+	<div class="box">
+	<h1>Session</h1>
+	</div>
+	<div class="box">
+			<table>
+				<tr>
+					<th>Key</th>
+					<th>Value</th>
+				</tr>
+@foreach( string k in state.session.string_params.keys ) {
+				<tr>
+					<td>@{k}</td>
+					<td>@{state.session.string_params.get(k)}</td>
+				</tr>
+@}
+			</table>
+	</div>
+</body>
+</html>

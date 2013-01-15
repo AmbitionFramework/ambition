@@ -1,0 +1,6 @@
+build
+src/.generated
+core
+plugins
+/wiki
+config/skra.htpasswd

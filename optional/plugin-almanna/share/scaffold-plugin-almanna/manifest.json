@@ -1,0 +1,25 @@
+{
+	"version": 1,
+	"name": "plugin-almanna",
+	"config": [
+		"# To connect to a database using Almanna, uncomment the following lines and",
+		"# replace with the correct configuration for your database. The configuration",
+		"# below would connect to a local PostgreSQL instance.",
+		"# almanna.provider = PostgreSQL",
+		"# almanna.connection_string = PostgreSQL://HOST=127.0.0.1;DB_NAME=test",
+		"# almanna.username = postgres",
+		"# almanna.password = postgres"
+	],
+	"pkgs": [
+		"almanna-0.1"
+	],
+	"plugins": [
+		"new Plugin<AlmannaPlugin>.with_default(",
+		"new AlmannaPlugin.with_entities({",
+		"})",
+		")"
+	],
+	"appends": [
+		"src/CMakeLists.txt"
+	]
+}
