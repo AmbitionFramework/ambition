@@ -215,6 +215,7 @@ namespace Ambition.Engine {
 					// Manually kick off parser again, since parse_file_data ate the boundary.
 					try {
 						var trash = stream.read_byte();
+						if ( trash > 0 ) {}
 						mime_parse_boundary( state, stream, boundary );
 					} catch (IOError e) {}
 				}

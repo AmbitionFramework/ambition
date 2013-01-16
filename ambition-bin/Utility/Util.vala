@@ -162,7 +162,27 @@ namespace Ambition.Utility {
 	public static bool in_application() {
 		var src_dir = File.new_for_path("src");
 		var ambition = File.new_for_path(".ambition");
-		return ( src_dir.query_exists() && ambition.query_exists() );
+		if ( src_dir.query_exists() && ambition.query_exists() ) {
+			var application_file = File.new_for_path("src/Application.vala");
+
+			try {
+				var input_stream = new DataInputStream( application_file.read() );
+				string line;
+				MatchInfo info;
+				while ( ( line = input_stream.read_line(null) ) != null ) {
+					if ( /namespace ([^ ]+)/.match( line, 0, out info ) ) {
+						Config.set_value( "ambition.app_name", info.fetch(1) );
+					}
+				}
+			} catch (Error e) {
+				Logger.error( e.message );
+				return false;
+			}
+			Config.set_value( "ambition.app_path", Environment.get_current_dir() );
+
+			return true;
+		}
+		return false;
 	}
 
 	public static void usage( string? method = null, bool as_interactive = false ) {

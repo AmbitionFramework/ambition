@@ -97,6 +97,9 @@ namespace Ambition {
 				throw new TemplateCompileError.TEMPLATE_NOT_FOUND(msg);
 			}
 
+			// If configuration contains extra using statements, add them first
+			add_usings(builder);
+
 			// Write standard header
 			builder.append( "/* This file is auto generated, do not edit! */\n");
 			builder.append( "namespace %s {\n".printf(local_namespace) );
@@ -222,6 +225,8 @@ namespace Ambition {
 		public void compile_all( string input_path, string output_path ) throws TemplateCompileError {
 			root_path = input_path;
 
+			init_config();
+
 			// Convert files to vala
 			var file_list = new ArrayList<string>();
 			var files = enumerate_directory( input_path, ".vtmpl" );
@@ -303,6 +308,24 @@ namespace Ambition {
 			}
 
 			return list;
+		}
+
+		/**
+		 * Based on configuration (for now), add using statements if required.
+		 * @param builder StringBuilder object
+		 */
+		private void add_usings( StringBuilder builder ) {
+			string? usings = Config.lookup("template.using");
+			if ( usings != null ) {
+				foreach ( var using in usings.replace( " ", "" ).split(",") ) {
+					builder.append( "using %s;\n".printf(using) );
+				}
+			}
+		}
+
+		private void init_config() {
+			Config.set_value( "ambition.app_name", namespace );
+			Config.set_value( "ambition.app_path", Environment.get_current_dir() + "/.." );
 		}
 	}
 }

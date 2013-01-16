@@ -162,7 +162,7 @@ namespace Ambition {
 					".."
 				};
 				foreach ( string path in paths ) {
-					file = File.new_for_path( path + "/" + file_name );
+					file = File.new_for_path( "%s/%s".printf( path, file_name ) );
 
 					if ( file.query_exists() ) {
 						break;
@@ -193,7 +193,7 @@ namespace Ambition {
 					}
 				}
 			} catch (Error e) {
-				Logger.error( "Error reading config: %s".printf( e.message ) );
+				Logger.error( "Error reading config \"%s\": %s".printf( file.get_path(), e.message ) );
 			}
 		}
 	}
