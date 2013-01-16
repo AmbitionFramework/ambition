@@ -97,13 +97,16 @@ namespace Ambition {
 				throw new TemplateCompileError.TEMPLATE_NOT_FOUND(msg);
 			}
 
+			// If configuration defines a base class, use that
+			string base_class = Config.lookup_with_default( "template.base_class", "Ambition.CoreView.Template" );
+
 			// If configuration contains extra using statements, add them first
 			add_usings(builder);
 
 			// Write standard header
 			builder.append( "/* This file is auto generated, do not edit! */\n");
 			builder.append( "namespace %s {\n".printf(local_namespace) );
-			builder.append( "    public class " + class_name + " : Ambition.CoreView.Template {\n" );
+			builder.append( "    public class " + class_name + " : " + base_class + " {\n" );
 			builder.append( "        public override Ambition.State state { get; set; }\n");
 			builder.append( "        public override int64 size { get; set; }\n");
 			builder.append( "%%%PARAMS_PARSED%%%\n" );
