@@ -84,7 +84,7 @@ namespace Ambition {
 
 			// Parse engine config, if available
 			if ( Config.lookup("engine") != null ) {
-				load_engine_from_string( Config.lookup("engine") );
+				load_engine_from_string( Config.lookup("app.engine") );
 			}
 
 			// Parse command line options
