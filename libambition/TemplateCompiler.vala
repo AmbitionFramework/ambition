@@ -147,6 +147,9 @@ namespace Ambition {
 								throw new TemplateCompileError.INVALID_USAGE(msg);
 							}
 
+						} else if ( line.has_prefix("@*") ) {
+							continue;
+
 						} else {
 							if ( check_valid(line) ) {
 								builder.append( "            " + line.substring(1) + " // L%d\n".printf(line_number) );
