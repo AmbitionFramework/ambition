@@ -13,6 +13,11 @@ IF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 	SET(CMAKE_INSTALL_PREFIX "/usr" CACHE PATH "install prefix" FORCE)
 ENDIF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
+IF(LIB_INSTALL_DIR)
+ELSE()
+SET(LIB_INSTALL_DIR lib)
+ENDIF()
+
 option( WITH_ALMANNA "Include Almanna Integration plugin (requires libalmanna)" ON )
 option( WITH_SCGI "Include SCGI Engine plugin (requires libgscgi)" ON )
 option( WITH_TEXTCAPTCHA "Include TextCaptcha plugin" ON )
