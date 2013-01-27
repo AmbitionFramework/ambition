@@ -56,9 +56,9 @@ SET( LAM_VALA_FILES
 	Form/Validator.vala
 	PluginSupport/IPlugin.vala
 	PluginSupport/PluginLoader.vala
-	PluginSupport/SessionPlugin.vala
 	Session/Interface.vala
 	Session/IStorable.vala
+	Session/SessionPlugin.vala
 	Session/StorableFile.vala
 	Session/StorableMemory.vala
 	Testing/Helper.vala

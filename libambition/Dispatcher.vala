@@ -78,7 +78,7 @@ namespace Ambition {
 
 			// Load plugins
 			this.plugins = PluginLoader.load_plugins_from_directory("plugins");
-			this.plugins.add( new SessionPlugin() );
+			this.plugins.add( new Session.SessionPlugin() );
 
 			execute_startup_hooks();
 

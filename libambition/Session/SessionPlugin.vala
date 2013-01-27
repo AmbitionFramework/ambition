@@ -19,10 +19,10 @@
  * limitations under the License.
  */
 
-using Ambition.Session;
 using Ambition;
+using Ambition.PluginSupport;
 
-namespace Ambition.PluginSupport {
+namespace Ambition.Session {
 	/**
 	 * Provides Session support to an Ambition application.
 	 */
@@ -55,7 +55,7 @@ namespace Ambition.PluginSupport {
 		public void on_request_dispatch( State state ) {
 			initialize_session(state);
 			if ( state.session != null && state.session.session_id != null ) {
-				state.log.info( "Found session %s".printf( state.session.session_id ) );
+				state.log.debug( "Found session %s".printf( state.session.session_id ) );
 			}
 		}
 
@@ -114,16 +114,28 @@ namespace Ambition.PluginSupport {
 					session_store.store( state.session.id, state.session );
 
 					// Create session cookie
-					string session_name = Config.lookup_with_default(
-						"session.name", "session_id"
-					);
-					var c = new Cookie();
-					c.name = session_name;
-					c.value = state.session.id;
-					c.max_age = 2000;
-					state.response.set_cookie(c);
+					generate_session_cookie(state);
 				}
 			}
+		}
+
+		/**
+		 * Generate the session cookie.
+		 * @param state State
+		 */
+		private void generate_session_cookie( State state ) {
+			string session_name = Config.lookup_with_default(
+				"session.name", "session_id"
+			);
+			int? expires = Config.lookup_int("session.expires");
+			if ( expires == null ) {
+				expires = 0;
+			}
+			var c = new Cookie();
+			c.name = session_name;
+			c.value = state.session.id;
+			c.max_age = expires;
+			state.response.set_cookie(c);
 		}
 	}
 }
