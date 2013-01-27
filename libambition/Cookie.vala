@@ -24,6 +24,8 @@ namespace Ambition {
 	 * Represents an HTTP cookie.
 	 */
 	public class Cookie : Object {
+		private int _max_age = 0;
+
 		/**
 		 * Name of the cookie.
 		 */
@@ -33,15 +35,29 @@ namespace Ambition {
 		 */
 		public string value { get; set; }
 		/**
-		 * Expiration date as a HTTP formatted date.
+		 * Expiration date as a HTTP formatted date, but normally will be set
+		 * automatically with max_age.
 		 */
-		public string expires { get; set; }
+		public string? expires { get; set; }
 		/**
 		 * Expiration as a relative value in seconds. This can be set at the
 		 * same time as expires, and browsers will ignore expires if they
 		 * support max-age.
 		 */
-		public int max_age { get; set; default = 0; }
+		public int max_age {
+			get {
+				return _max_age;
+			}
+			set {
+				if ( value == 0 ) {
+					expires = null;
+				} else {
+					var newtime = new DateTime.now_utc().add_seconds(value);
+					expires = newtime.format("%a, %d %b %Y %H:%M:%S GMT");
+				}
+				_max_age = value;
+			}
+		}
 		/**
 		 * Partial or full domain name for which this cookie is valid.
 		 */
@@ -81,13 +97,13 @@ namespace Ambition {
 			var cookie_string = new StringBuilder();
 			cookie_string.append( "%s=%s; Path=%s".printf( name, value, path ) );
 			if ( expires != null ) {
-				cookie_string.append( "; Expires=%s".printf( "insert-expires-here" ) );
+				cookie_string.append( "; Expires=%s".printf(expires) );
 			}
 			if ( max_age > 0 ) {
-				cookie_string.append( "; Max-Age=%d".printf( max_age ) );
+				cookie_string.append( "; Max-Age=%d".printf(max_age) );
 			}
 			if ( domain != null ) {
-				cookie_string.append( "; Domain=%s".printf( domain ) );
+				cookie_string.append( "; Domain=%s".printf(domain) );
 			}
 			if (secure) {
 				cookie_string.append("; Secure");
