@@ -78,6 +78,20 @@ namespace Ambition.Form {
 			return generic( "label", hm, content );
 		}
 
+		/**
+		 * <label class="y" for="x" />
+		 * @param class_name Class name
+		 * @param field_for  ID of the input this label is for
+		 * @param content    Content for the inside of the label
+		 * @return string
+		 */
+		public string label_class ( string class_name, string field_for, string? content = null ) {
+			var hm = new HashMap<string,string>();
+			hm.set( "class", class_name );
+			hm.set( "for", field_for );
+			return generic( "label", hm, content );
+		}
+
 		public string generic ( string tag_name, HashMap<string,string>? params, string? content = null ) {
 			var sb = new StringBuilder();
 			sb.append("<");

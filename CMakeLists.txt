@@ -22,6 +22,7 @@ option( WITH_ALMANNA "Include Almanna Integration plugin (requires libalmanna)" 
 option( WITH_SCGI "Include SCGI Engine plugin (requires libgscgi)" ON )
 option( WITH_TEXTCAPTCHA "Include TextCaptcha plugin" ON )
 option( WITH_COUCH "Include Couch plugin" ON )
+option( WITH_TWITTER "Include TwitterBootstrap plugin" ON )
 
 set (PKGNAME ambition)
 set (PKGVERSION 0.1)
@@ -42,12 +43,17 @@ SET( CMAKE_BUILD_TYPE Debug )
 SET( CORE_DEPS_CFLAGS_ALL
 	${CORE_DEPS_CFLAGS}
 	${CORE_DEPS_CFLAGS_OTHER}
+	-DGETTEXT_PACKAGE=ambition
 )
 
 add_subdirectory (share)
 add_subdirectory (src/libambition)
 add_subdirectory (src/ambition-bin)
 add_subdirectory (test)
+
+if (WITH_TWITTER)
+	add_subdirectory (src/optional/plugin-twitter-bootstrap)
+endif (WITH_TWITTER)
 
 if (WITH_COUCH)
 	add_subdirectory (src/optional/plugin-couchdb)

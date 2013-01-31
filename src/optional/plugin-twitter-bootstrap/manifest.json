@@ -1,0 +1,13 @@
+{
+	"name" : "TwitterBootstrap",
+	"version" : "0.1.0",
+	"author" : "ambitionframework.org",
+	"description" : "Twitter Bootstrap integration for Ambition",
+	"require-link" : false,
+	"headers" : [
+		"ambition-plugin-twitterbootstrap-0.1.0.h"
+	],
+	"libraries" : [
+		"ambition-plugin-twitterbootstrap-0.1.0"
+	]
+}
