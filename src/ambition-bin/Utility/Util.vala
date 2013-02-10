@@ -76,6 +76,9 @@ namespace Ambition.Utility {
 				break;
 
 			case "new":
+				if (as_interactive) {
+					return no_interactive();
+				}
 				var s = new Ambition.Utility.Scaffold();
 				if ( args.length < 1 ) {
 					usage( "new", as_interactive );
@@ -96,6 +99,9 @@ namespace Ambition.Utility {
 				return m.run();
 
 			case "shell":
+				if (as_interactive) {
+					return no_interactive();
+				}
 				var m = new Ambition.Utility.Shell();
 				if ( !in_application() ) {
 					usage( "shell", as_interactive );
@@ -120,6 +126,9 @@ namespace Ambition.Utility {
 				return m.test();
 
 			case "daemon":
+				if (as_interactive) {
+					return no_interactive();
+				}
 				var m = new Ambition.Utility.Run();
 				if ( !in_application() ) {
 					usage( "daemon", as_interactive );
@@ -220,7 +229,7 @@ namespace Ambition.Utility {
 				+ "environment. Must be run from an application directory.\n"
 			);
 		}
-		if ( method == null || method == "daemon" ) {
+		if ( !as_interactive && method == null || method == "daemon" ) {
 			stdout.printf("daemon\n");
 			wrap(
 				"As a background process, perform the same actions as 'run'.\n"
@@ -299,6 +308,11 @@ namespace Ambition.Utility {
 				"Parses actions.conf and resolves plugin dependencies.\n"
 			);
 		}
+	}
+
+	public static int no_interactive() {
+		stdout.printf("This command is unavailable in the interactive shell.\n\n");
+		return -1;
 	}
 
 	/**
