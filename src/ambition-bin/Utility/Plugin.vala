@@ -50,22 +50,22 @@ namespace Ambition.Utility {
 			string plugin_command = args[0];
 			switch (plugin_command) {
 				case "add":
-					install_plugin( args[1], args[2:args.length] );
+					install_plugin( args[1], args );
 					break;
 				case "remove":
-					remove_plugin( args[1], args[2:args.length] );
+					remove_plugin( args[1], args );
 					break;
 				case "info":
-					info_plugin( args[1], args[2:args.length] );
+					info_plugin( args[1], args );
 					break;
 				case "search":
-					search_plugin( args[1], args[2:args.length] );
+					search_plugin( args[1], args );
 					break;
 				case "outdated":
-					check_outdated_plugin( args[1:args.length] );
+					check_outdated_plugin(args);
 					break;
 				case "installed":
-					installed_plugin( args[1:args.length] );
+					installed_plugin(args);
 					break;
 				default:
 					Logger.error("Invalid plugin command '%s'.".printf(plugin_command) );
@@ -315,7 +315,10 @@ namespace Ambition.Utility {
 		private HashMap<string,string> args_to_config( string[] args ) {
 			var config = new HashMap<string,string>();
 			string last_arg = "";
-			foreach ( string arg in args ) {
+			foreach ( string? arg in args ) {
+				if ( arg == null ) {
+					break;
+				}
 				if ( arg.has_prefix("--") ) {
 					last_arg = arg.substring(2);
 					config[last_arg] = "";

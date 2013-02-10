@@ -36,7 +36,8 @@ namespace Ambition.Utility {
 					break;
 				}
 				string[] responses = response.split(" ");
-				Utility.execute_command( true, responses[0], responses[1:response.length] );
+				string[] empty = {};
+				Utility.execute_command( true, responses[0], ( responses.length > 1 ? responses[1:response.length] : empty ) );
 
 				Readline.History.add(response);
 			}
