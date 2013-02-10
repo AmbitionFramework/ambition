@@ -18,25 +18,25 @@ PACKAGES
 OPTIONS
     -g
 	--thread
-    --vapidir ${CMAKE_BINARY_DIR}/libambition
-    --vapidir ${CMAKE_BINARY_DIR}/optional/textcaptcha
+    --vapidir ${CMAKE_BINARY_DIR}/src/libambition
+    --vapidir ${CMAKE_BINARY_DIR}/src/optional/textcaptcha
 	--enable-experimental)
 
 set(TAHT_CFLAGS
     ${CORE_DEPS_CFLAGS_ALL}
-    -I${CMAKE_BINARY_DIR}/libambition
-    -I${CMAKE_BINARY_DIR}/optional/textcaptcha
+    -I${CMAKE_BINARY_DIR}/src/libambition
+    -I${CMAKE_BINARY_DIR}/src/optional/textcaptcha
     -w
 )
 set(TAHT_LIB_PATHS
     ${CORE_DEPS_LIBRARY_DIRS}
-    -L${CMAKE_BINARY_DIR}/libambition
-    -L{CMAKE_BINARY_DIR}/optional/textcaptcha
+    -L${CMAKE_BINARY_DIR}/src/libambition
+    -L{CMAKE_BINARY_DIR}/src/optional/textcaptcha
 )
 add_definitions(${TAHT_CFLAGS})
 
 add_executable(${BINNAME} ${TAHT_VALA_C})
-include_directories(${CMAKE_BINARY_DIR}/libambition ${CMAKE_BINARY_DIR}/optional/textcaptcha)
+include_directories(${CMAKE_BINARY_DIR}/src/libambition ${CMAKE_BINARY_DIR}/src/optional/textcaptcha)
 add_dependencies(${BINNAME} ${PPKGNAME}-${PPKGVERSION})
 target_link_libraries(${BINNAME} ${TAHT_DEPS_LIBRARIES} gthread-2.0 ambition-helper-textcaptcha-${PPKGVERSION})
 include(Tests)

@@ -35,22 +35,22 @@ PACKAGES
 OPTIONS
 	-g
 	--thread
-	--vapidir ../libambition
+	--vapidir ../src/libambition
 	--enable-experimental)
 
 set(TA_CFLAGS
 	${CORE_DEPS_CFLAGS_ALL}
-    -I${CMAKE_BINARY_DIR}/libambition
+    -I${CMAKE_BINARY_DIR}/src/libambition
     -w
 )
 set(TA_LIB_PATHS
     ${CORE_DEPS_LIBRARY_DIRS}
-    -L${CMAKE_BINARY_DIR}/libambition
+    -L${CMAKE_BINARY_DIR}/src/libambition
 )
 add_definitions(${TA_CFLAGS})
 
 add_executable(${BINNAME} ${TA_VALA_C})
-include_directories(${CMAKE_BINARY_DIR}/libambition)
+include_directories(${CMAKE_BINARY_DIR}/src/libambition)
 add_dependencies(${BINNAME} ${PKGNAME}-${PKGVERSION})
 target_link_libraries(${BINNAME} ${CORE_DEPS_LIBRARIES} gthread-2.0 ambition-0.1)
 include(Tests)

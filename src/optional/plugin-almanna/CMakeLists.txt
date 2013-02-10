@@ -27,7 +27,7 @@ PACKAGES
 OPTIONS
 	--thread
     --vapidir=${CMAKE_SOURCE_DIR}/vapi
-    --vapidir=${CMAKE_BINARY_DIR}/libambition
+    --vapidir=${CMAKE_BINARY_DIR}/src/libambition
 	--enable-experimental
 GENERATE_VAPI
 	${PPKGNAME}-${PPKGVERSION}
@@ -40,7 +40,7 @@ set(APA_CFLAGS
 	${CORE_DEPS_CFLAGS_ALL}
     ${APA_DEPS_CFLAGS}
     ${APA_DEPS_CFLAGS_OTHER}
-    -I${CMAKE_BINARY_DIR}/libambition
+    -I${CMAKE_BINARY_DIR}/src/libambition
     -w
 )
 set(APA_LIB_PATHS
@@ -55,8 +55,8 @@ target_link_libraries(${PPKGNAME}-${PPKGVERSION} ${CORE_DEPS_LIBRARIES} ${APA_DE
 
 add_subdirectory(test)
 
-file(COPY ${CMAKE_SOURCE_DIR}/optional/plugin-almanna/share/scaffold-plugin-almanna DESTINATION ${CMAKE_BINARY_DIR}/optional/plugin-almanna/share/scaffold-plugin-almanna)
-install(DIRECTORY ${CMAKE_BINARY_DIR}/optional/plugin-almanna/share/scaffold-plugin-almanna DESTINATION ${CMAKE_INSTALL_PREFIX}/share/ambition-framework)
+file(COPY ${CMAKE_SOURCE_DIR}/src/optional/plugin-almanna/share/scaffold-plugin-almanna DESTINATION ${CMAKE_BINARY_DIR}/src/optional/plugin-almanna/share/scaffold-plugin-almanna)
+install(DIRECTORY ${CMAKE_BINARY_DIR}/src/optional/plugin-almanna/share/scaffold-plugin-almanna DESTINATION ${CMAKE_INSTALL_PREFIX}/share/ambition-framework)
 
 install (
 	FILES ${CMAKE_CURRENT_BINARY_DIR}/${PPKGNAME}-${PPKGVERSION}.vapi ${PPKGNAME}-${PPKGVERSION}.deps manifest.json

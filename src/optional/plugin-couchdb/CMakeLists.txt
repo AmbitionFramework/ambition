@@ -26,9 +26,9 @@ PACKAGES
     ${APCDB_VALA_PACKAGES}
 OPTIONS
 	--thread
-	--vapidir=${CMAKE_SOURCE_DIR}/optional/plugin-couchdb
+	--vapidir=${CMAKE_SOURCE_DIR}/src/optional/plugin-couchdb
     --vapidir=${CMAKE_SOURCE_DIR}/vapi
-    --vapidir=${CMAKE_BINARY_DIR}/libambition
+    --vapidir=${CMAKE_BINARY_DIR}/src/libambition
 	--enable-experimental
 GENERATE_VAPI
 	${PPKGNAME}-${PPKGVERSION}
@@ -42,7 +42,7 @@ set(APCDB_CFLAGS
     ${APCDB_DEPS_CFLAGS}
     ${APCDB_DEPS_CFLAGS_OTHER}
     -I/usr/include/couchdb-glib-1.0
-    -I${CMAKE_BINARY_DIR}/libambition
+    -I${CMAKE_BINARY_DIR}/src/libambition
     -w
 )
 set(APCDB_LIB_PATHS ${APCDB_DEPS_LIBRARY_DIRS})
@@ -55,7 +55,7 @@ target_link_libraries(${PPKGNAME}-${PPKGVERSION} ${CORE_DEPS_LIBRARIES} ${APCDB_
 add_subdirectory(test)
 
 install (
-	FILES ${CMAKE_CURRENT_BINARY_DIR}/${PPKGNAME}-${PPKGVERSION}.vapi ${CMAKE_SOURCE_DIR}/optional/plugin-couchdb/couchdb-glib-1.0.vapi ${PPKGNAME}-${PPKGVERSION}.deps manifest.json
+	FILES ${CMAKE_CURRENT_BINARY_DIR}/${PPKGNAME}-${PPKGVERSION}.vapi ${CMAKE_SOURCE_DIR}/src/optional/plugin-couchdb/couchdb-glib-1.0.vapi ${PPKGNAME}-${PPKGVERSION}.deps manifest.json
 	DESTINATION ${CMAKE_INSTALL_PREFIX}/share/ambition-framework/plugins/CouchDB-${PPKGVERSION}/)
 install (
 	FILES ${CMAKE_CURRENT_BINARY_DIR}/${PPKGNAME}-${PPKGVERSION}.h

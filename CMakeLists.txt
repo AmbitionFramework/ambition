@@ -44,22 +44,22 @@ SET( CORE_DEPS_CFLAGS_ALL
 )
 
 add_subdirectory (share)
-add_subdirectory (libambition)
-add_subdirectory (ambition-bin)
+add_subdirectory (src/libambition)
+add_subdirectory (src/ambition-bin)
 add_subdirectory (test)
 
 if (WITH_COUCH)
-	add_subdirectory (optional/plugin-couchdb)
+	add_subdirectory (src/optional/plugin-couchdb)
 endif (WITH_COUCH)
 
 if (WITH_TEXTCAPTCHA)
-	add_subdirectory (optional/textcaptcha)
+	add_subdirectory (src/optional/textcaptcha)
 endif (WITH_TEXTCAPTCHA)
 
 if (WITH_SCGI)
-	add_subdirectory (optional/engine-scgi)
+	add_subdirectory (src/optional/engine-scgi)
 endif (WITH_SCGI)
 
 if (WITH_ALMANNA)
-	add_subdirectory (optional/plugin-almanna)
+	add_subdirectory (src/optional/plugin-almanna)
 endif (WITH_ALMANNA)

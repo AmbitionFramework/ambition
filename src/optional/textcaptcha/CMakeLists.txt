@@ -24,7 +24,7 @@ PACKAGES
 OPTIONS
 	--thread
     --vapidir=${CMAKE_SOURCE_DIR}/vapi
-    --vapidir=${CMAKE_BINARY_DIR}/libambition
+    --vapidir=${CMAKE_BINARY_DIR}/src/libambition
 	--enable-experimental
 GENERATE_VAPI
 	${PPKGNAME}-${PPKGVERSION}
@@ -37,7 +37,7 @@ set(AHT_CFLAGS
 	${CORE_DEPS_CFLAGS_ALL}
     ${AHT_DEPS_CFLAGS}
     ${AHT_DEPS_CFLAGS_OTHER}
-    -I${CMAKE_BINARY_DIR}/libambition
+    -I${CMAKE_BINARY_DIR}/src/libambition
     -w
 )
 set(AHT_LIB_PATHS ${AHT_DEPS_LIBRARY_DIRS})
