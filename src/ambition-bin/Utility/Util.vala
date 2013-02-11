@@ -160,6 +160,17 @@ namespace Ambition.Utility {
 				}
 				return ( m.resolve_plugins() ? 0 : 1 );
 
+			case "controller":
+			case "model":
+			case "view":
+			case "form":
+				var m = new Ambition.Utility.Creator();
+				if ( !in_application() || args.length < 1 ) {
+					usage( command, as_interactive );
+					return 1;
+				}
+				return m.run( command, args[0] );
+
 			case "help":
 			default:
 				usage( null, as_interactive );
