@@ -268,6 +268,34 @@ namespace Ambition.Utility {
 				+ "work on Mac OS X/Darwin or Win32.\n"
 			);
 		}
+		if ( method == null || method == "controller" ) {
+			stdout.printf("controller <name>\n");
+			wrap(
+				"Create a new Controller class with the given name, and add to "
+				+ "the build script.\n"
+			);
+		}
+		if ( method == null || method == "model" ) {
+			stdout.printf("model <name>\n");
+			wrap(
+				"Create a new Model class with the given name, and add to "
+				+ "the build script.\n"
+			);
+		}
+		if ( method == null || method == "view" ) {
+			stdout.printf("view <name>\n");
+			wrap(
+				"Create a new View class with the given name, and add to "
+				+ "the build script.\n"
+			);
+		}
+		if ( method == null || method == "form" ) {
+			stdout.printf("form <name>\n");
+			wrap(
+				"Create a new Form class with the given name, and add to "
+				+ "the build script.\n"
+			);
+		}
 		if ( method == null || method == "plugin" ) {
 			stdout.printf("plugin\n");
 			wrap(
