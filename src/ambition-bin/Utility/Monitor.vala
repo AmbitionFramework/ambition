@@ -25,13 +25,11 @@ using Posix;
 
 namespace Ambition.Utility {
 	/**
-	 * Monitor an application for changes, build if it does. Requires a
-	 * 'Makefile' project right now, needs to be changed to detect and deal
-	 * with a CMake project.
+	 * Monitor an application for changes, build if it does.
 	 */
 	public class Monitor : Object {
-		private string last_file { get; set; default = null; }
-		private string build_file { get; set; }
+		private static const int timeout = 1000;
+		private HashMap<string,FileMonitorEvent> changed_files { get; set; default = new HashMap<string,FileMonitorEvent>(); }
 		private ArrayList<FileMonitor> monitor_list = null;
 		private unowned Pid running_pid { get; set; }
 
@@ -51,6 +49,19 @@ namespace Ambition.Utility {
 				return return_type;
 			}
 
+			var time = new TimeoutSource(timeout);
+			time.set_callback(() => {
+				if ( changed_files.size > 0 ) {
+					foreach ( string file in changed_files.keys ) {
+						Logger.info( "File '%s' %s.".printf( file, changed_files[file].to_string().substring(21).down() ) );
+					}
+					changed_files = new HashMap<string,FileMonitorEvent>();
+					build_and_run();
+				}
+				return true;
+			});
+			time.attach( loop.get_context() );
+
 			loop.run();
 			return 0;
 		}
@@ -60,7 +71,7 @@ namespace Ambition.Utility {
 			try {
 				ArrayList<string> directories = get_recursive_directories("src");
 				directories.add("src");
-				directories.add("."); // Add so Makefile and config are used
+				directories.add("config");
 				foreach ( string path in directories ) {
 					var dir_path = File.new_for_path(path);
 					var monitor = dir_path.monitor_directory( FileMonitorFlags.NONE );
@@ -82,23 +93,12 @@ namespace Ambition.Utility {
 		 * @param event_type FileMonitor event type
 		 */
 		private void on_file_change( File file, File? other_file, FileMonitorEvent event_type ) {
-			if ( this.last_file == null || file.get_basename() != this.last_file ) {
-				this.last_file = file.get_basename();
-
-				switch(event_type) {
-				case FileMonitorEvent.CREATED:
-					Logger.info( "File '%s' created, restarting.".printf( file.get_basename() ) );
-					build_and_run();
-					break;
-				case FileMonitorEvent.DELETED:
-					Logger.info( "File '%s' deleted, restarting.".printf( file.get_basename() ) );
-					build_and_run();
-					break;
-				case FileMonitorEvent.CHANGED:
-					Logger.info( "File '%s' changed, restarting.".printf( file.get_basename() ) );
-					build_and_run();
-					break;
-				}
+			if (
+				event_type == FileMonitorEvent.CREATED
+				|| event_type == FileMonitorEvent.CHANGED
+				|| event_type == FileMonitorEvent.DELETED
+			) {
+				changed_files[file.get_basename()] = event_type;
 			}
 		}
 
@@ -198,8 +198,6 @@ namespace Ambition.Utility {
 		}
 
 		private int re_monitor() {
-			this.last_file = null;
-
 			// Reconnect signals
 			int return_type = build_monitors();
 			if ( return_type > 0 ) {
