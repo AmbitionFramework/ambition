@@ -229,6 +229,7 @@ namespace %s.Form%s {
 			}
 
 			Logger.info( "Created '%s'.".printf(full_path) );
+			alter_cmakelists();
 			return 0;
 		}
 
@@ -259,6 +260,62 @@ namespace %s.Form%s {
 				Logger.error( "Error creating file: %s".printf( e.message ) );
 			}
 			return null;
+		}
+
+		/**
+		 * Add the created class to the project's CMakeLists.txt file.
+		 */
+		private bool alter_cmakelists() {
+			var cmakelists = File.new_for_path("src/CMakeLists.txt");
+			var builder = new StringBuilder();
+
+			if ( !cmakelists.query_exists() ) {
+				Logger.error( "Fatal: Unable to load CMakeLists.txt." );
+				return false;
+			}
+			try {
+				var input_stream = new DataInputStream( cmakelists.read() );
+				string line;
+				while ( ( line = input_stream.read_line(null) ) != null ) {
+					builder.append(line);
+					builder.append("\n");
+				}
+			} catch ( Error e ) {
+				Logger.error( "Fatal: Unable to read CMakeLists.txt" );
+				return false;
+			}
+
+			try {
+				var output_stream = cmakelists.replace( null, false, FileCreateFlags.REPLACE_DESTINATION );
+				bool in_source_files = false;
+				string last_section = "";
+				foreach ( string line in builder.str.split("\n") ) {
+					if ( in_source_files ) {
+						string section = line.substring( 0, line.index_of("/") ).chug();
+						if ( last_section == "Controller" ) {
+							if ( section != last_section ) {
+								string new_line = full_path.replace( "src/", "    " ) + "\n";
+								output_stream.write( new_line.data );
+							}
+						}
+						last_section = section;
+					}
+					if ( line == ")" ) {
+						in_source_files = false;
+					}
+					if ( "SET( APP_VALA_FILES" in line ) {
+						in_source_files = true;
+					}
+					output_stream.write( line.data );
+					output_stream.write( "\n".data );
+				}
+			} catch ( Error e ) {
+				Logger.error( "Fatal: Unable to write CMakeLists.txt" );
+				return false;
+			}
+
+
+			return true;
 		}
 
 	}
