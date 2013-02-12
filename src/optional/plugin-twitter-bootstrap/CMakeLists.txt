@@ -3,6 +3,14 @@ set (PPKGVERSION 0.1.0)
 
 SET( APTBS_VALA_FILES
 	TwitterBootstrapPlugin.vala
+	Form/TBButton.vala
+	Form/TBCheckboxGroupInput.vala
+	Form/TBGroupInput.vala
+	Form/TBPasswordInput.vala
+	Form/TBRadioGroupInput.vala
+	Form/TBResetButton.vala
+	Form/TBSelectGroupInput.vala
+	Form/TBSubmitButton.vala
 	Form/TBTextInput.vala
 )
 
@@ -18,9 +26,9 @@ PACKAGES
     ${APTBS_VALA_PACKAGES}
 OPTIONS
 	--thread
-	--vapidir=${CMAKE_SOURCE_DIR}/optional/plugin-twitter-bootstrap
+	--vapidir=${CMAKE_SOURCE_DIR}/src/optional/plugin-twitter-bootstrap
     --vapidir=${CMAKE_SOURCE_DIR}/vapi
-    --vapidir=${CMAKE_BINARY_DIR}/libambition
+    --vapidir=${CMAKE_BINARY_DIR}/src/libambition
 	--enable-experimental
 GENERATE_VAPI
 	${PPKGNAME}-${PPKGVERSION}
@@ -31,7 +39,7 @@ find_package(PkgConfig)
 set(APTBS_CFLAGS
 	${CORE_DEPS_CFLAGS_ALL}
 
-    -I${CMAKE_BINARY_DIR}/libambition
+    -I${CMAKE_BINARY_DIR}/src/libambition
     -w
 )
 set(APTBS_LIB_PATHS ${APTBS_DEPS_LIBRARY_DIRS})
