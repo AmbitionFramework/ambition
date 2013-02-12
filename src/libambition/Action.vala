@@ -21,6 +21,9 @@
 
 using Gee;
 namespace Ambition {
+	/**
+	 * Action definition.
+	 */
 	public class Action : Object {
 		public ArrayList<HttpMethod?> methods { get; set; default = new ArrayList<HttpMethod?>(); }
 		public ArrayList<ActionMethod?> targets { get; set; default = new ArrayList<ActionMethod?>(); }

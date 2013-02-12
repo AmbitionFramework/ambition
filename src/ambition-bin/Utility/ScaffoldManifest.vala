@@ -20,6 +20,9 @@
  */
 
 namespace Ambition.Utility {
+	/**
+	 * Container for a scaffold manifest.json file.
+	 */
 	public class ScaffoldManifest : Object {
 		public int version { get; set; }
 		public string name { get; set; }

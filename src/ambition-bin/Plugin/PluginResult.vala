@@ -20,6 +20,9 @@
  */
 
 namespace Ambition.Plugin {
+	/**
+	 * Container for the result of a Plugin query.
+	 */
 	public class PluginResult : Object {
 		public string name { get; set; }
 		public string version { get; set; }

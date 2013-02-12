@@ -20,6 +20,10 @@
  */
 
 namespace Ambition {
+	/**
+	 * Base class for the auto-generated Actions class, derived from the
+	 * application's actions.conf.
+	 */
 	public class Actions : Object {
 
 		/**

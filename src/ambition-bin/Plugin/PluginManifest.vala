@@ -20,6 +20,9 @@
  */
 
 namespace Ambition.Plugin {
+	/**
+	 * Container for a Plugin manifest.json file.
+	 */
 	public class PluginManifest : Object {
 		public string directory { get; set; }
 

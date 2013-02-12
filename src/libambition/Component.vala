@@ -20,6 +20,9 @@
  */
 
 namespace Ambition {
+	/**
+	 * Base class for each dispatcher-dependent Ambition component.
+	 */
 	public class Component : Object {
 		public Dispatcher dispatcher { get; set; }
 	}

@@ -28,10 +28,22 @@ namespace Ambition {
 
 		public abstract Actions get_actions();
 
+		/**
+		 * Optional function, called from the entry point, to allow code to be
+		 * run on initial execution of the application. Does nothing by default.
+		 * @param args Command line arguments
+		 */
 		public virtual bool init( string[] args ) {
 			return true;
 		}
 
+		/**
+		 * Entry point for the web application, initialized with command line
+		 * arguments. In most cases, this should not be overridden, as init()
+		 * will be run from this method. However, this can be done as long as it
+		 * is called from the subclass.
+		 * @param args Command line arguments
+		 */
 		public virtual void run( string[] args ) {
 			// Initialize the application's dispatcher
 			this.dispatcher = new Dispatcher(args);
