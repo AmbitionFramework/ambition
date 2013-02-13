@@ -6,7 +6,7 @@ The Almanna plugin provides integration with the Almanna ORM to an Ambition appl
 
 ## Installation and Configuration
 
-The Almanna plugin can be installed using the usual Ambition plugin tool. The plugin will link with your application.
+The Almanna plugin can be installed using the usual Ambition plugin tool. The plugin will link with your application. This requires that libalmanna, and potentially any dev package, is installed on your development machine.
 
 To change the configuration of the Almanna plugin, edit your application's configuration file in the `config/` directory.
 
