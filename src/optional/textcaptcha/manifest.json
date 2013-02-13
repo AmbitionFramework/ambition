@@ -4,6 +4,7 @@
 	"author" : "ambitionframework.org",
 	"description" : "Provides TextCaptcha integration.",
 	"require-link" : true,
+	"documentation" : "documentation.md",
 	"libraries" : [
 		"ambition-helper-textcaptcha-0.1.0"
 	],
