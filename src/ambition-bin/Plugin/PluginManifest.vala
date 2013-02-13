@@ -30,6 +30,7 @@ namespace Ambition.Plugin {
 		public string? version { get; set; }
 		public string? author { get; set; }
 		public string? description { get; set; }
+		public string? documentation { get; set; }
 		public bool require_link { get; set; }
 		public string[]? libraries { get; set; }
 		public string[]? pkgconfig_dependencies { get; set; }
