@@ -12,7 +12,7 @@ Most web servers provide SCGI support. These include, but are not limited to:
 
 ## Installation and Configuration
 
-The engine-scgi plugin can be installed using the usual Ambition plugin tool, and can be used immediately without configuration with sensible defaults. To always use SCGI, _engine_ must be set to _SCGI_ in your configuration file. Otherwise, to use the SCGI for one session, execute:
+The engine-scgi plugin can be installed using the usual Ambition plugin tool, and can be used immediately without configuration with sensible defaults. The plugin will link with your application. To always use SCGI, `app.engine` must be set to _SCGI_ in your configuration file. Otherwise, to use the SCGI for one session, execute:
 
     ambition run --engine SCGI
 
