@@ -4,6 +4,7 @@
 	"author" : "ambitionframework.org",
 	"description" : "Provides built-in support for the Almanna ORM, with entity registration and configuration via the application config file.",
 	"require-link" : true,
+	"documentation" : "documentation.md",
 	"headers" : [
 		"ambition-plugin-almanna-0.1.0.h"
 	],
