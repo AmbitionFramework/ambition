@@ -4,6 +4,7 @@
 	"author" : "ambitionframework.org",
 	"description" : "CouchDB integration for Ambition",
 	"require-link" : true,
+	"documentation" : "documentation.md",
 	"headers" : [
 		"ambition-plugin-couchdb-0.1.0.h"
 	],
