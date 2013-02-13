@@ -2,8 +2,9 @@
 	"name" : "TwitterBootstrap",
 	"version" : "0.1.0",
 	"author" : "ambitionframework.org",
-	"description" : "Twitter Bootstrap integration for Ambition",
-	"require-link" : false,
+	"description" : "Twitter Bootstrap field rendering for form fields in Ambition",
+	"require-link" : true,
+	"documentation" : "documentation.md",
 	"headers" : [
 		"ambition-plugin-twitterbootstrap-0.1.0.h"
 	],
