@@ -9,8 +9,12 @@ namespace %%namespace%% {
 			return new Actions();
 		}
 
-		public override void run( string[] args ) {
-			base.run(args);
+		/**
+		 * Customize this method to perform actions when the application starts.
+		 * @param args Command line arguments.
+		 */
+		public override bool init( string[] args ) {
+			return true;
 		}
 	}
 }
