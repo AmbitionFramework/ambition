@@ -210,10 +210,12 @@ namespace Ambition.Utility {
 				);
 			} catch (SpawnError se) {
 				Logger.error( "Unable to run make: %s".printf( se.message ) );
+				return_home();
 				return -1;
 			}
 			if ( exit_status != 0 ) {
 				Logger.error( "Error building project files via cmake:\n%s".printf(standard_error) );
+				return_home();
 				return -1;
 			}
 
@@ -237,14 +239,22 @@ namespace Ambition.Utility {
 				);
 			} catch (SpawnError se) {
 				Logger.error( "Unable to run make: %s".printf( se.message ) );
+				return_home();
 				return -1;
 			}
 			if ( exit_status != 0 ) {
 				Logger.error( "Error building current application:\n%s".printf(standard_error) );
+				return_home();
 				return -1;
 			}
 
 			return 0;
+		}
+
+		private void return_home() {
+			if ( Environment.get_current_dir().has_suffix("build") ) {
+				Environment.set_current_dir("..");
+			}
 		}
 
 		private void parse_exit_status( int exit_status ) {
