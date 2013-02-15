@@ -21,7 +21,6 @@ vala_precompile(AB_VALA_C
 	Plugin/IPluginService.vala
 	Plugin/HttpPluginService.vala
 	Plugin/LocalPluginService.vala
-	Plugin/PluginManifest.vala
 	Plugin/PluginResult.vala
 PACKAGES
 	${AB_VALA_PACKAGES}

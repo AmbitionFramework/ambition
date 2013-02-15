@@ -54,6 +54,7 @@ SET( LAM_VALA_FILES
 	Form/SubmitButton.vala
 	Form/ResetButton.vala
 	Form/Validator.vala
+	Plugin/PluginManifest.vala
 	PluginSupport/IPlugin.vala
 	PluginSupport/PluginLoader.vala
 	Session/Interface.vala
