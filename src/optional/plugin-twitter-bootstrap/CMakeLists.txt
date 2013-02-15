@@ -52,7 +52,7 @@ target_link_libraries(${PPKGNAME}-${PPKGVERSION} ${CORE_DEPS_LIBRARIES} ${APTBS_
 add_subdirectory(test)
 
 install (
-	FILES ${CMAKE_CURRENT_BINARY_DIR}/${PPKGNAME}-${PPKGVERSION}.vapi ${PPKGNAME}-${PPKGVERSION}.deps manifest.json
+	FILES ${CMAKE_CURRENT_BINARY_DIR}/${PPKGNAME}-${PPKGVERSION}.vapi ${PPKGNAME}-${PPKGVERSION}.deps manifest.json documentation.md
 	DESTINATION ${CMAKE_INSTALL_PREFIX}/share/ambition-framework/plugins/TwitterBootstrap-${PPKGVERSION}/)
 install (
 	FILES ${CMAKE_CURRENT_BINARY_DIR}/${PPKGNAME}-${PPKGVERSION}.h

@@ -55,7 +55,7 @@ target_link_libraries(${PPKGNAME}-${PPKGVERSION} ${CORE_DEPS_LIBRARIES} ${APCDB_
 add_subdirectory(test)
 
 install (
-	FILES ${CMAKE_CURRENT_BINARY_DIR}/${PPKGNAME}-${PPKGVERSION}.vapi ${CMAKE_SOURCE_DIR}/src/optional/plugin-couchdb/couchdb-glib-1.0.vapi ${PPKGNAME}-${PPKGVERSION}.deps manifest.json
+	FILES ${CMAKE_CURRENT_BINARY_DIR}/${PPKGNAME}-${PPKGVERSION}.vapi ${CMAKE_SOURCE_DIR}/src/optional/plugin-couchdb/couchdb-glib-1.0.vapi ${PPKGNAME}-${PPKGVERSION}.deps manifest.json documentation.md
 	DESTINATION ${CMAKE_INSTALL_PREFIX}/share/ambition-framework/plugins/CouchDB-${PPKGVERSION}/)
 install (
 	FILES ${CMAKE_CURRENT_BINARY_DIR}/${PPKGNAME}-${PPKGVERSION}.h

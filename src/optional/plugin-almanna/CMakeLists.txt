@@ -59,7 +59,7 @@ file(COPY ${CMAKE_SOURCE_DIR}/src/optional/plugin-almanna/share/scaffold-plugin-
 install(DIRECTORY ${CMAKE_BINARY_DIR}/src/optional/plugin-almanna/share/scaffold-plugin-almanna DESTINATION ${CMAKE_INSTALL_PREFIX}/share/ambition-framework)
 
 install (
-	FILES ${CMAKE_CURRENT_BINARY_DIR}/${PPKGNAME}-${PPKGVERSION}.vapi ${PPKGNAME}-${PPKGVERSION}.deps manifest.json
+	FILES ${CMAKE_CURRENT_BINARY_DIR}/${PPKGNAME}-${PPKGVERSION}.vapi ${PPKGNAME}-${PPKGVERSION}.deps manifest.json documentation.md
 	DESTINATION ${CMAKE_INSTALL_PREFIX}/share/ambition-framework/plugins/Almanna-${PPKGVERSION}/)
 install (
 	FILES ${CMAKE_CURRENT_BINARY_DIR}/${PPKGNAME}-${PPKGVERSION}.h

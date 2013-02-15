@@ -53,7 +53,7 @@ file(COPY ${CMAKE_SOURCE_DIR}/src/optional/engine-scgi/share/scaffold-engine-scg
 install(DIRECTORY ${CMAKE_BINARY_DIR}/src/optional/engine-scgi/share/scaffold-engine-scgi DESTINATION ${CMAKE_INSTALL_PREFIX}/share/ambition-framework)
 
 install (
-	FILES ${CMAKE_CURRENT_BINARY_DIR}/${PPKGNAME}-${PPKGVERSION}.vapi ${PPKGNAME}-${PPKGVERSION}.deps manifest.json
+	FILES ${CMAKE_CURRENT_BINARY_DIR}/${PPKGNAME}-${PPKGVERSION}.vapi ${PPKGNAME}-${PPKGVERSION}.deps manifest.json documentation.md
 	DESTINATION ${CMAKE_INSTALL_PREFIX}/share/ambition-framework/plugins/SCGI-${PPKGVERSION}/)
 install (
 	FILES ${CMAKE_CURRENT_BINARY_DIR}/${PPKGNAME}-${PPKGVERSION}.h
