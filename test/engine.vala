@@ -28,11 +28,11 @@ public class EngineTest {
 		Test.add_func("/ambition/engine/parse_request_body/non-form", () => {
 			var state = get_state();
 
-			string st_testdata = "This is test data.";
+			string st_testdata = "This is test data";
 			InputStream is_testdata = new MemoryInputStream.from_data( st_testdata.data, null );
 
 			var c = new Ambition.Engine.Base();
-			c.hook_parse_request_body( state, st_testdata.length, new DataInputStream(is_testdata) );
+			c.hook_parse_request_body( state, 17, new DataInputStream(is_testdata) );
 			assert( (string) state.request.request_body == (string) st_testdata.data );
 			assert( state.request.params.size == 1 );
 			assert( state.request.params.has_key( st_testdata ) );

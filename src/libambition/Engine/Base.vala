@@ -125,14 +125,14 @@ namespace Ambition.Engine {
 						break;
 					}
 					post_data.append_c( (char) c );
-					if ( post_data.len >= content_length ) {
+					if ( post_data.len == content_length ) {
 						break;
 					}
 				}
 			} catch (IOError e) {}
 			if ( post_data.len > 0 ) {
 				state.request.params.set_all( Request.params_from_string( post_data.str ) );
-				state.request.request_body = post_data.str.data;
+				state.request.request_body = post_data.data;
 			}
 		}
 
