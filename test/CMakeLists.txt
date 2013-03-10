@@ -45,9 +45,10 @@ set(TA_CFLAGS
 )
 set(TA_LIB_PATHS
     ${CORE_DEPS_LIBRARY_DIRS}
-    -L${CMAKE_BINARY_DIR}/src/libambition
+    ${CMAKE_BINARY_DIR}/src/libambition
 )
 add_definitions(${TA_CFLAGS})
+link_directories(${TA_LIB_PATHS})
 
 add_executable(${BINNAME} ${TA_VALA_C})
 include_directories(${CMAKE_BINARY_DIR}/src/libambition)

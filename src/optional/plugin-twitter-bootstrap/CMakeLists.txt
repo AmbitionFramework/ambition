@@ -42,7 +42,7 @@ set(APTBS_CFLAGS
     -I${CMAKE_BINARY_DIR}/src/libambition
     -w
 )
-set(APTBS_LIB_PATHS ${APTBS_DEPS_LIBRARY_DIRS})
+set(APTBS_LIB_PATHS ${APTBS_DEPS_LIBRARY_DIRS} ${CORE_DEPS_LIBRARY_DIRS})
 link_directories(${APTBS_LIB_PATHS})
 add_definitions(${APTBS_CFLAGS})
 
