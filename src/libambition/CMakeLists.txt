@@ -54,7 +54,11 @@ SET( LAM_VALA_FILES
 	Form/SubmitButton.vala
 	Form/ResetButton.vala
 	Form/Validator.vala
+	Plugin/HttpPluginService.vala
+	Plugin/IPluginService.vala
+	Plugin/LocalPluginService.vala
 	Plugin/PluginManifest.vala
+	Plugin/PluginResult.vala
 	PluginSupport/IPlugin.vala
 	PluginSupport/PluginLoader.vala
 	Session/Interface.vala
@@ -64,6 +68,14 @@ SET( LAM_VALA_FILES
 	Session/StorableMemory.vala
 	Testing/Helper.vala
 	Testing/TestResponse.vala
+	Utility/Clean.vala
+	Utility/Creator.vala
+	Utility/Monitor.vala
+	Utility/Run.vala
+	Utility/Plugin.vala
+	Utility/Scaffold.vala
+	Utility/ScaffoldManifest.vala
+	Utility/Utility.vala
 )
 
 SET( LAM_VALA_PACKAGES

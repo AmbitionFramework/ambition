@@ -152,7 +152,11 @@ namespace Ambition.Helper {
 				this,
 				destroy
 			);
-			context.parse( content, -1 );
+			try {
+				context.parse( content, -1 );
+			} catch (MarkupError me) {
+				throw new TextCaptchaError.PARSE_FAILURE( me.message );
+			}
 		}
 
 		private void element_open( MarkupParseContext context, string name,

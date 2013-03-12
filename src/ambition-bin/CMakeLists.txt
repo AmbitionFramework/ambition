@@ -9,19 +9,8 @@ SET( AB_VALA_PACKAGES
 )
 
 vala_precompile(AB_VALA_C
-	Utility/Clean.vala
-	Utility/Creator.vala
-	Utility/Monitor.vala
-	Utility/Run.vala
-	Utility/Plugin.vala
-	Utility/Scaffold.vala
-	Utility/ScaffoldManifest.vala
-	Utility/Shell.vala
-	Utility/Util.vala
-	Plugin/IPluginService.vala
-	Plugin/HttpPluginService.vala
-	Plugin/LocalPluginService.vala
-	Plugin/PluginResult.vala
+	Binary.vala
+	Shell.vala
 PACKAGES
 	${AB_VALA_PACKAGES}
 	${PKGNAME}-${PKGVERSION}
