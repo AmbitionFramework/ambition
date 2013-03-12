@@ -30,8 +30,8 @@ vala_precompile(TA_VALA_C
 	pluginloader.vala
 	assets/formsubclass.vala
 PACKAGES
-    ${TA_VALA_PACKAGES}
-    ${PKGNAME}-${PKGVERSION}
+	${TA_VALA_PACKAGES}
+	${PKGNAME}-${PKGVERSION}
 OPTIONS
 	-g
 	--thread
@@ -40,12 +40,12 @@ OPTIONS
 
 set(TA_CFLAGS
 	${CORE_DEPS_CFLAGS_ALL}
-    -I${CMAKE_BINARY_DIR}/src/libambition
-    -w
+	-I${CMAKE_BINARY_DIR}/src/libambition
+	-w
 )
 set(TA_LIB_PATHS
-    ${CORE_DEPS_LIBRARY_DIRS}
-    ${CMAKE_BINARY_DIR}/src/libambition
+	${CORE_DEPS_LIBRARY_DIRS}
+	${CMAKE_BINARY_DIR}/src/libambition
 )
 add_definitions(${TA_CFLAGS})
 link_directories(${TA_LIB_PATHS})
