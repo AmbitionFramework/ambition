@@ -33,7 +33,7 @@ OPTIONS
 
 set(AB_CFLAGS
 	${CORE_DEPS_CFLAGS_ALL}
-	-I${CMAKE_BINARY_DIR}/libambition
+	-I../libambition
 	-w
 )
 set(AB_LIB_PATHS
