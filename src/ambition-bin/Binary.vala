@@ -25,9 +25,28 @@
  */
 
 using Ambition;
+using Ambition.Utility;
 using Gee;
 
+public static HashMap<string,IUtility> utilities;
+
 public static int main( string[] args ) {
+	utilities = new HashMap<string,IUtility>();
+	/*
+	 * Load utility plugins, if available
+	 */
+	var plugin_dir = File.new_for_path("plugins");
+	if ( plugin_dir.query_exists() ) {
+		var utility_list = Ambition.Utility.UtilityLoader.load_utilities_from_directory("plugins");
+		if ( utility_list != null ) {
+			// init
+			foreach ( var utility in utility_list ) {
+				utility.register_utility();
+				utilities[ utility.name.down() ] = utility;
+			}
+		}
+	}
+
 	if ( args[1] == null ) {
 		return execute_command( false, null, null );
 	}
@@ -39,6 +58,8 @@ public static int execute_command( bool as_interactive, string? command, string[
 		if ( in_application() ) {
 			command = "shell";
 		}
+	} else if ( command in utilities.keys ) {
+		return utilities[command].receive_command(args);
 	}
 	switch (command) {
 		case "template-compile":
@@ -345,6 +366,21 @@ public static void usage( string? method = null, bool as_interactive = false ) {
 		wrap(
 			"Parses actions.conf and resolves plugin dependencies.\n"
 		);
+	}
+
+	if ( utilities != null && utilities.size > 0 ) {
+
+		if ( method == null ) {
+			stdout.printf("Plugin Commands\n---------------\n\n");
+		}
+
+		if ( method == null || ( method != null && utilities.has_key(method) ) ) {
+			foreach ( var utility_name in utilities.keys ) {
+				stdout.printf( "%s\n", utilities[utility_name].help() );
+			}
+		} else if ( utilities != null && method in utilities.keys ) {
+			stdout.printf( "%s\n", utilities[method].help() );
+		}
 	}
 }
 

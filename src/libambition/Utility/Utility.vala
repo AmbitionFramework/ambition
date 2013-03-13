@@ -40,7 +40,7 @@ namespace Ambition.Utility {
 	 * @param text Text to display and wrap
 	 * @param indent Default = 4, level of indentation for string
 	 */
-	public static void wrap( string text, int indent = 4 ) {
+	public static string? wrap_string( string text, int indent = 4 ) {
 		int wrap_at = 80;
 		var sb = new StringBuilder();
 		foreach ( string word in text.split(" ") ) {
@@ -57,6 +57,15 @@ namespace Ambition.Utility {
 			}
 			sb.append(word);
 		}
-		stdout.printf( "%s\n", sb.str );
+		return sb.str;
+	}
+
+	/**
+	 * Soft wrap a string at a given column.
+	 * @param text Text to display and wrap
+	 * @param indent Default = 4, level of indentation for string
+	 */
+	public static void wrap( string text, int indent = 4 ) {
+		stdout.printf( "%s\n", wrap_string( text, indent ) );
 	}
 }

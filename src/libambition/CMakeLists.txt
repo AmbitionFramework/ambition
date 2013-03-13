@@ -70,12 +70,14 @@ SET( LAM_VALA_FILES
 	Testing/TestResponse.vala
 	Utility/Clean.vala
 	Utility/Creator.vala
+	Utility/IUtility.vala
 	Utility/Monitor.vala
 	Utility/Run.vala
 	Utility/Plugin.vala
 	Utility/Scaffold.vala
 	Utility/ScaffoldManifest.vala
 	Utility/Utility.vala
+	Utility/UtilityLoader.vala
 )
 
 SET( LAM_VALA_PACKAGES

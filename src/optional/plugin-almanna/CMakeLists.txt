@@ -3,9 +3,10 @@ set (PPKGVERSION 0.1.0)
 
 SET( APA_VALA_FILES
 	AlmannaPlugin.vala
-	StorableAlmanna.vala
 	AlmannaSession.vala
+	AlmannaUtility.vala
 	AuthorizerAlmanna.vala
+	StorableAlmanna.vala
 	UserAlmanna.vala
 )
 
