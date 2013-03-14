@@ -4,6 +4,7 @@ set (PPKGVERSION 0.1.0)
 SET( AES_VALA_FILES
 	SCGI.vala
 	SCGIPlugin.vala
+	SCGIUtility.vala
 )
 
 SET( AES_DEPS_PACKAGES

@@ -42,10 +42,11 @@ namespace Ambition.Utility {
 	 */
 	public static string? wrap_string( string text, int indent = 4 ) {
 		int wrap_at = 80;
+		var big_sb = new StringBuilder();
 		var sb = new StringBuilder();
 		foreach ( string word in text.split(" ") ) {
 			if ( sb.len >= wrap_at || sb.len + word.length > wrap_at ) {
-				stdout.printf( "%s\n", sb.str );
+				big_sb.append( "%s\n".printf(sb.str) );
 				sb = new StringBuilder();
 			}
 			if ( sb.len > 0 ) {
@@ -57,7 +58,8 @@ namespace Ambition.Utility {
 			}
 			sb.append(word);
 		}
-		return sb.str;
+		big_sb.append(sb.str);
+		return big_sb.str;
 	}
 
 	/**
@@ -67,5 +69,51 @@ namespace Ambition.Utility {
 	 */
 	public static void wrap( string text, int indent = 4 ) {
 		stdout.printf( "%s\n", wrap_string( text, indent ) );
+	}
+
+	/**
+	 * Alter a config key in the current application.
+	 * @param config_key Configuration key
+	 * @param config_value Configuration value
+	 */
+	public static void alter_config( string config_key, string config_value ) {
+		var sb = new StringBuilder();
+		bool found = false;
+		try {
+			var file = File.new_for_path( "config/%s.conf".printf( get_application_name().down() ) );
+
+			if ( !file.query_exists() ) {
+				stderr.printf( "Config file not available where expected.\n" );
+				return;
+			}
+
+			// Read it
+			var input_stream = new DataInputStream( file.read() );
+			string line = null;
+			while ( ( line = input_stream.read_line(null) ) != null ) {
+				// Skip potential comments
+				if ( !line.has_prefix("#") && !line.has_prefix("//") && "=" in line ) {
+					string key = line.substring( 0, line.index_of("=") ).chomp().chug();
+					if ( key == config_key ) {
+						found = true;
+						sb.append( "%s = %s\n".printf( config_key, config_value ) );
+					} else {
+						sb.append( "%s\n".printf(line) );
+					}
+				} else {
+					sb.append( "%s\n".printf(line) );
+				}
+			}
+			if ( found == false ) {
+				sb.append( "%s = %s\n".printf( config_key, config_value ) );
+			}
+
+			// Write it
+			string etag;
+			file.replace_contents( sb.str.data, null, false, FileCreateFlags.REPLACE_DESTINATION, out etag );
+
+		} catch (Error e) {
+
+		}
 	}
 }

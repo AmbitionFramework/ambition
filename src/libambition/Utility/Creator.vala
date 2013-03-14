@@ -54,8 +54,6 @@ namespace Ambition.Utility {
 					Logger.error( "Cannot scaffold a '%s'.".printf(type) );
 					return -1;
 			}
-
-			return 0;
 		}
 
 		/**

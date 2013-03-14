@@ -16,7 +16,15 @@ The engine-scgi plugin can be installed using the usual Ambition plugin tool, an
 
     ambition run --engine SCGI
 
-To change the configuration of the SCGI plugin, edit your application's configuration file in the `config/` directory.
+To change the configuration of the SCGI plugin, you may use the ambition shell. To set the engine to SCGI, execute:
+
+    ambition scgi configure
+
+To set the engine using another port, add the port to the end. All values will replace previous instances.
+
+    ambition scgi configure 3201
+
+Otherwise, edit your application's configuration file in the `config/` directory.
 
 _scgi.port_ - Listening port of the SCGI server, and should match the web server configuraion. Defaults to 3200.
 
