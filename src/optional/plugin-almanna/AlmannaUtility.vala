@@ -39,7 +39,7 @@ namespace Ambition.Utility {
 			string command = args[0];
 			switch (command) {
 				case "scaffold":
-					string[] spawn_args = { "/usr/bin/generate-schema.pl" };
+					string[] spawn_args = { "/usr/bin/almanna-generate" };
 					foreach ( var arg in args ) {
 						spawn_args += arg;
 					}

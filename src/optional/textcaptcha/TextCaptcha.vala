@@ -90,7 +90,7 @@ namespace Ambition.Helper {
 		 * Serialize the current TextCaptcha instance as a string.
 		 */
 		public string serialize() {
-			return string.joinv( "|||", { question, string.joinv( "|||", answers.to_array() ) } );;
+			return string.joinv( "|||", { question, string.joinv( "|||", answers.to_array() ) } );
 		}
 
 		/**
