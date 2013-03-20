@@ -85,7 +85,6 @@ namespace Ambition.Utility {
 			}
 			void* register_function;
 			if ( ! module.symbol( "init_utility", out register_function ) ) {
-				Logger.error( "Invalid utility '%s', missing init_utility() function, skipping. %s".printf( filename, Module.error() ) );
 				return null;
 			}
 
