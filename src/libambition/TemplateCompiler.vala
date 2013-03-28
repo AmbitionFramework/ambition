@@ -123,18 +123,18 @@ namespace Ambition {
 				string line;
 				while ( ( line = input_stream.read_line(null) ) != null ) {
 					line_number++;
+					string left_line = line.chug();
+					if ( left_line.has_prefix("@") && !left_line.has_prefix("@{") ) {
+						left_line = "@" + line.substring(1).chug(); // Remove leading space after @
+						if ( left_line.has_prefix("@parameters") ) {
+							parameters = left_line.chomp().replace( "@parameters(", "" );
 
-					if ( line.has_prefix("@") && !line.has_prefix("@{") ) {
-						line = "@" + line.substring(1).chug(); // Remove leading space after @
-						if ( line.has_prefix("@parameters") ) {
-							parameters = line.chomp().replace( "@parameters(", "" );
+						} else if ( left_line.has_prefix("@using") ) {
+							builder.prepend( "using " + left_line.replace( "@using ", "" ) + "; // L%d\n".printf(line_number) );
 
-						} else if ( line.has_prefix("@using") ) {
-							builder.prepend( "using " + line.replace( "@using ", "" ) + "; // L%d\n".printf(line_number) );
-
-						} else if ( line.has_prefix("@process") ) {
+						} else if ( left_line.has_prefix("@process") ) {
 							MatchInfo info = null;
-							if ( process.match( line, 0, out info ) ) {
+							if ( process.match( left_line, 0, out info ) ) {
 								string template = info.fetch(1);
 								builder.append("            b.append(");
 								builder.append( "( new Template." + template + "(" );
@@ -147,12 +147,12 @@ namespace Ambition {
 								throw new TemplateCompileError.INVALID_USAGE(msg);
 							}
 
-						} else if ( line.has_prefix("@*") ) {
+						} else if ( left_line.has_prefix("@*") ) {
 							continue;
 
 						} else {
-							if ( check_valid(line) ) {
-								builder.append( "            " + line.substring(1) + " // L%d\n".printf(line_number) );
+							if ( check_valid(left_line) ) {
+								builder.append( "            " + left_line.substring(1) + " // L%d\n".printf(line_number) );
 							} else {
 								var msg = "Unrecognized or unavailable command in '%s' on line %d: %s\n".printf( template_name, line_number, line );
 								throw new TemplateCompileError.BAD_COMMAND(msg);
