@@ -39,22 +39,40 @@ namespace Ambition.Utility {
 			string command = args[0];
 			switch (command) {
 				case "scaffold":
-					string[] spawn_args = { "/usr/bin/almanna-generate" };
+					string[] spawn_args = { "/usr/bin/almanna-generate", "--show" };
 					foreach ( var arg in args ) {
 						spawn_args += arg;
 					}
 					try {
 						int exit_status;
+						string proc_stdout;
+						string proc_stderr;
 						Process.spawn_sync(
 							null,
 							spawn_args,
 							null,
 							SpawnFlags.CHILD_INHERITS_STDIN,
 							null,
-							null,
-							null,
+							out proc_stdout,
+							out proc_stderr,
 							out exit_status
 						);
+						stdout.printf(proc_stdout);
+						stderr.printf(proc_stderr);
+						// Check for generated files 
+						if ( "----" in proc_stdout ) {
+							var files = new Gee.ArrayList<string>();
+							bool after_rule = false;
+							foreach ( string line in proc_stdout.split("\n") ) {
+								if (after_rule) {
+									files.add( line.replace( "src/", "" ) );
+								}
+								if ( line == "----" ) {
+									after_rule = true;
+								}
+							}
+							alter_cmakelists(files);
+						}
 					} catch (SpawnError wse) {
 						Logger.error( "Unable to run scaffold: %s".printf( wse.message ) );
 						return -1;
@@ -69,7 +87,10 @@ namespace Ambition.Utility {
 
 		public string help() {
 			return "almanna scaffold <options>\n"
-			       + wrap_string( "Runs the Almanna scaffolder." );
+			       + wrap_string(
+			       		"Runs the Almanna scaffolder, and inserts the created "
+			       		+ "files into your project."
+			       	);
 		}
 	}
 }

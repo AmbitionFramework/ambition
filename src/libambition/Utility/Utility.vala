@@ -19,6 +19,7 @@
  * limitations under the License.
  */
 
+using Gee;
 namespace Ambition.Utility {
 	/**
 	 * Get current application name.
@@ -115,5 +116,59 @@ namespace Ambition.Utility {
 		} catch (Error e) {
 
 		}
+	}
+
+	/**
+	 * Alter a config key in the current application.
+	 * @param lines Lines to add or modify
+	 */
+	public static bool alter_cmakelists( ArrayList<string> lines ) {
+		var cmakelists = File.new_for_path("src/CMakeLists.txt");
+		var builder = new StringBuilder();
+
+		if ( !cmakelists.query_exists() ) {
+			Logger.error( "Fatal: Unable to load CMakeLists.txt." );
+			return false;
+		}
+		try {
+			var input_stream = new DataInputStream( cmakelists.read() );
+			string line;
+			while ( ( line = input_stream.read_line(null) ) != null ) {
+				builder.append(line);
+				builder.append("\n");
+			}
+		} catch ( Error e ) {
+			Logger.error( "Fatal: Unable to read CMakeLists.txt" );
+			return false;
+		}
+
+		try {
+			var output_stream = cmakelists.replace( null, false, FileCreateFlags.REPLACE_DESTINATION );
+			bool in_source_files = false;
+			foreach ( string line in builder.str.split("\n") ) {
+				if ( in_source_files ) {
+					var stripped = line.chomp().chug();
+					if ( stripped in lines ) {
+						lines.remove(stripped);
+					}
+				}
+				if ( in_source_files && line == ")" ) {
+					foreach ( var new_line in lines ) {
+						output_stream.write( "    %s\n".printf(new_line).data );
+					}
+					in_source_files = false;
+				}
+				if ( "SET( APP_VALA_FILES" in line ) {
+					in_source_files = true;
+				}
+				output_stream.write( line.data );
+				output_stream.write( "\n".data );
+			}
+		} catch ( Error e ) {
+			Logger.error( "Fatal: Unable to write CMakeLists.txt" );
+			return false;
+		}
+
+		return true;
 	}
 }
