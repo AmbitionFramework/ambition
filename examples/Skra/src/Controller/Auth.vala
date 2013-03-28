@@ -32,10 +32,9 @@ namespace Skra.Controller {
 			if ( state.request.method == HttpMethod.POST && login_form.is_valid() ) {
 				bool success = state.authorize( "ht", login_form.username, login_form.password );
 				if (success) {
-					state.response.redirect("/wiki");
-				} else {
-					login_form.add_form_error("Invalid username or password.");
+					return new CoreView.Redirect("/wiki");
 				}
+				login_form.add_form_error("Invalid username or password.");
 			}
 			return new Template.Auth.login(login_form);
 		}
