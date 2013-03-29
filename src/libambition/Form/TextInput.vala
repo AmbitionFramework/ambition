@@ -35,7 +35,7 @@ namespace Ambition.Form {
 			input_hm.set( "name", field );
 			input_hm.set( "value", value );
 			string div_text = "";
-			if ( blurb != null && blurb != field ) {
+			if ( blurb != null && blurb != field && blurb != field.replace( "_", "-" ) ) {
 				var div_hm = new HashMap<string,string>();
 				div_hm.set( "class", "input_hint" );
 				div_hm.set( "id", id + "_hint" );

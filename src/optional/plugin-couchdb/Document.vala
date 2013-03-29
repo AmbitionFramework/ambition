@@ -19,6 +19,7 @@
  * limitations under the License.
  */
 
+using Gee;
 namespace Ambition.Couch {
 	/**
 	 * Base class for a Couch DB Database/Document type.
@@ -150,6 +151,21 @@ namespace Ambition.Couch {
 			}
 
 			return database.put_document(document);
+		}
+
+		/**
+		 * List all documents in this database. Use with care.
+		 * @returns ArrayList of Document. Must cast to document type.
+		 */
+		public ArrayList<Document> list() {
+			var return_list = new ArrayList<Document>();
+			var list = get_database().list_documents();
+			foreach ( var doc in list ) {
+				var new_doc = (Document) Object.new( this.get_type() );
+				new_doc.load(doc);
+				return_list.add(new_doc);
+			}
+			return return_list;
 		}
 
 		/**

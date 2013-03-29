@@ -48,6 +48,7 @@ namespace Ambition.PluginSupport {
 			// Register types for dynamic loading
 			var type = typeof(Ambition.Authorization.Authorizer.Almanna);
 			type = typeof(Ambition.Session.StorableAlmanna);
+			type = typeof(Almanna.Loader);
 			if ( type > 0 ) {}
 
 			// Determine if connection data is in here

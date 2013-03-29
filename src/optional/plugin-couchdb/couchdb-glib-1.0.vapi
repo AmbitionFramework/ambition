@@ -39,6 +39,7 @@ namespace Couchdb {
 		public void listen_for_changes ();
 		public bool put_document (Couchdb.Document document) throws GLib.Error;
 		public Couchdb.Document get_document (string docid) throws GLib.Error;
+		public GLib.SList<Document> list_documents () throws GLib.Error;
 		[NoAccessorMethod]
 		public string database_name { owned get; set construct; }
 		[NoAccessorMethod]

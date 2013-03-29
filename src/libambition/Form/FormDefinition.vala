@@ -166,6 +166,22 @@ namespace Ambition.Form {
 			return true;
 		}
 
+		/**
+		 * Bind the data from this form to properties in another object.
+		 * @param destination_object Object to transfer data to.
+		 */
+		public void bind_to_object( Object destination_object ) {
+			// Iterate through destination properties
+			foreach ( ParamSpec ps in destination_object.get_class().list_properties() ) {
+				// Check if source object has this property
+				if ( this.get_class().find_property( ps.name ) != null ) {
+					Value v = Value( ps.value_type );
+					this.get_property( ps.name, ref v );
+					destination_object.set_property( ps.name, v );
+				}
+			}
+		}
+
 		/*
 		 * Haaaaaaaaacks
 		 */

@@ -120,6 +120,27 @@ public static void add_tests() {
 			assert( document.some_int_value == 13 );
 			drop_test_database();
 		});
+		Test.add_func("/ambition/plugin/couchdb/live/document_subclass/list", () => {
+			create_test_database();
+			for( var i = 1; i < 5; i++ ) {
+				var document = new ExampleCouchDocument();
+				assert( document != null );
+				document.some_int_value = i;
+				document.some_string_value = "twelve";
+				document.some_double_value = i + 0.04;
+				document.some_bool_value = true;
+				try {
+					assert( document.save() == true );
+				} catch (Error e) {
+					assert_not_reached();
+				}
+			}
+			var list = ( new ExampleCouchDocument() ).list();
+			assert( list != null );
+			assert( list.size == 4 );
+			assert( ( ( ExampleCouchDocument) list[0] ).some_int_value == 1 );
+			drop_test_database();
+		});
 	} else {
 		stdout.printf( "%s\n", "Skipping live tests. Enable with COUCH_LIVE_TESTS=1." );
 	}
