@@ -92,6 +92,15 @@ namespace Ambition.Utility {
 				return false;
 			}
 
+			// OS Type
+			bool is_osx = false;
+			foreach ( var v in Environment.list_variables() ) {
+				if ( v.length > 6 && v.substring( 0, 6 ) == "Apple_" ) {
+					is_osx = true;
+					break;
+				}
+			}
+
 			// Fill installed arraylist
 			var installed = get_installed_manifests();
 			if ( installed == null ) {
@@ -109,6 +118,18 @@ namespace Ambition.Utility {
 					// Is installed, but shouldn't be
 					remove_plugin_from_directory(installed_plugin.name);
 					installed.remove(installed_plugin);
+				}
+
+				if (is_osx) {
+					string library_path = Environment.get_variable("DYLD_LIBRARY_PATH");
+					if ( library_path == null ) {
+						library_path = "";
+					} else {
+						library_path = library_path + ":";
+					}
+					library_path = library_path + "plugins/" + installed_plugin.name;
+
+					Environment.set_variable( "DYLD_LIBRARY_PATH", library_path, true );
 				}
 			}
 
