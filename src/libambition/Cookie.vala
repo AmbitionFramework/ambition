@@ -33,7 +33,7 @@ namespace Ambition {
 		/**
 		 * Content of the cookie.
 		 */
-		public string value { get; set; }
+		public string value { get; set; default = ""; }
 		/**
 		 * Expiration date as a HTTP formatted date, but normally will be set
 		 * automatically with max_age.

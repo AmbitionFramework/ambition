@@ -303,7 +303,10 @@ namespace Ambition.Engine {
 				if ( sb.len > 0 ) {
 					sb.append("; ");
 				}
-				sb.append( cookie.render() );
+				string? cookie_string = cookie.render();
+				if ( cookie_string != null ) {
+					sb.append(cookie_string);
+				}
 			}
 			state.response.set_header( "Set-Cookie", sb.str );
 		}
