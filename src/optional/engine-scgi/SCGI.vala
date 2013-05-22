@@ -103,11 +103,10 @@ namespace Ambition.Engine {
 				raw_headers["Content-Type"] = state.response.content_type;
 				raw_headers["Content-Length"] = state.response.get_body_length().to_string();
 			}
-			
-			var it = raw_headers.map_iterator();
-			for (var has_next = it.first(); has_next; has_next = it.next()) {
+
+			foreach ( var header_key in raw_headers.keys ) {
 				scgi_req.output.write(
-					"%s: %s\r\n".printf( it.get_key(), it.get_value() ).data
+					"%s: %s\r\n".printf( header_key, raw_headers[header_key] ).data
 				);
 			}
 			

@@ -30,15 +30,15 @@ set (PREFIX ${CMAKE_INSTALL_PREFIX})
 set (DOLLAR "$")
 
 SET( CORE_DEPS_PACKAGES
-	glib-2.0>=2.26
-	gee-1.0
+	glib-2.0
+	gee-0.8
 	gio-2.0
 	json-glib-1.0
 	gmodule-2.0
     libsoup-2.4
 )
 find_package(PkgConfig)
-pkg_check_modules(CORE_DEPS REQUIRED ${CORE_DEPS_PACKAGES})
+pkg_check_modules(CORE_DEPS REQUIRED ${CORE_DEPS_PACKAGES} glib-2.0>=2.26)
 SET( CMAKE_BUILD_TYPE Debug )
 SET( CORE_DEPS_CFLAGS_ALL
 	${CORE_DEPS_CFLAGS}

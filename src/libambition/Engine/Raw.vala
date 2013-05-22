@@ -305,10 +305,9 @@ namespace Ambition.Engine {
 
 			raw_headers.set_all(state.response.headers);
 			
-			var it = raw_headers.map_iterator();
-			for ( var has_next = it.first(); has_next; has_next = it.next() ) {
+			foreach ( var header_key in raw_headers.keys ) {
 				yield conn.output_stream.write_async(
-					"%s: %s\r\n".printf(it.get_key(), it.get_value()).data
+					"%s: %s\r\n".printf( header_key, raw_headers[header_key] ).data
 				);
 			}
 			

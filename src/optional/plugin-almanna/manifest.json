@@ -13,7 +13,7 @@
 	],
 	"pkgconfig-dependencies" : [
 		"almanna-0.1",
-		"gee-1.0",
+		"gee-0.8",
 		"gio-2.0"
 	]
 }

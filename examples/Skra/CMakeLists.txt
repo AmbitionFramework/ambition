@@ -20,7 +20,7 @@ set (PREFIX ${CMAKE_INSTALL_PREFIX})
 INCLUDE(plugins/plugins.cmake)
 
 SET( APP_DEPS_PACKAGES
-    gee-1.0
+    gee-0.8
     ambition-0.1
     ${APP_PLUGIN_PKGCONFIG}
 )

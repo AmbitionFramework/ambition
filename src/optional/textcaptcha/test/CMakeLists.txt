@@ -7,7 +7,6 @@ SET( TAHT_VALA_PACKAGES
     ambition-0.1
     almanna-0.1
     ambition-helper-textcaptcha-${PPKGVERSION}
-	posix
 )
 
 vala_precompile(TAHT_VALA_C
@@ -41,4 +40,5 @@ add_dependencies(${BINNAME} ${PPKGNAME}-${PPKGVERSION})
 target_link_libraries(${BINNAME} ${TAHT_DEPS_LIBRARIES} gthread-2.0 ambition-helper-textcaptcha-${PPKGVERSION})
 include(Tests)
 add_test_executable(${BINNAME})
-set(ENV{LD_LIBRARY_PATH} "${CMAKE_BINARY_DIR}/libambition:..:$ENV{LD_LIBRARY_PATH}")
+set(ENV{LD_LIBRARY_PATH} "${CMAKE_BINARY_DIR}/src/libambition:..:$ENV{LD_LIBRARY_PATH}")
+set(ENV{DYLD_LIBRARY_PATH} "${CMAKE_BINARY_DIR}/src/libambition:..:$ENV{DYLD_LIBRARY_PATH}")
