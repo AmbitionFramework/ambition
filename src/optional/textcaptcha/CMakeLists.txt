@@ -40,7 +40,10 @@ set(AHT_CFLAGS
     -I${CMAKE_BINARY_DIR}/src/libambition
     -w
 )
-set(AHT_LIB_PATHS ${AHT_DEPS_LIBRARY_DIRS})
+set(AHT_LIB_PATHS
+	${AHT_DEPS_LIBRARY_DIRS}
+	${CMAKE_BINARY_DIR}/src/libambition
+)
 link_directories(${AHT_LIB_PATHS})
 add_definitions(${AHT_CFLAGS})
 

@@ -30,8 +30,8 @@ set(TAHT_CFLAGS
 )
 set(TAHT_LIB_PATHS
     ${CORE_DEPS_LIBRARY_DIRS}
-    -L${CMAKE_BINARY_DIR}/src/libambition
-    -L{CMAKE_BINARY_DIR}/src/optional/textcaptcha
+    ${CMAKE_BINARY_DIR}/src/libambition
+    ${CMAKE_BINARY_DIR}/src/optional/textcaptcha
 )
 add_definitions(${TAHT_CFLAGS})
 

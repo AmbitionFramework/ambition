@@ -37,19 +37,19 @@ OPTIONS
 
 set(AB_CFLAGS
 	${CORE_DEPS_CFLAGS_ALL}
-	-I../libambition
+	${CMAKE_BINARY_DIR}/src/libambition
 	-I${READLINE_INCLUDE_DIR}
 	-w
 )
 set(AB_LIB_PATHS
 	${CORE_DEPS_LIBRARY_DIRS}
-	${CMAKE_BINARY_DIR}/libambition
+	${CMAKE_BINARY_DIR}/src/libambition
 )
 add_definitions(${AB_CFLAGS})
 
 link_directories(${AB_LIB_PATHS})
 add_executable(${BINNAME} ${AB_VALA_C})
-include_directories(${CMAKE_BINARY_DIR}/libambition ${READLINE_INCLUDE_DIR})
+include_directories(${CMAKE_BINARY_DIR}/src/libambition ${READLINE_INCLUDE_DIR})
 add_dependencies(${BINNAME} ${PKGNAME}-${PKGVERSION})
 target_link_libraries(${BINNAME} ${CORE_DEPS_LIBRARIES} readline gthread-2.0 ambition-0.1)
 

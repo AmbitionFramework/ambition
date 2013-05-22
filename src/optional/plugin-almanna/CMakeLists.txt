@@ -38,15 +38,16 @@ GENERATE_HEADER
 find_package(PkgConfig)
 pkg_check_modules(APA_DEPS REQUIRED ${APA_DEPS_PACKAGES})
 set(APA_CFLAGS
+    -I${CMAKE_BINARY_DIR}/src/libambition
 	${CORE_DEPS_CFLAGS_ALL}
     ${APA_DEPS_CFLAGS}
     ${APA_DEPS_CFLAGS_OTHER}
-    -I${CMAKE_BINARY_DIR}/src/libambition
     -w
 )
 set(APA_LIB_PATHS
 	${CORE_DEPS_LIBRARY_DIRS}
     ${APA_DEPS_LIBRARY_DIRS}
+	${CMAKE_BINARY_DIR}/src/libambition
 )
 link_directories(${APA_LIB_PATHS})
 add_definitions(${APA_CFLAGS})

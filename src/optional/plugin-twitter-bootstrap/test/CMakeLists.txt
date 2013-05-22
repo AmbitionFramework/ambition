@@ -31,8 +31,8 @@ set(TAPBS_CFLAGS
 )
 set(TAPBS_LIB_PATHS
     ${CORE_DEPS_LIBRARY_DIRS}
-    -L${CMAKE_BINARY_DIR}/src/libambition
-    -L{CMAKE_BINARY_DIR}/src/optional/plugin-twitter-bootstrap
+    ${CMAKE_BINARY_DIR}/src/libambition
+    ${CMAKE_BINARY_DIR}/src/optional/plugin-twitter-bootstrap
 )
 add_definitions(${TAPBS_CFLAGS})
 

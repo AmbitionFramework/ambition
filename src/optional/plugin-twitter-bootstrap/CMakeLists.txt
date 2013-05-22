@@ -38,11 +38,14 @@ GENERATE_HEADER
 find_package(PkgConfig)
 set(APTBS_CFLAGS
 	${CORE_DEPS_CFLAGS_ALL}
-
     -I${CMAKE_BINARY_DIR}/src/libambition
     -w
 )
-set(APTBS_LIB_PATHS ${APTBS_DEPS_LIBRARY_DIRS} ${CORE_DEPS_LIBRARY_DIRS})
+set(APTBS_LIB_PATHS
+	${APTBS_DEPS_LIBRARY_DIRS}
+	${CORE_DEPS_LIBRARY_DIRS}
+	${CMAKE_BINARY_DIR}/src/libambition
+)
 link_directories(${APTBS_LIB_PATHS})
 add_definitions(${APTBS_CFLAGS})
 

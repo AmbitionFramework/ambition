@@ -23,12 +23,12 @@ SET( APCDB_VALA_PACKAGES
 vala_precompile(APCDB_VALA_C
 	${APCDB_VALA_FILES}
 PACKAGES
-    ${APCDB_VALA_PACKAGES}
+	${APCDB_VALA_PACKAGES}
 OPTIONS
 	--thread
 	--vapidir=${CMAKE_SOURCE_DIR}/src/optional/plugin-couchdb
-    --vapidir=${CMAKE_SOURCE_DIR}/vapi
-    --vapidir=${CMAKE_BINARY_DIR}/src/libambition
+	--vapidir=${CMAKE_SOURCE_DIR}/vapi
+	--vapidir=${CMAKE_BINARY_DIR}/src/libambition
 	--enable-experimental
 GENERATE_VAPI
 	${PPKGNAME}-${PPKGVERSION}
@@ -39,13 +39,16 @@ find_package(PkgConfig)
 pkg_check_modules(APCDB_DEPS REQUIRED ${APCDB_DEPS_PACKAGES})
 set(APCDB_CFLAGS
 	${CORE_DEPS_CFLAGS_ALL}
-    ${APCDB_DEPS_CFLAGS}
-    ${APCDB_DEPS_CFLAGS_OTHER}
-    -I/usr/include/couchdb-glib-1.0
-    -I${CMAKE_BINARY_DIR}/src/libambition
-    -w
+	${APCDB_DEPS_CFLAGS}
+	${APCDB_DEPS_CFLAGS_OTHER}
+	-I/usr/include/couchdb-glib-1.0
+	-I${CMAKE_BINARY_DIR}/src/libambition
+	-w
 )
-set(APCDB_LIB_PATHS ${APCDB_DEPS_LIBRARY_DIRS})
+set(APCDB_LIB_PATHS
+	${APCDB_DEPS_LIBRARY_DIRS}
+	${CMAKE_BINARY_DIR}/src/libambition
+)
 link_directories(${APCDB_LIB_PATHS})
 add_definitions(${APCDB_CFLAGS})
 
