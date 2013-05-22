@@ -21,11 +21,11 @@ OPTIONS
 
 set(APPTEST_CFLAGS
 	${APP_CFLAGS}
-	-I../src
+	-I${CMAKE_BINARY_DIR}/src
 )
 set(APPTEST_LIB_PATHS
 	${APP_LIB_PATHS}
-	-L../src
+	${CMAKE_BINARY_DIR}/src
 )
 add_definitions(${APPTEST_CFLAGS})
 link_directories( ${APPTEST_LIB_PATHS} )
