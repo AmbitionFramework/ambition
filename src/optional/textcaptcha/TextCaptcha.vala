@@ -49,7 +49,7 @@ namespace Ambition.Helper {
 		/**
 		 * Question to be posed to the user.
 		 */
-		public string question { get; private set; }
+		public string? question { get; private set; }
 		/**
 		 * List of MD5 hashes representing valid answers.
 		 */
@@ -67,7 +67,7 @@ namespace Ambition.Helper {
 			parse_content( retrieve_captcha(api_key) );
 		}
 
-		internal TextCaptcha.test( string content ) throws TextCaptchaError {
+		public TextCaptcha.test( string content ) throws TextCaptchaError {
 			parse_content(content);
 		}
 
@@ -90,7 +90,7 @@ namespace Ambition.Helper {
 		 * Serialize the current TextCaptcha instance as a string.
 		 */
 		public string serialize() {
-			return string.joinv( "|||", { question, string.joinv( "|||", answers.to_array() ) } );
+			return string.joinv( "|||", { question, Ambition.arraylist_joinv( "|||", answers ) } );
 		}
 
 		/**
@@ -172,7 +172,9 @@ namespace Ambition.Helper {
 			if ( current_node != null ) {
 				switch (current_node) {
 					case "question":
-						this.question = text;
+						if ( text != null ) {
+							this.question = text;
+						}
 						break;
 					case "answer":
 						this.answers.add(text);
