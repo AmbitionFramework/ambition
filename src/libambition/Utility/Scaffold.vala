@@ -33,6 +33,11 @@ namespace Ambition.Utility {
 		public int run( string name, string[]? profiles = null ) {
 			this.profiles = profiles;
 
+			if ( name.down() == "test" || name.down() == "release" || name.down() == "debug" ) {
+				stderr.printf( "Projects cannot be named 'test', 'release', or 'debug'.\n" );
+				return 1;
+			}
+
 			// Find shared files
 			foreach ( string dir in Environment.get_system_data_dirs() ) {
 				var file_path = get_path( dir, "ambition-framework" );
