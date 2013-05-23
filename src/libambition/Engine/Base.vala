@@ -117,14 +117,14 @@ namespace Ambition.Engine {
 		}
 
 		private void parse_form_data( State state, int content_length, DataInputStream stream ) {
-			var post_data = new StringBuilder();
+			var post_data = new StringBuilder.sized(content_length);
 			int c;
 			try {
 				while ( ( c = stream.read_byte(null) ) != 0 ) {
 					if ( c == '\r' ) {
 						break;
 					}
-					post_data.append_c( (char) c );
+					post_data.append_unichar( (unichar) c );
 					if ( post_data.len == content_length ) {
 						break;
 					}

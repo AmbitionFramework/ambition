@@ -33,7 +33,8 @@ public class EngineTest {
 
 			var c = new Ambition.Engine.Base();
 			c.hook_parse_request_body( state, 17, new DataInputStream(is_testdata) );
-			assert( (string) state.request.request_body == (string) st_testdata.data );
+			var body = ( (string) state.request.request_body ).substring( 0, 17 );
+			assert( body == (string) st_testdata.data );
 			assert( state.request.params.size == 1 );
 			assert( state.request.params.has_key( st_testdata ) );
 		});
@@ -45,7 +46,8 @@ public class EngineTest {
 
 			var c = new Ambition.Engine.Base();
 			c.hook_parse_request_body( state, st_testdata.length, new DataInputStream(is_testdata) );
-			assert( (string) state.request.request_body == (string) st_testdata.data );
+			var body = ( (string) state.request.request_body ).substring( 0, 17 );
+			assert( body == (string) st_testdata.data );
 			assert( state.request.params.size == 2 );
 			assert( state.request.params["this"] == "is form data" );
 			assert( state.request.params["that"] == "also" );
