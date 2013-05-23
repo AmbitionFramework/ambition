@@ -16,8 +16,9 @@ SET( LAM_VALA_FILES
 	RequestFile.vala
 	Response.vala
 	Result.vala
+	Stash.vala
 	State.vala
-    TemplateCompiler.vala
+	TemplateCompiler.vala
 	Engine/Base.vala
 	Engine/Raw.vala
 	Engine/Test.vala
@@ -88,10 +89,10 @@ SET( LAM_VALA_PACKAGES
 vala_precompile(LAM_VALA_C
 	${LAM_VALA_FILES}
 PACKAGES
-    ${LAM_VALA_PACKAGES}
+	${LAM_VALA_PACKAGES}
 OPTIONS
 	--thread
-    --vapidir=${CMAKE_SOURCE_DIR}/vapi
+	--vapidir=${CMAKE_SOURCE_DIR}/vapi
 	--enable-experimental
 	-g
 GENERATE_VAPI
@@ -100,8 +101,8 @@ GENERATE_HEADER
 	${PKGNAME}-${PKGVERSION})
 
 set(LAM_CFLAGS
-    ${CORE_DEPS_CFLAGS_ALL}
-    -w
+	${CORE_DEPS_CFLAGS_ALL}
+	-w
 )
 set(LAM_LIB_PATHS
 	${CORE_DEPS_LIBRARY_DIRS}

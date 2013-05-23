@@ -15,6 +15,7 @@ vala_precompile(TA_VALA_C
 	cookie.vala
 	engine.vala
 	session.vala
+	stash.vala
 	authorizer.vala
 	password_type.vala
 	request.vala

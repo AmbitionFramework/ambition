@@ -60,6 +60,7 @@ public class AuthorizerTest {
 			config.set( "type", "Flat" );
 			config.set( "file", "assets/flat_file" );
 
+			var a = typeof(Ambition.Authorization.PasswordType.SHA1);
 			var c = new Ambition.Authorization.Authorizer.Flat();
 			assert( c != null );
 			c.init(config);

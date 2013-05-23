@@ -37,6 +37,7 @@ void main ( string[] args ) {
 	FormFieldTest.add_tests();
 	FormValidatorTest.add_tests();
 
+	StashTest.add_tests();
 	ControllerStaticTest.add_tests();
 	HttpMethodTest.add_tests();
 	ConfigTest.add_tests();
