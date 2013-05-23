@@ -46,7 +46,7 @@ public class EngineTest {
 
 			var c = new Ambition.Engine.Base();
 			c.hook_parse_request_body( state, st_testdata.length, new DataInputStream(is_testdata) );
-			var body = ( (string) state.request.request_body ).substring( 0, 17 );
+			var body = ( (string) state.request.request_body ).substring( 0, st_testdata.length );
 			assert( body == (string) st_testdata.data );
 			assert( state.request.params.size == 2 );
 			assert( state.request.params["this"] == "is form data" );
