@@ -145,7 +145,7 @@ using Ambition;
 			if ( path.length > 2 && path.has_prefix("/") && path.has_suffix("/") ) {
 				regex = path;
 			} else {
-				var re_named = /\[([^\\]+)\]/;
+				var re_named = /\[([^\]]+)\]/;
 				try {
 					path = re_named.replace( path, -1, 0, "(?<\\1>.+?)/?" );
 				} catch (RegexError e) {
