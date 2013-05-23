@@ -31,13 +31,6 @@ namespace Ambition {
 		private string _uri;
 
 		/**
-		 * Provides a HashMap<string,string> to store values for the life of a
-		 * request. This is helpful when preparing values during a "begin" or
-		 * while transferring data between methods.
-		 */
-		public HashMap<string,string> cache { get; set; default = new HashMap<string,string>(); }
-
-		/**
 		 * Provides all cookies set for this request.
 		 */
 		public HashMap<string,Cookie> cookies { get; set; default = new HashMap<string,Cookie>(); }

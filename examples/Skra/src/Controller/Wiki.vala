@@ -50,15 +50,15 @@ namespace Skra.Controller {
 				return show_404( state, node_path );
 			}
 
-			state.request.cache.set( "node_path", node_path );
-			state.request.cache.set( "path", path );
+			state.stash.set_string( "node_path", node_path );
+			state.stash.set_string( "path", path );
 			return new CoreView.None();
 		}
 
 		public Result history( State state ) {
-			string path = state.request.cache.get("path");
+			string path = state.stash.get_string("path");
 			return new Template.Wiki.history(
-				state.request.cache.get("node_path"),
+				state.stash.get_string("node_path"),
 				WikiNode.version_list(path)
 			);
 		}
@@ -67,7 +67,7 @@ namespace Skra.Controller {
 			if ( !check_authorization(state) ) {
 				return new CoreView.None();
 			}
-			string path = state.request.cache.get("path");
+			string path = state.stash.get_string("path");
 			if ( state.request.method == HttpMethod.POST ) {
 				var result = WikiNode.save( path, state.request.param("edit") );
 				if ( result == true ) {
@@ -83,7 +83,7 @@ namespace Skra.Controller {
 				parsed = WikiMarkdown.process(content);
 			}
 			return new Template.Wiki.edit(
-				state.request.cache.get("node_path"),
+				state.stash.get_string("node_path"),
 				content,
 				parsed
 			);
@@ -91,13 +91,13 @@ namespace Skra.Controller {
 
 		public Result preview( State state ) {
 			return new Template.Wiki.preview(
-				WikiMarkdown.process( state.request.params.get("edit") )
+				WikiMarkdown.process( state.stash.get_string("edit") )
 			);
 		}
 
 		public Result index( State state ) {
-			string node_path = state.request.cache.get("node_path");
-			string path = state.request.cache.get("path");
+			string node_path = state.stash.get_string("node_path");
+			string path = state.stash.get_string("path");
 
 			string content = null;
 			if ( state.request.param("version") != null ) {
@@ -143,7 +143,7 @@ namespace Skra.Controller {
 
 		public bool check_authorization( State state ) {
 			if ( !state.has_user ) {
-				state.response.redirect( "/wiki/" + state.request.cache.get("node_path") );
+				state.response.redirect( "/wiki/" + state.stash.get_string("node_path") );
 				return false;
 			}
 			return true;

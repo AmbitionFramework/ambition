@@ -26,9 +26,9 @@ namespace Skra.Controller {
 	public class Root : Object {
 
 		public Result begin( State state ) {
-			state.request.cache.set( "head_markdown", WikiNode.retrieve_latest("_component/head") );
-			state.request.cache.set( "header_markdown", WikiNode.retrieve_latest("_component/header") );
-			state.request.cache.set( "footer_markdown", WikiNode.retrieve_latest("_component/footer") );
+			state.stash.set_string( "head_markdown", WikiNode.retrieve_latest("_component/head") );
+			state.stash.set_string( "header_markdown", WikiNode.retrieve_latest("_component/header") );
+			state.stash.set_string( "footer_markdown", WikiNode.retrieve_latest("_component/footer") );
 			return new CoreView.None();
 		}
 

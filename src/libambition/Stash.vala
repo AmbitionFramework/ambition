@@ -23,7 +23,9 @@ using Gee;
 
 namespace Ambition {
 	/**
-	 * Stash or cache of data that lasts for the life of a request.
+	 * Stash or cache of data that lasts for the life of a request. This is
+	 * helpful when preparing values during a "begin" or while transferring data
+	 * between methods.
 	 */
 	public class Stash : HashMap<string,Value?> {
 		/**
