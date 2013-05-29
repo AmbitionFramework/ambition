@@ -11,6 +11,7 @@ SET( APTBS_VALA_FILES
 	Form/TBResetButton.vala
 	Form/TBSelectGroupInput.vala
 	Form/TBSubmitButton.vala
+	Form/TBTextarea.vala
 	Form/TBTextInput.vala
 )
 

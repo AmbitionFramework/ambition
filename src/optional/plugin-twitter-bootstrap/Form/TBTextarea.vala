@@ -1,5 +1,5 @@
 /*
- * TBTextInput.vala
+ * TBTextarea.vala
  *
  * The Ambition Web Framework
  * http://www.ambitionframework.org
@@ -22,13 +22,12 @@
 using Gee;
 namespace Ambition.Form {
 	/**
-	 * <input type="text" />
+	 * <textarea />
 	 */
-	public class TBTextInput : FieldRenderer {
-		protected string input_type { get; set; default = "text"; }
+	public class TBTextarea : FieldRenderer {
 		public string? class_attribute { get; set; }
 
-		public TBTextInput.with_class( string class_attribute ) {
+		public TBTextarea.with_class( string class_attribute ) {
 			this.class_attribute = class_attribute;
 		}
 
@@ -38,13 +37,11 @@ namespace Ambition.Form {
 			var div_hm = new HashMap<string,string>();
 			div_hm["class"] = "control-group";
 
-			var input_hm = new HashMap<string,string>();
-			input_hm.set( "type", input_type );
-			input_hm.set( "id", id );
-			input_hm.set( "name", field );
-			input_hm.set( "value", value );
+			var textarea_hm = new HashMap<string,string>();
+			textarea_hm.set( "id", id );
+			textarea_hm.set( "name", field );
 			if ( this.class_attribute != null ) {
-				input_hm.set( "class", class_attribute );
+				textarea_hm.set( "class", class_attribute );
 			}
 			string span_text = "";
 			if ( blurb != null && blurb != field ) {
@@ -64,8 +61,8 @@ namespace Ambition.Form {
 			}
 			return div(
 				div_hm,
-				label_class( "control-label", id, ( nick == null ? field : nick ) )
-				+ input(input_hm)
+				( nick != null && nick != field ? label_class( "control-label", id, nick ) : "" )
+				+ textarea( textarea_hm, ( value != null ? value : "" ) )
 				+ span_text
 			);
 		}

@@ -41,19 +41,20 @@ SET( LAM_VALA_FILES
 	CoreView/None.vala
 	CoreView/Redirect.vala
 	CoreView/Template.vala
+	Form/Button.vala
+	Form/CheckboxGroupInput.vala
+	Form/GroupInput.vala
 	Form/FieldRenderer.vala
 	Form/FormDefinition.vala
+	Form/HiddenInput.vala
 	Form/Tag.vala
 	Form/TextInput.vala
-	Form/HiddenInput.vala
 	Form/PasswordInput.vala
-	Form/GroupInput.vala
 	Form/RadioGroupInput.vala
-	Form/CheckboxGroupInput.vala
-	Form/SelectGroupInput.vala
-	Form/Button.vala
-	Form/SubmitButton.vala
 	Form/ResetButton.vala
+	Form/SelectGroupInput.vala
+	Form/SubmitButton.vala
+	Form/Textarea.vala
 	Form/Validator.vala
 	Plugin/HttpPluginService.vala
 	Plugin/IPluginService.vala

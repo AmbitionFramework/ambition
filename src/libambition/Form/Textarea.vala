@@ -1,5 +1,5 @@
 /*
- * TBTextInput.vala
+ * Textarea.vala
  *
  * The Ambition Web Framework
  * http://www.ambitionframework.org
@@ -22,51 +22,55 @@
 using Gee;
 namespace Ambition.Form {
 	/**
-	 * <input type="text" />
+	 * <textarea />
+	 * If the nick is null, this will not render a default nick. Instead, it
+	 * will add a textarea without a dl->dd/dt.
 	 */
-	public class TBTextInput : FieldRenderer {
-		protected string input_type { get; set; default = "text"; }
+	public class Textarea : FieldRenderer {
 		public string? class_attribute { get; set; }
 
-		public TBTextInput.with_class( string class_attribute ) {
+		public Textarea.with_class( string class_attribute ) {
 			this.class_attribute = class_attribute;
 		}
 
 		public override string render( string form_name, string field, string? value = "", string? nick, string? blurb, string[]? errors = null ) {
 			string id = make_id( form_name, field );
-
-			var div_hm = new HashMap<string,string>();
-			div_hm["class"] = "control-group";
-
-			var input_hm = new HashMap<string,string>();
-			input_hm.set( "type", input_type );
-			input_hm.set( "id", id );
-			input_hm.set( "name", field );
-			input_hm.set( "value", value );
+			var textarea_hm = new HashMap<string,string>();
+			textarea_hm.set( "id", id );
+			textarea_hm.set( "name", field );
 			if ( this.class_attribute != null ) {
-				input_hm.set( "class", class_attribute );
+				textarea_hm.set( "class", class_attribute );
 			}
-			string span_text = "";
+			string div_text = "";
 			if ( blurb != null && blurb != field ) {
-				span_text = blurb;
+				var div_hm = new HashMap<string,string>();
+				div_hm.set( "class", "input_hint" );
+				div_hm.set( "id", id + "_hint" );
+				div_text = div( div_hm, blurb );
 			}
 			if ( errors != null ) {
-				div_hm["class"] = div_hm["class"] + " error";
+				textarea_hm.set( "class", ( this.class_attribute != null ? this.class_attribute + " " : "" ) + "input_error" );
+
+				var error_hm = new HashMap<string,string>();
+				error_hm.set( "class", "input_hint_error" );
 				foreach ( string error in errors ) {
-					span_text = error;
+					div_text = div_text + div( error_hm, error );
 				}
 			}
-			if ( span_text.length > 0 ) {
-				var span_hm = new HashMap<string,string>();
-				span_hm.set( "class", "help-block" );
-				span_hm.set( "id", id + "_hint" );
-				span_text = span( span_hm, span_text );
-			}
-			return div(
-				div_hm,
-				label_class( "control-label", id, ( nick == null ? field : nick ) )
-				+ input(input_hm)
-				+ span_text
+			return (
+				nick != null && nick != field ?
+					dl(
+						null,
+						dt(
+							null,
+							label( id, nick )
+						)
+						+ dd(
+							null,
+							textarea( textarea_hm, value ) + div_text
+						)
+					)
+					: textarea( textarea_hm, value ) + div_text
 			);
 		}
 	}
