@@ -26,19 +26,8 @@ namespace Ambition.Session {
 	 * of this abstract class need to have a table with a session_id integer
 	 * field and a session_data string field.
 	 */
-	public abstract class AlmannaSession : Entity {
-		public override string entity_name { owned get { return "session"; } }
-		public virtual string session_id { get; set; }
-		public virtual string session_data { get; set; }
-
-		public override void register_entity() {
-			add_column( new Column<string>.with_name_type( "session_id", "varchar" ) );
-			add_column( new Column<string>.with_name_type( "session_data", "varchar" ) );
-			try {
-				set_primary_key("session_id");
-			} catch ( EntityError e ) {
-				Logger.warn( "Something is wrong: EntityError while setting primary key: %s".printf( e.message ) );
-			}
-		}
+	public interface AlmannaSession : Entity {
+		public abstract string session_id { get; set; }
+		public abstract string session_data { get; set; }
 	}
 }
