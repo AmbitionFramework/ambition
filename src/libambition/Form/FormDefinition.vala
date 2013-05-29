@@ -54,7 +54,7 @@ namespace Ambition.Form {
 		 * @return boolean
 		 */
 		public bool is_valid() {
-			return ( validate_form() && !has_errors() );
+			return ( this.validate_form() && !this.has_errors() );
 		}
 
 		/**
