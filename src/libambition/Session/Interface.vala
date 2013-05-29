@@ -104,8 +104,27 @@ namespace Ambition.Session {
 		 * Get a session value
 		 * @param key Lookup key
 		 */
-		public string get_value( string key ) {
+		public string? get_value( string key ) {
 			return string_params.get(key);
+		}
+
+		/**
+		 * Check if a session key exists.
+		 * @param key Lookup key
+		 */
+		public bool has_value( string key ) {
+			return string_params.has_key(key);
+		}
+
+		/**
+		 * Delete a session value, optionally return the value that existed
+		 * before deletion.
+		 * @param key Lookup key
+		 */
+		public string? delete_value( string key ) {
+			string? val = get_value(key);
+			string_params.unset(key);
+			return val;
 		}
 
 		/**
