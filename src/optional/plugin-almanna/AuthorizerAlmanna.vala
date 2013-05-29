@@ -81,7 +81,11 @@ namespace Ambition.Authorization.Authorizer {
 
 		public IUser? authorize( string username, string password, HashMap<string,string>? options = null ) {
 			var p_type = get_password_type_instance();
-			Entity e = Repo.get_entity( Type.from_name( config["entity_type"] ) );
+			string entity_type = config["entity_type"];
+			if ( "." in entity_type ) {
+				entity_type = entity_type.replace( ".", "" );
+			}
+			Entity e = Repo.get_entity( Type.from_name(entity_type) );
 
 			if ( e != null ) {
 				try {
@@ -98,6 +102,8 @@ namespace Ambition.Authorization.Authorizer {
 					Logger.warn( "Caught Almanna SearchError: %s".printf( se.message ) );
 					return null;
 				}
+			} else {
+				Logger.error("Unable to find entity.");
 			}
 			return null;
 		}

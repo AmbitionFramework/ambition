@@ -27,5 +27,14 @@ namespace Ambition.Form {
 		public TBPasswordInput() {
 			this.input_type = "password";
 		}
+
+		/**
+		 * Create a TBPasswordInput with a predefined class attribute.
+		 * @param class_attribute One or more classes
+		 */
+		public TBPasswordInput.with_class( string class_attribute ) {
+			this();
+			this.class_attribute = class_attribute;
+		}
 	}
 }
