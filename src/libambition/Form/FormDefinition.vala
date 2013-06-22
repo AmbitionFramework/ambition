@@ -110,7 +110,7 @@ namespace Ambition.Form {
 		}
 
 		/**
-		 * Render a given field/property with the given field renderer
+		 * Render a given field/property with the given field renderer.
 		 * @param field    Field/property name
 		 * @param renderer A Ambition.Form.FieldRenderer object
 		 * @return string containing the rendered content
@@ -146,7 +146,16 @@ namespace Ambition.Form {
 						break;
 				}
 
-				return renderer.render( this.form_name, field, converted_value, p.get_nick(), p.get_blurb(), get_field_errors(field).to_array() );
+				/* The blurb is the property name by default, which is likely
+				 * not required by any field renderer separate from the field
+				 * name.
+				 */
+				string? blurb = p.get_blurb();
+				if ( blurb != null && blurb == gfield ) {
+					blurb = null;
+				}
+
+				return renderer.render( this.form_name, field, converted_value, p.get_nick(), blurb, get_field_errors(field).to_array() );
 			}
 			Logger.error( "Field not found: %s".printf(field) );
 			return "";
