@@ -42,6 +42,10 @@ namespace Ambition.Authorization.Authorizer {
 			}
 		}
 
+		public IPasswordType? get_password_type_instance() {
+			return null;
+		}
+
 		public IUser? authorize( string username, string password, HashMap<string,string>? options = null ) {
 			var base_password = get_password_for_user(username);
 			string crypted_pass = null;

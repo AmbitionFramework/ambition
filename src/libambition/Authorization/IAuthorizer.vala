@@ -80,5 +80,10 @@ namespace Ambition.Authorization {
 			}
 			return null;
 		}
+
+		/**
+		 * Get an instance of the current authorizer's password type.
+		 */
+		public abstract IPasswordType? get_password_type_instance();
 	}
 }

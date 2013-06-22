@@ -60,6 +60,9 @@ namespace Ambition.Authorization {
 		/**
 		 * Reauthorize a previously serialized authorization, for use with
 		 * sessions.
+		 * @param authorizer_name Authorizer name as defined by the application
+		 *                        configuration
+		 * @param serialized Serialized authorization
 		 */
 		public bool authorize_previous( string authorizer_name, string serialized ) {
 			var authorizer = App.authorizers.get(authorizer_name);
@@ -74,6 +77,28 @@ namespace Ambition.Authorization {
 				return true;
 			}
 			return false;
+		}
+
+		/**
+		 * Encode a password using the given authorization type.
+		 * @param authorizer_name Authorizer name as defined by the application
+		 *                        configuration
+		 * @param password Password to encode
+		 * @param options Optional overrides to pass to convert()
+		 */
+		public string? encode_password( string authorizer_name, string password, HashMap<string,string>? options = null ) {
+			var authorizer = App.authorizers.get(authorizer_name);
+			if ( authorizer == null ) {
+				Logger.warn( "No such authorizer: %s".printf(authorizer_name) );
+				return null;
+			}
+
+			var p_type = authorizer.get_password_type_instance();
+			if ( p_type == null ) {
+				Logger.warn("Authorizer does not support external password types.");
+				return null;
+			}
+			return p_type.convert( password, options );
 		}
 	}
 }

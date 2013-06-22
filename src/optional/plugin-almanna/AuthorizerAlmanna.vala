@@ -72,9 +72,6 @@ namespace Ambition.Authorization.Authorizer {
 			}
 		}
 
-		/**
-		 * Get an instance of the current authorizer's password type.
-		 */
 		public IPasswordType? get_password_type_instance() {
 			return get_password_type_from_string( password_type, config["auth_name"] );
 		}
