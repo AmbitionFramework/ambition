@@ -115,14 +115,14 @@ namespace Ambition {
 		 * Elapsed time since the start of this request.
 		 */
 		public int64 elapsed() {
-			return (new DateTime.now_utc()).difference(start);
+			return ( new DateTime.now_utc() ).difference(start);
 		}
 
 		/**
 		 * Elapsed time since the start of this request, in milliseconds.
 		 */
 		public float elapsed_ms() {
-			return ((float) elapsed() ) / 1000.0f;
+			return ( (float) elapsed() ) / 1000.0f;
 		}
 
 		public void ping() {}

@@ -26,7 +26,7 @@ namespace Ambition.Authorization.User {
 	 * Represents a user in an Almanna entity.
 	 */
 	public class Almanna : Object,IUser {
-		private Entity _entity;
+		private Entity? _entity = null;
 		protected HashMap<string,string> config { get; set; }
 		public string authorizer_name { get; set; default = "almanna"; }
 		public int? id { get; set; }
@@ -38,6 +38,10 @@ namespace Ambition.Authorization.User {
 			this.username = username;
 		}
 
+		public Almanna.with_config( HashMap<string,string> config ) {
+			this.config = config;
+		}
+
 		/**
 		 * Return the entity associated with this user.
 		 */
@@ -45,7 +49,11 @@ namespace Ambition.Authorization.User {
 			// Look up entity if it hasn't been loaded yet
 			if ( _entity == null && id != null ) {
 				try {
-					Entity e = Repo.get_entity( Type.from_name( config["entity_type"] ) );
+					string entity_type = config["entity_type"];
+					if ( "." in entity_type ) {
+						entity_type = entity_type.replace( ".", "" );
+					}
+					Entity e = Repo.get_entity( Type.from_name(entity_type) );
 					if ( e != null ) {
 						_entity = e.search().lookup(id);
 					}

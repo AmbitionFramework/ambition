@@ -106,7 +106,7 @@ namespace Ambition.Authorization.Authorizer {
 		}
 
 		public IUser? get_user_from_serialized( string serialized ) {
-			var user = new User.Almanna();
+			var user = new User.Almanna.with_config(config);
 			user.deserialize(serialized);
 			if ( user.id > 0 ) {
 				return user;
