@@ -243,7 +243,7 @@ namespace Ambition.Utility {
 				return -1;
 			}
 			if ( exit_status != 0 ) {
-				Logger.error( "Error building current application:\n%s".printf(standard_error) );
+				Logger.error( "Error building current application:\n%s", standard_error );
 				return_home();
 				return -1;
 			}
