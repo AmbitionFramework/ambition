@@ -30,10 +30,8 @@ PACKAGES
 	${AB_VALA_PACKAGES}
 	${PKGNAME}-${PKGVERSION}
 OPTIONS
-	--thread
-	--vapidir ../libambition
-	--enable-experimental
-	-g)
+	${DEFAULT_VALA_OPTIONS}
+)
 
 set(AB_CFLAGS
 	${CORE_DEPS_CFLAGS_ALL}

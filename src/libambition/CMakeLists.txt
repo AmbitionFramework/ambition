@@ -92,10 +92,7 @@ vala_precompile(LAM_VALA_C
 PACKAGES
 	${LAM_VALA_PACKAGES}
 OPTIONS
-	--thread
-	--vapidir=${CMAKE_SOURCE_DIR}/vapi
-	--enable-experimental
-	-g
+	${DEFAULT_VALA_OPTIONS}
 GENERATE_VAPI
 	${PKGNAME}-${PKGVERSION}
 GENERATE_HEADER

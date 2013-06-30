@@ -29,6 +29,21 @@ set (PKGVERSION 0.1)
 set (PREFIX ${CMAKE_INSTALL_PREFIX})
 set (DOLLAR "$")
 
+set (BINSOURCE ${CMAKE_BINARY_DIR}/src/libambition)
+set (VAPIDIRS 
+	--vapidir='${CMAKE_SOURCE_DIR}'
+	--vapidir='${CMAKE_SOURCE_DIR}/vapi'
+	--vapidir='${BINSOURCE}'
+)
+set (DEFAULT_VALA_OPTIONS
+	${VAPIDIRS}
+	--thread
+	--enable-experimental
+	--target-glib=2.32
+	--debug
+	-g
+)
+
 SET( CORE_DEPS_PACKAGES
 	glib-2.0
 	gee-0.8
@@ -38,7 +53,7 @@ SET( CORE_DEPS_PACKAGES
     libsoup-2.4
 )
 find_package(PkgConfig)
-pkg_check_modules(CORE_DEPS REQUIRED ${CORE_DEPS_PACKAGES} glib-2.0>=2.26)
+pkg_check_modules(CORE_DEPS REQUIRED ${CORE_DEPS_PACKAGES} glib-2.0>=2.32)
 SET( CMAKE_BUILD_TYPE Debug )
 SET( CORE_DEPS_CFLAGS_ALL
 	${CORE_DEPS_CFLAGS}
