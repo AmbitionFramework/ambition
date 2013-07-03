@@ -183,6 +183,11 @@ namespace Ambition {
 		 * @param state Current engine state
 		 */
 		public void handle_request( State state ) {
+			// Throw away invalid requests
+			if ( state.request.ip == null && state.request.method == HttpMethod.NONE ) {
+				return;
+			}
+
 			state.log.info("");
 			state.log.info( "Request from %s: %s %s".printf(
 				state.request.ip,
