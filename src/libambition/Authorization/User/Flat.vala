@@ -26,7 +26,7 @@ namespace Ambition.Authorization.User {
 	 */
 	public class Flat : Object,IUser {
 		public string authorizer_name { get; set; default = "Flat"; }
-		public int? id { get; set; }
+		public int id { get; set; default = 0; }
 		public string? username { get; set; }
 
 		public Flat.with_params( int id, string username ) {

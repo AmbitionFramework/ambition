@@ -29,7 +29,7 @@ namespace Ambition.Authorization.User {
 		private Entity? _entity = null;
 		protected HashMap<string,string> config { get; set; }
 		public string authorizer_name { get; set; default = "almanna"; }
-		public int? id { get; set; }
+		public int id { get; set; default = 0; }
 		public string? username { get; set; }
 
 		public Almanna.with_params( HashMap<string,string> config, int id, string username ) {
@@ -47,7 +47,7 @@ namespace Ambition.Authorization.User {
 		 */
 		public Object? get_object() {
 			// Look up entity if it hasn't been loaded yet
-			if ( _entity == null && id != null ) {
+			if ( _entity == null && id > 0 ) {
 				try {
 					string entity_type = config["entity_type"];
 					if ( "." in entity_type ) {

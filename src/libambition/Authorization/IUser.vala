@@ -34,7 +34,7 @@ namespace Ambition.Authorization {
 		/**
 		 * Return ID for given user
 		 */
-		public abstract int? id { get; set; }
+		public abstract int id { get; set; default = 0; }
 
 		/**
 		 * Return ID for given user

@@ -25,7 +25,7 @@ namespace Ambition.Authorization {
 	 * Provides authorization functions to a state object.
 	 */
 	public class Authorize : Object {
-		public IUser user { get; private set; }
+		public IUser? user { get; private set; }
 
 		/**
 		 * Attempt to authorize a user with the given authorizer.

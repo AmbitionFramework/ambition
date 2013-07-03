@@ -26,7 +26,7 @@ namespace Ambition.Authorization.User {
 	 */
 	public class Htpasswd : Object,IUser {
 		public string authorizer_name { get; set; default = "Htpasswd"; }
-		public int? id { get; set; }
+		public int id { get; set; default = 0; }
 		public string? username { get; set; }
 
 		public Htpasswd.with_params( int id, string username ) {
