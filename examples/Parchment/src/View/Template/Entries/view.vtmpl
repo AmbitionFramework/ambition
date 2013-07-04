@@ -1,0 +1,5 @@
+@parameters( Entry entry )
+@using Parchment.Model.DB.Implementation
+@process( "Wrapper.header", entry.title )
+@process( "Entries.entry", entry )
+@process("Wrapper.footer")

@@ -1,0 +1,44 @@
+@parameters( ArrayList<Implementation.Entry> entries )
+@using Parchment.Model.DB
+@using Gee
+@process( "Wrapper.header", "Blog Dashboard" )
+<div>
+	<a href="/admin/entry" class="btn btn-inverse">Create New Entry</a>
+</div>
+
+@if( state.session.has_value("entry_id") ) {
+	<div class="text-success">
+		Entry saved successfully!
+		<a href="/entries/@{state.session.delete_value("entry_id")}">View it now</a>.
+	</div>
+@}
+
+<div>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Entry Title</th>
+				<th>Created</th>
+				<th>Modified</th>
+				<th>Size</th>
+			</tr>
+		</thead>
+		<tbody>
+@if ( entries.size == 0 ) {
+			<tr>
+				<td colspan="4">No entries.</td>
+			</tr>
+@} else {
+@foreach ( var entry in entries ) {
+			<tr>
+				<td><a href="/admin/entry?id=@{entry.entry_id.to_string()}">@{entry.title}</a></td>
+				<td>@{entry.date_created.format("%Y-%m-%d at %H:%M:%S")}</td>
+				<td>@{entry.date_modified.format("%Y-%m-%d at %H:%M:%S")}</td>
+				<td>@{"%0.1f".printf( ( (double) entry.content.length ) / 1024 + 0.09 )}k</td>
+			</tr>	
+@}
+@}
+		</tbody>
+	</table>
+</div>
+@process("Wrapper.footer")

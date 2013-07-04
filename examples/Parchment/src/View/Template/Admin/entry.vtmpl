@@ -1,0 +1,22 @@
+@parameters( Entry form )
+@using Parchment.Form
+@using Ambition.Form
+@process( "Wrapper.header", ( state.request.params["id"] != null ? "Edit" : "Create" ) + " an Entry" )
+<style type="text/css">
+	textarea { height: 360px; }
+</style>
+
+@if( form.has_errors() ) {
+	<div class="text-error">
+		Please correct the errors below.
+	</div>
+@}
+<form method="post" action="/admin/entry">
+@if( state.request.params["id"] != null ) {
+<input name="entry_id" type="hidden" value="@{state.request.params["id"]}">
+@}
+@{form.render_field( "title", new TBTextInput.with_class("span9") )}
+@{form.render_field( "content", new TBTextarea.with_class("span9") )}
+@{form.render_field( "submit", new TBSubmitButton() )}
+</form>
+@process("Wrapper.footer")

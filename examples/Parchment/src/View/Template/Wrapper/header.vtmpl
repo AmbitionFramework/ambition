@@ -1,0 +1,44 @@
+@parameters( string? title = null )
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>@{( title == null ? "Parchment" : title )}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      body {
+        padding-top: 60px;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="#">@{ Ambition.Config.lookup_with_default( "blog_title", "Parchment" ) }</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+@if ( state.has_user ) {
+              <li><a>Welcome, @{state.user.username}!</a></li>
+              <li><a href="/admin/logout">Logout</a></li>
+@} else {
+              <li><a href="/admin/login">Login</a></li>
+@}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
