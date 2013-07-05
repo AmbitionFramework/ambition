@@ -45,7 +45,6 @@ namespace Ambition.Authorization.Authorizer {
 		private string password_field { get; set; default = "password"; }
 
 		public void init( HashMap<string,string> config ) {
-			Logger.warn( "config is %s", ( config == null ? "null" : "not null") );
 			this.config = config;
 			if ( config["entity_type"] == null ) {
 				Logger.warn("Missing entity_type for Almanna authorizer, this will fail");

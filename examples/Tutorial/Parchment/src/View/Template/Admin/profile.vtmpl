@@ -1,0 +1,28 @@
+@parameters( Profile form )
+@using Parchment.Form
+@using Ambition.Form
+@process( "Wrapper.header", "Profile" )
+<style type="text/css">
+    .form-profile {
+        -webkit-border-radius: 5px;
+           -moz-border-radius: 5px;
+                border-radius: 5px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+                box-shadow: 0 1px 2px rgba(0,0,0,.05);
+      }
+</style>
+@if( form.has_errors() ) {
+	<div class="text-error">
+@foreach( var error in form.get_form_errors() ) {
+    @{error}<br />
+@}
+	</div>
+@}
+<form method="post" class="form-profile">
+@{form.render_field( "display_name", new TBTextInput.with_class("span4") )}
+@{form.render_field( "username", new TBTextInput.with_class("span3") )}
+@{form.render_field( "password", new TBPasswordInput.with_class("span3") )}
+@{form.render_field( "submit", new TBSubmitButton() )}
+</form>
+@process("Wrapper.footer")

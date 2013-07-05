@@ -1,0 +1,16 @@
+@parameters( ArrayList<Entry> entries, int page, int pages )
+@using Gee
+@using Parchment.Model.DB.Implementation
+@process( "Wrapper.header", "Entries" )
+@foreach( var entry in entries ) {
+@process( "Entries.entry", entry )
+@}
+<div style="text-align: center">
+@if ( page > 1 ) {
+	<a href="/page/@{(page - 1).to_string()}">&lt; Last Page</a>
+@}
+@if ( pages > page ) {
+	<a href="/page/@{(page + 1).to_string()}">Next Page &gt;</a>
+@}
+</div>
+@process("Wrapper.footer")

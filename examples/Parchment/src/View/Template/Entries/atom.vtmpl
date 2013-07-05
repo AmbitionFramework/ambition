@@ -1,0 +1,31 @@
+@parameters( ArrayList<Entry> entries )
+@using Gee
+@using Parchment.Model.DB.Implementation
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>urn:pm:@{state.request.host.replace( "^www.", "" )}:1</id>
+    <title>@{Ambition.Config.lookup("blog_name")}</title>
+@if( Ambition.Config.lookup("blog_subname") != null ) {
+    <subtitle>@{Ambition.Config.lookup("blog_subname")}</subtitle>
+@}
+    <updated>@{entries[0].date_created.to_string().replace( "+0000", "" )}Z</updated>
+    <link rel="alternate" type="text/html" href="@{state.request.protocol}://@{state.request.host}" />
+    <link rel="self" type="application/atom+xml" href="@{state.request.uri}" />
+    <generator>Parchment</generator>
+@foreach( Entry entry in entries ) {
+    <entry>
+        <author>
+        <name>@{entry.publisher.display_name}</name>
+        </author>
+        <title>@{entry.title}</title>
+        <id>tag:@{state.request.host.replace( "^www.", "" )},@{Ambition.Config.lookup("start_date")}://1.@{entry.entry_id.to_string()}</id>
+        <published>@{entry.date_created.to_string().replace( "+0000", "" )}Z</published>
+        <updated>@{entry.date_modified.to_string().replace( "+0000", "" )}Z</updated>
+        <link href="http://@{state.request.host.replace( "^www.", "" )}/entries/@{entry.entry_id.to_string()}"/>
+        <summary>@{Markup.escape_text( entry.content.substring( 0, ( entry.content.length > 255 ? 255 : entry.content.length ) ) )}</summary>
+        <content type="html">
+        <![CDATA[ @{entry.content.replace( "\n", "<br>" )} ]]>
+        </content>
+    </entry>
+@}
+</feed>

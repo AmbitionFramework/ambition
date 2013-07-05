@@ -46,18 +46,5 @@ namespace Parchment.Controller {
 			return new Template.Entries.view(entry);
 		}
 
-		/**
-		 * Render an Atom-based RSS feed.
-		 */
-		public Result atom( State state ) {
-			var entries = new Almanna.Search<Entry>()
-							.relationship("publisher")
-							.rows(15)
-							.page(1)
-							.list();
-			state.response.content_type = "application/atom+xml";
-			return new Template.Entries.atom(entries);
-		}
-
 	}
 }
