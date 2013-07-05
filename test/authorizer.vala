@@ -29,7 +29,7 @@ public class AuthorizerTest {
 			var c = new Ambition.Authorization.Authorizer.Htpasswd();
 			assert( c != null );
 			c.init(config);
-			Ambition.Authorization.IUser user = c.authorize( "test", "foo" );
+			Ambition.Authorization.IUser? user = c.authorize( "test", "foo" );
 			assert( user != null );
 			user = null;
 			user = c.authorize( "bar", "test" );
