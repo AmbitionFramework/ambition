@@ -35,7 +35,7 @@ OPTIONS
 
 set(AB_CFLAGS
 	${CORE_DEPS_CFLAGS_ALL}
-	${CMAKE_BINARY_DIR}/src/libambition
+	-I${CMAKE_BINARY_DIR}/src/libambition
 	-I${READLINE_INCLUDE_DIR}
 	-w
 )
