@@ -103,7 +103,9 @@ namespace Ambition {
 			if ( re.match( decoded_path, 0, out info ) ) {
 				// Why ( method in this.methods ) doesn't work, I do not know.
 				foreach ( var supported_method in this.methods ) {
-					return ( supported_method == method );
+					if ( supported_method == method ) {
+						return true;
+					}
 				}
 				
 			}
