@@ -31,10 +31,9 @@ namespace Ambition {
 		public const int ERROR = 3;
 		
 		public class Unique {
-			
 			private string id;
 			
-			public Unique(string unique_id) {
+			public Unique( string unique_id ) {
 				id = unique_id;
 			}
 			
@@ -45,6 +44,7 @@ namespace Ambition {
 				var l = va_list();
 				write_log( "debug", message.vprintf(l) );
 			}
+
 			public void info( string message, ... ) {
 				if ( App.log_level > INFO ) {
 					return;
@@ -52,6 +52,7 @@ namespace Ambition {
 				var l = va_list();
 				write_log( "info", message.vprintf(l) );
 			}
+
 			public void warn( string message, ... ) {
 				if ( App.log_level > WARN ) {
 					return;
@@ -59,10 +60,12 @@ namespace Ambition {
 				var l = va_list();
 				write_log( "warn", message.vprintf(l) );
 			}
+
 			public void error( string message, ... ) {
 				var l = va_list();
 				write_log( "error", message.vprintf(l) );
 			}
+
 			private void write_log( string log_level, string message ) {
 				Logger.write_log.begin(log_level, "<%s> ".printf(id) + message );
 			}
@@ -76,6 +79,7 @@ namespace Ambition {
 			var l = va_list();
 			write_log.begin( "debug", message.vprintf(l) );
 		}
+
 		public static void info( string message, ... ) {
 			if ( App.log_level > INFO ) {
 				return;
@@ -83,6 +87,7 @@ namespace Ambition {
 			var l = va_list();
 			write_log.begin( "info", message.vprintf(l) );
 		}
+
 		public static void warn( string message, ... ) {
 			if ( App.log_level > WARN ) {
 				return;
@@ -90,14 +95,21 @@ namespace Ambition {
 			var l = va_list();
 			write_log.begin( "warn", message.vprintf(l) );
 		}
+
 		public static void error( string message, ... ) {
 			var l = va_list();
 			write_log.begin( "error", message.vprintf(l) );
 		}
+
 		private static async void write_log( string log_level, string message ) {
 			var dt = new DateTime.now_local();
-			stdout.printf("[%s.%06i] (%5s) %s\n", dt.format("%Y-%m-%d %H:%M:%S"), dt.get_microsecond(), 
-				log_level, message);
+			stdout.printf(
+				"[%s%.3f] (%5s) %s\n",
+				dt.format("%Y-%m-%d %H:%M:"),
+				(float) dt.get_microsecond() / 1000000 + dt.get_second(),
+				log_level,
+				message
+			);
 		}
 	}
 }

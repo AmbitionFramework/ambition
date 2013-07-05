@@ -85,5 +85,14 @@ namespace Ambition.Authorization {
 		 * Get an instance of the current authorizer's password type.
 		 */
 		public abstract IPasswordType? get_password_type_instance();
+
+		/**
+		 * Get the name of the current authenticator.
+		 */
+		public string get_name() {
+			return this.get_type().name()
+						.replace( "AmbitionAuthorization", "" )
+						.replace( "Authorizer", "" );
+		}
 	}
 }

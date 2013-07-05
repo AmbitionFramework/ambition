@@ -50,9 +50,7 @@ namespace Ambition {
 			typeof(Engine.Raw).name();
 
 			set_default_config(args);
-
 			App.set_log_level( Config.lookup_with_default( "app.log_level", "debug" ) );
-
 			this.args = args;
 		}
 
@@ -83,8 +81,12 @@ namespace Ambition {
 			execute_startup_hooks();
 
 			// Parse engine config, if available
-			if ( Config.lookup("engine") != null ) {
-				load_engine_from_string( Config.lookup("app.engine") );
+			string config_engine = Config.lookup("engine");
+			if ( config_engine == null ) {
+				config_engine = Config.lookup("app.engine");
+			}
+			if ( config_engine != null ) {
+				load_engine_from_string(config_engine);
 			}
 
 			// Parse command line options
@@ -113,6 +115,9 @@ namespace Ambition {
 					action.methods.add( HttpMethod.ALL );
 				}
 
+				// Normally, we rely on Logger to determine whether to output
+				// anything, but in this case, let's save some minor ops if we
+				// are not in debug mode.
 				if ( App.log_level == Logger.DEBUG ) {
 					var methods = new ArrayList<string>();
 					foreach ( HttpMethod hm in action.methods ) {
@@ -140,21 +145,15 @@ namespace Ambition {
 				Logger.debug("Authorizers:");
 				foreach ( var authorizer_name in App.authorizers.keys ) {
 					Logger.debug(
-						" %s (%s)".printf(
-							authorizer_name,
-							App.authorizers[authorizer_name]
-								.get_type()
-								.name()
-								.replace( "AmbitionAuthorization", "" )
-								.replace( "Authorizer", "" )
-						)
+						" %s (%s)",
+						authorizer_name,
+						App.authorizers[authorizer_name].get_name()
 					);
 				}
 			}
 
 			// Cache runtime config
-			this.show_powered_by = ( Config.lookup("app.show_powered_by") == "1" ? true : false );
-
+			this.show_powered_by = Config.lookup_bool("app.show_powered_by");
 			this.engine.execute();
 			return true;
 		}
@@ -189,49 +188,20 @@ namespace Ambition {
 			}
 
 			state.log.info("");
-			state.log.info( "Request from %s: %s %s".printf(
+			state.log.info(
+				"Request from %s: %s %s",
 				state.request.ip,
 				state.request.method.to_string(),
 				state.request.path
-			) );
+			);
 
 			// Call on_request_dispatch hook on registered plugins.
 			foreach( IPlugin p in this.plugins ) {
 				p.on_request_dispatch(state);
 			}
 
-			ArrayList<ActionMethod?> action_list = null;
-			string decoded_path = Uri.unescape_string( state.request.path );
-			foreach ( var action in actions ) {
-				Regex re = action._regex;
-				MatchInfo info = null;
-				if ( re.match( decoded_path, 0, out info ) ) {
-					state.log.debug( "Matched pattern %s".printf( re.get_pattern() ) );
-					state.request.captures = info.fetch_all();
-
-					// Determine named captures
-					var re_named = /\(?<([\w\d_]+)>/;
-					MatchInfo named_info = null;
-					if ( re_named.match( re.get_pattern(), 0, out named_info ) ) {
-						var matches = named_info.fetch_all();
-						foreach ( string match in matches ) {
-							state.request.named_captures[match] = info.fetch_named(match);
-						}
-					}
-
-					// Determine arguments
-					if ( !action._regex.get_pattern().has_suffix("$/") ) {
-						try {
-							state.request._arguments = re.replace( decoded_path, -1, 0, "" );
-						} catch ( RegexError e ) {
-							Logger.error("Invalid regex for arguments");
-						}
-					}
-
-					action_list = action.targets;
-					break;
-				}
-			}
+			// Get action list for request
+			var action_list = find_actions_for(state);
 
 			if ( action_list != null && action_list.size > 0 ) {
 				var action_response = execute_action_list( action_list, state );
@@ -249,12 +219,13 @@ namespace Ambition {
 			}
 
 			// Output response
-			state.log.info( "Rendered %lld bytes, type %s, status %d".printf(
+			state.log.info(
+				"Rendered %lld bytes, type %s, status %d. %0.4f ms.",
 				state.response.get_body_length(),
 				state.response.content_type,
-				state.response.status
-			) );
-			state.log.info( "Dispatch & render: %0.4f ms".printf( state.elapsed_ms() ) );
+				state.response.status,
+				state.elapsed_ms()
+			);
 		}
 
 		/**
@@ -306,6 +277,45 @@ namespace Ambition {
 				}
 			}
 			return al;
+		}
+
+		/**
+		 * Iterate through action list and determine the list of actions for
+		 * a given request.
+		 * @param state Current engine state
+		 */
+		private ArrayList<ActionMethod?>? find_actions_for( State state ) {
+			string decoded_path = Uri.unescape_string( state.request.path );
+			foreach ( var action in actions ) {
+				string action_pattern = action._regex.get_pattern();
+				MatchInfo info = null;
+				if ( action.responds_to_request( decoded_path, state.request.method, out info ) ) {
+					state.log.debug( "Matched pattern %s", action_pattern );
+					state.request.captures = info.fetch_all();
+
+					// Determine named captures
+					var re_named = /\(?<([\w\d_]+)>/;
+					MatchInfo named_info = null;
+					if ( re_named.match( action_pattern, 0, out named_info ) ) {
+						var matches = named_info.fetch_all();
+						foreach ( string match in matches ) {
+							state.request.named_captures[match] = info.fetch_named(match);
+						}
+					}
+
+					// Determine arguments
+					if ( !action._regex.get_pattern().has_suffix("$/") ) {
+						try {
+							state.request._arguments = action._regex.replace( decoded_path, -1, 0, "" );
+						} catch ( RegexError e ) {
+							Logger.error("Invalid regex for arguments");
+						}
+					}
+
+					return action.targets;
+				}
+			}
+			return null;
 		}
 
 		private void execute_startup_hooks() {

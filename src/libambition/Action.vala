@@ -91,5 +91,23 @@ namespace Ambition {
 			this.targets.add(am);
 			return this;
 		}
+
+		/**
+		 * Given a path and a method, return true if this action can respond to
+		 * the request.
+		 * @param decoded_path Dispatcher-decoded path
+		 * @param method HttpMethod of given request
+		 */
+		public bool responds_to_request( string decoded_path, HttpMethod method, out MatchInfo info = null ) {
+			Regex re = this._regex;
+			if ( re.match( decoded_path, 0, out info ) ) {
+				// Why ( method in this.methods ) doesn't work, I do not know.
+				foreach ( var supported_method in this.methods ) {
+					return ( supported_method == method );
+				}
+				
+			}
+			return false;
+		}
 	}
 }
