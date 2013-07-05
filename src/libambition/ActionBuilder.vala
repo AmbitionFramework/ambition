@@ -154,6 +154,8 @@ using Ambition;
 				regex = "/^" + path.replace( "/", "\\/" );
 				if ( regex.has_suffix("*") ) {
 					regex = regex.substring( 0, regex.length - 1 ) + ".*";
+				} else {
+					regex = regex + "\\/?";
 				}
 				regex = regex + "$/";
 			}
