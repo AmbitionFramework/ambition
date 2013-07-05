@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>@{( title == null ? "Parchment" : title )}</title>
+    <title>@{( title == null ? Ambition.Config.lookup_with_default( "blog_name", "Parchment" ) : title )}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -26,11 +26,11 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="brand" href="#">@{ Ambition.Config.lookup_with_default( "blog_title", "Parchment" ) }</a>
+          <a class="brand" href="/">@{ Ambition.Config.lookup_with_default( "blog_name", "Parchment" ) }</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
 @if ( state.has_user ) {
-              <li><a>Welcome, @{state.user.username}!</a></li>
+              <li><a href="/admin/profile">Welcome, @{state.user.username}!</a></li>
               <li><a href="/admin/logout">Logout</a></li>
 @} else {
               <li><a href="/admin/login">Login</a></li>
