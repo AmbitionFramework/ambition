@@ -27,7 +27,7 @@ namespace Ambition.Plugin {
 	public class LocalPluginService : Object,IPluginService {
 		public HashMap<string,string> config { get; set; }
 
-		public File? retrieve_plugin( string plugin_name ) throws Error {
+		public File? retrieve_plugin( string plugin_name, string? version = null ) throws Error {
 			var manifest = get_manifest(plugin_name);
 			if ( manifest != null && manifest.directory != null ) {
 				File dir = File.new_for_path( manifest.directory );

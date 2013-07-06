@@ -27,14 +27,32 @@ namespace Ambition.Plugin {
 	 */
 	public class HttpPluginService : Object,IPluginService {
 		public HashMap<string,string> config { get; set; }
-		private string plugin_url = "http://plugins.ambitionframework.org/service";
+		private string plugin_url = "http://localhost:8099/service";
 
-		public File? retrieve_plugin( string plugin_name ) throws Error {
+		public File? retrieve_plugin( string plugin_name, string? version = null ) throws Error {
 			return null;
 		}
 
 		public ArrayList<PluginResult> search_plugin( string plugin_name ) throws Error {
-			return new ArrayList<PluginResult>();
+			var results = new ArrayList<PluginResult>();
+			var params = new HashMap<string,string>();
+			params["q"] = plugin_name;
+			var content = http_get( "/search", params );
+			if ( content != null ) {
+				var parser = new Json.Parser();
+				try {
+					parser.load_from_data( content, -1 );
+				} catch (Error e) {
+					Logger.error( "Service unavailable. (%s)", e.message );
+					return results;
+				}
+				var root_object = parser.get_root().get_object();
+				foreach ( var plugin_node in root_object.get_array_member("plugins").get_elements() ) {
+					var plugin_result = (PluginResult) Json.gobject_deserialize( typeof(PluginResult), plugin_node );
+					results.add(plugin_result);
+				}
+			}
+			return results;
 		}
 
 		public ArrayList<PluginResult> available_plugins() throws Error {
@@ -60,7 +78,7 @@ namespace Ambition.Plugin {
 			if ( message.status_code == 200 ) {
 				return (string) message.response_body.data;
 			} else {
-				Logger.error( "Received status %u".printf( message.status_code ) );
+				Logger.error( "Received status %u during GET, aborting.".printf( message.status_code ) );
 				return null;
 			}
 		}

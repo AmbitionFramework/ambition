@@ -285,6 +285,7 @@ namespace Ambition {
 		 */
 		private ArrayList<ActionMethod?>? find_actions_for( State state ) {
 			string decoded_path = Uri.unescape_string( state.request.path );
+			decoded_path = decoded_path.replace( "//", "/" );
 			foreach ( var action in actions ) {
 				string action_pattern = action._regex.get_pattern();
 				MatchInfo info = null;

@@ -27,7 +27,7 @@ namespace Ambition.Plugin {
 	public interface IPluginService : Object {
 		public abstract HashMap<string,string> config { get; set; }
 
-		public abstract File? retrieve_plugin( string plugin_name ) throws Error;
+		public abstract File? retrieve_plugin( string plugin_name, string? version = null ) throws Error;
 
 		public abstract ArrayList<PluginResult> search_plugin( string plugin_name ) throws Error;
 
