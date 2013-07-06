@@ -366,11 +366,12 @@ namespace Ambition.Utility {
 		private IPluginService determine_plugin_service( string[] args ) {
 			IPluginService service = null;
 			var config = args_to_config(args);
-			if ( config["remote"] != null ) {
-				service = new HttpPluginService();
-			} else {
-				service = new LocalPluginService();
-			}
+			service = new HttpPluginService();
+			// if ( config["remote"] != null ) {
+			// 	service = new HttpPluginService();
+			// } else {
+			// 	service = new LocalPluginService();
+			// }
 
 			service.config = config;
 			return service;
