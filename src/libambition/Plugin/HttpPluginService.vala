@@ -37,7 +37,7 @@ namespace Ambition.Plugin {
 			var results = new ArrayList<PluginResult>();
 			var params = new HashMap<string,string>();
 			params["q"] = plugin_name;
-			var content = http_get( "/search", params );
+			var content = http_get( "search", params );
 			if ( content != null ) {
 				var parser = new Json.Parser();
 				try {
@@ -64,10 +64,22 @@ namespace Ambition.Plugin {
 		}
 
 		public PluginManifest? get_manifest( string plugin_name ) {
-			return null;
-		}
-
-		private File? retrieve( string plugin_name, string? version = null ) {
+			var params = new HashMap<string,string>();
+			params["n"] = plugin_name;
+			var content = http_get( "manifest", params );
+			if ( content != null ) {
+				var parser = new Json.Parser();
+				try {
+					parser.load_from_data( content, -1 );
+				} catch (Error e) {
+					Logger.error( "Service unavailable. (%s)", e.message );
+					return null;
+				}
+				var root = parser.get_root();
+				if ( root != null ) {
+					return (PluginManifest) Json.gobject_deserialize( typeof(PluginManifest), parser.get_root() );
+				}
+			}
 			return null;
 		}
 

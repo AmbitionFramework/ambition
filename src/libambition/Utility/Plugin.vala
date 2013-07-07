@@ -298,6 +298,12 @@ namespace Ambition.Utility {
 				wrap( manifest.description );
 				stdout.printf( "Latest version: %s\n", manifest.version );
 				stdout.printf( "Author: %s\n", manifest.author );
+				if ( manifest.versions != null && manifest.versions.length > 0 ) {
+					stdout.printf( "Available versions:\n" );
+					foreach ( var version in manifest.versions ) {
+						wrap(version);
+					}
+				}
 				stdout.printf( "Required plugins:\n" );
 				wrap( manifest.plugin_dependencies != null ? string.joinv( ", ", manifest.plugin_dependencies ) : "None" );
 			} else {

@@ -36,6 +36,7 @@ namespace Ambition.Plugin {
 		public string[]? libraries { get; set; }
 		public string[]? pkgconfig_dependencies { get; set; }
 		public string[]? plugin_dependencies { get; set; }
+		public string[]? versions { get; set; }
 
 		/**
 		 * Load a manifest.json file from an existing plugin directory.
