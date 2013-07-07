@@ -79,7 +79,43 @@ namespace Ambition.Plugin {
 		}
 
 		public ArrayList<PluginResult> check_outdated_plugin( HashMap<string,string> installed_plugins ) {
-			return new ArrayList<PluginResult>();
+			var results = new ArrayList<PluginResult>();
+
+			// Generate JSON request from list of plugins
+			var params = new HashMap<string,string>();
+
+			var array = new Json.Array();
+			foreach ( string plugin_name in installed_plugins.keys ) {
+				var plugin_object = new Json.Object();
+				plugin_object.set_string_member( "name", plugin_name );
+				plugin_object.set_string_member( "version", installed_plugins[plugin_name] );
+				array.add_object_element(plugin_object);
+			}
+			var master_object = new Json.Object();
+			master_object.set_array_member( "plugins", array );
+			var node = new Json.Node( Json.NodeType.OBJECT );
+			node.set_object(master_object);
+			var generator = new Json.Generator();
+			generator.root = node;
+
+			params["l"] = generator.to_data(null);
+
+			var content = http_get( "versions", params );
+			if ( content != null ) {
+				var parser = new Json.Parser();
+				try {
+					parser.load_from_data( content, -1 );
+				} catch (Error e) {
+					Logger.error( "Service unavailable. (%s)", e.message );
+					return results;
+				}
+				var root_object = parser.get_root().get_object();
+				foreach ( var plugin_node in root_object.get_array_member("plugins").get_elements() ) {
+					var plugin_result = (PluginResult) Json.gobject_deserialize( typeof(PluginResult), plugin_node );
+					results.add(plugin_result);
+				}
+			}
+			return results;
 		}
 
 		public PluginManifest? get_manifest( string plugin_name ) {
