@@ -38,6 +38,11 @@ namespace Ambition.Plugin {
 			return null;
 		}
 
+		public bool cleanup( File retrieved_plugin ) {
+			// No cleanup required on local service.
+			return true;
+		}
+
 		public ArrayList<PluginResult> search_plugin( string plugin_name ) throws Error {
 			var available = available_plugins();
 			var searched = new ArrayList<PluginResult>();

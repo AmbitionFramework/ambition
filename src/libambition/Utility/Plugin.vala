@@ -146,6 +146,7 @@ namespace Ambition.Utility {
 						return false;
 					}
 					add_plugin_to_directory( plugin_name, temp_dir );
+					service.cleanup(temp_dir);
 				} catch (Error e) {
 					return false;
 				}
@@ -251,6 +252,7 @@ namespace Ambition.Utility {
 			write_plugin_config(installed);
 
 			add_plugin_to_directory( plugin_name, temp_dir );
+			service.cleanup(temp_dir);
 			generate_plugins_cmake();
 			clean();
 

@@ -30,7 +30,26 @@ namespace Ambition.Plugin {
 		private string plugin_url = "http://localhost:8099/service";
 
 		public File? retrieve_plugin( string plugin_name, string? version = null ) throws Error {
+			var params = new HashMap<string,string>();
+			params["n"] = plugin_name;
+			if ( version != null ) {
+				params["b"] = version;
+			}
+			File? archive_file = retrieve_archive(params);
+			if ( archive_file != null ) {
+				var temp_directory = unarchive_file(archive_file);
+				if ( temp_directory != null ) {
+					return temp_directory;
+				}
+			}
 			return null;
+		}
+
+		public bool cleanup( File retrieved_plugin ) {
+			if ( "tmp-" in retrieved_plugin.get_basename() ) {
+				clean_directory(retrieved_plugin);
+			}
+			return true;
 		}
 
 		public ArrayList<PluginResult> search_plugin( string plugin_name ) throws Error {
@@ -84,11 +103,19 @@ namespace Ambition.Plugin {
 		}
 
 		private string? http_get( string path, HashMap<string,string>? params ) {
+			var message = http_get_message( path, params );
+			if ( message != null ) {
+				return (string) message.response_body.data;
+			}
+			return null;
+		}
+
+		private Soup.Message? http_get_message( string path, HashMap<string,string>? params ) {
 			var session = new Soup.SessionSync();
 			var message = new Soup.Message( "GET", construct_url( path, params ) );
 			session.send_message(message);
 			if ( message.status_code == 200 ) {
-				return (string) message.response_body.data;
+				return message;
 			} else {
 				Logger.error( "Received status %u during GET, aborting.".printf( message.status_code ) );
 				return null;
@@ -103,6 +130,90 @@ namespace Ambition.Plugin {
 				}
 			}
 			return url;
+		}
+
+		private File? retrieve_archive( HashMap<string,string> params ) {
+			Logger.debug("Retrieving archive.");
+			var message = http_get_message( "retrieve", params );
+			if ( message != null ) {
+				try {
+					var archive_file = File.new_for_path(
+						"%s/%s.tar.gz".printf( Environment.get_tmp_dir(), params["n"] )
+					);
+					if ( archive_file.query_exists() ) {
+						Logger.debug("Deleting old temporary file.");
+						archive_file.delete();
+					}
+					var stream = archive_file.create( FileCreateFlags.REPLACE_DESTINATION );
+					size_t bytes;
+					stream.write_all( message.response_body.data, out bytes );
+					stream.close();
+					Logger.debug( "Retrieved %dk.", ( (int) bytes / 1024 ) );
+					return archive_file;
+				} catch (Error e) {
+					Logger.error( "Unable to write archive file: %s", e.message );
+				}
+			}
+			return null;
+		}
+
+		private File? unarchive_file( File archive ) {
+			string sanitized_name = archive.get_basename().down().replace( " ", "_" ).replace( ".tar.gz", "" );
+
+			// Create temporary directory
+			string temp_name = "%s/ambtmp-%s".printf( Environment.get_tmp_dir(), sanitized_name );
+			File temp_dir = File.new_for_path(temp_name);
+			try {
+				temp_dir.make_directory();
+			} catch (Error e) {
+				Logger.error(e.message);
+				return null;
+			}
+			var current_dir = Environment.get_current_dir();
+			if ( Environment.set_current_dir(temp_name) == -1 ) {
+				Logger.error( "Unable to change to temp directory: " + temp_name );
+				return null;
+			}
+
+			// Unarchive file
+			string standard_output, standard_error;
+			int exit_status;
+			try {
+				Process.spawn_command_line_sync(
+					"tar xf " + archive.get_path(),
+					out standard_output,
+					out standard_error,
+					out exit_status
+				);
+			} catch (SpawnError se) {
+				Logger.error( "Unable to run tar xf: %s".printf( se.message ) );
+				clean_directory(temp_dir);
+				return null;
+			}
+
+			Environment.set_current_dir(current_dir);
+
+			return temp_dir;
+		}
+
+		private void clean_directory( File directory ) {
+			FileInfo file_info;
+			try {
+				var enumerator = directory.enumerate_children(
+					FileAttribute.STANDARD_NAME + "," + FileAttribute.STANDARD_TYPE, 0
+				);
+
+				while ( ( file_info = enumerator.next_file() ) != null ) {
+					if ( file_info.get_file_type() == FileType.DIRECTORY ) {
+						clean_directory( File.new_for_path( "%s/%s".printf( directory.get_path(), file_info.get_name() ) ) );
+					} else {
+						File.new_for_path( "%s/%s".printf( directory.get_path(), file_info.get_name() ) ).delete();
+					}
+				}
+				directory.delete();
+			} catch (Error e) {
+				Logger.error( "Error while enumerating directory '%s': %s".printf( directory.get_path(), e.message ) );
+			}
 		}
 	}
 }

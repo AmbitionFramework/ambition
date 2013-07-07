@@ -29,6 +29,8 @@ namespace Ambition.Plugin {
 
 		public abstract File? retrieve_plugin( string plugin_name, string? version = null ) throws Error;
 
+		public abstract bool cleanup( File retrieved_plugin );
+
 		public abstract ArrayList<PluginResult> search_plugin( string plugin_name ) throws Error;
 
 		public abstract ArrayList<PluginResult> available_plugins() throws Error;
