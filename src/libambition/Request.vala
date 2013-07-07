@@ -29,6 +29,7 @@ namespace Ambition {
 	public class Request : Object {
 		private string __arguments;
 		private string _uri;
+		private string _base_uri;
 
 		/**
 		 * Provides all cookies set for this request.
@@ -64,6 +65,20 @@ namespace Ambition {
 		 * Request URI/URL.
 		 */
 		public string uri { get { return _uri; } }
+
+		/**
+		 * Base URI/URL.
+		 */
+		public string base_uri {
+			get { 
+				string port_addon = "";
+				if ( ( protocol == "http" && port != 80 ) || ( protocol == "https" && port != 443 ) ) {
+					port_addon = ":%d".printf(port);
+				}
+				_base_uri = "%s://%s%s".printf( protocol, host, port_addon );
+				return _base_uri;
+			}
+		}
 
 		/**
 		 * Protocol being used to access this resource, according to the best
@@ -178,7 +193,11 @@ namespace Ambition {
 			if (colon != -1) {
 				this.port = int.parse( host[ colon + 1 : host.length ] );
 			} else {
-				this.port = 80;
+				if ( this.protocol == "https" ) {
+					this.port = 443;
+				} else {
+					this.port = 80;
+				}
 			}
 			this.path = clean_path;
 		}

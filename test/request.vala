@@ -71,11 +71,18 @@ public class RequestTest {
 			assert( r.uri == "http://www.google.com/test/url" );
 			assert( r.host == "www.google.com" );
 			assert( r.port == 80 );
+			assert( r.base_uri == "http://www.google.com" );
+
+			r.set_uri( "https", "www.google.com", "/test/url", "/test/url" );
+			assert( r.uri == "https://www.google.com/test/url" );
+			assert( r.host == "www.google.com" );
+			assert( r.base_uri == "https://www.google.com" );
 
 			r.set_uri( "https", "www.google.com:443", "/test/url", "/test/url" );
 			assert( r.uri == "https://www.google.com:443/test/url" );
 			assert( r.host == "www.google.com:443" );
 			assert( r.port == 443 );
+			assert( r.base_uri == "https://www.google.com:443" );
 		});
 		Test.add_func("/ambition/request/initialize", () => {
 			var r = new Ambition.Request();
