@@ -104,7 +104,7 @@ namespace Ambition {
 		private static async void write_log( string log_level, string message ) {
 			var dt = new DateTime.now_local();
 			stdout.printf(
-				"[%s%.3f] (%5s) %s\n",
+				"[%s%06.3f] (%5s) %s\n",
 				dt.format("%Y-%m-%d %H:%M:"),
 				(float) dt.get_microsecond() / 1000000 + dt.get_second(),
 				log_level,
