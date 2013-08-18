@@ -1,6 +1,8 @@
 SET( APP_VALA_FILES
     Controller/Entries.vala
     Controller/Admin.vala
+    Controller/Callback.vala
+    Form/Reply.vala
     Form/Profile.vala
     Form/Login.vala
     Form/Entry.vala
@@ -16,6 +18,8 @@ SET( APP_VALA_FILES
     Model/DB/Implementation/Session.vala
     Model/DB/Implementation/Tag.vala
     
+    Model/DB/Entity/Comment.vala
+    Model/DB/Implementation/Comment.vala
 )
 
 vala_precompile(APPLIB_VALA_C 
@@ -66,6 +70,9 @@ target_link_libraries(${BINNAME} ${APPNAME} gthread-2.0)
 
 install (TARGETS ${APPNAME} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin/)
 install (TARGETS ${BINNAME} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin/)
+
+
+
 
 
 

@@ -2,4 +2,56 @@
 @using Parchment.Model.DB.Implementation
 @process( "Wrapper.header", entry.title )
 @process( "Entries.entry", entry )
+<a name="#comments"></a>
+<div class="comment-section">
+
+<div class="accordion" id="accordion">
+	<div class="accordion-group">
+		<div class="accordion-heading">
+			<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#reply-content">
+				Reply &gt;
+			</a>
+		</div>
+		<div id="reply-content" class="accordion-body collapse">
+			<div class="accordion-inner">
+@process( "Entries.reply", entry )
+			</div>
+		</div>
+	</div>
+</div>
+
+@foreach( Comment comment in entry.comments() ) {
+@process( "Entries.comment", comment )
+@}
+</div>
+
+<script type="text/javascript">
+function replyLoad (commentId) {
+	$( '#comment_reply_container_' + commentId ).load(
+		'/callback/reply',
+		{
+			comment_id: commentId
+		},
+		function () {
+			$( '#comment_reply_container_' + commentId ).slideDown('fast');
+		}
+	);
+}
+function checkSubmit ( fields, identifier ) {
+	var errors = 0;
+	
+	for ( var field in fields ) {
+		field = fields[field];
+		if ( $( '#' + field + ( identifier ? identifier : '' ) ).val().length == 0 ) {
+			errors++;
+			alert( 'Please enter a ' + field );
+		}
+	}
+	if ( errors > 0 ) {
+		return false;
+	} else {
+		return true;
+	}
+}
+</script>
 @process("Wrapper.footer")

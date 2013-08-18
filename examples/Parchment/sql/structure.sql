@@ -1,3 +1,20 @@
+CREATE TABLE comment (
+    comment_id serial primary key,
+    parent_comment_id integer,
+    entry_id integer not null,
+    publisher_id integer,
+    is_visible integer default 1,
+    date_created timestamp with time zone,
+    comment_sha1 character(40),
+    ip_address varchar(15),
+    display_name varchar(255),
+    email_address varchar(255),
+    content text
+) WITH OIDS;
+
+CREATE INDEX comment_entry_id ON comment (entry_id);
+CREATE INDEX comment_comment_sha1 ON comment (comment_sha1);
+
 CREATE TABLE entry (
     entry_id serial primary key,
     publisher_id integer not null,

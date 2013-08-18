@@ -1,0 +1,37 @@
+.reply_text {
+	height: 180px;
+}
+
+.comment_reply_box {
+	margin-left: 20px;
+}
+
+.comment_container {
+    margin-bottom: 16px;
+}
+
+.comment_author {
+    font-weight: bold;
+}
+
+.comment_text, .comment_reply_container {
+    border-left: 1px dotted #999;
+}
+
+.comment_reply_container {
+    display: none;
+}
+
+.comment_text {
+    padding: 4px 4px 4px 12px;
+    font-style: italic;
+}
+
+.comment_reply {
+    margin-left: 50px;
+}
+
+.comment_reply_button {
+	margin-top: 6px;
+	font-size: 12px;
+}

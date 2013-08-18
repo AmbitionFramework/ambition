@@ -1,0 +1,28 @@
+@parameters( Comment comment )
+@using Parchment.Model.DB.Implementation
+<div class="comment_container @{(comment.parent_comment_id != comment.comment_id ? "comment_reply" : "" )}">
+    <div class="comment_byline">
+        <span class="comment_author">
+        	@{( comment.display_name == null ? "null" : comment.display_name )}
+        </span>
+        <span class="comment_author_writes">
+            wrote on
+        </span>
+        <span class="comment_posted_date">
+        	@{comment.date_created.format("%Y-%m-%d")}
+        </span>
+        <span class="comment_posted_at">
+            at
+        </span>
+        <span class="comment_posted_time">
+        	@{comment.date_created.format("%I:%M %p")}
+        </span>
+    </div>
+    <div class="comment_text">
+    	@{comment.content.replace( "\n", "<br />" )}
+        <div class="comment_reply_button">
+            (<a href="javascript:void(0)" onclick="replyLoad(@{comment.comment_id.to_string()})">Reply</a>)
+        </div>
+    </div>
+    <div id="comment_reply_container_@{comment.comment_id.to_string()}" class="comment_reply_container"></div>
+</div>

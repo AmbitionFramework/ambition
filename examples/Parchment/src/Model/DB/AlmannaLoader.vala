@@ -12,6 +12,7 @@ namespace Parchment.Model.DB {
 			Repo.add_entity( typeof(Parchment.Model.DB.Implementation.Publisher) );
 			Repo.add_entity( typeof(Parchment.Model.DB.Implementation.Session) );
 			Repo.add_entity( typeof(Parchment.Model.DB.Implementation.Tag) );
+			Repo.add_entity( typeof(Parchment.Model.DB.Implementation.Comment) );
 		}
 	}
 }

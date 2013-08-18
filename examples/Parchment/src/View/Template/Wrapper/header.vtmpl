@@ -8,6 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/parchment.css" rel="stylesheet">
     <link rel="alternate" type="application/atom+xml" title="Atom" href="/rss/atom.xml">
 
     <style>
@@ -18,7 +19,6 @@
   </head>
 
   <body>
-
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">

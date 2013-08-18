@@ -1,12 +1,14 @@
 @parameters( Entry entry )
 @using Parchment.Model.DB.Implementation
+<div class="entry-container">
 	<h3><a href="/entries/@{entry.entry_id.to_string()}">@{entry.title}</a></h3>
-	<blockquote>
-		@{entry.content.replace( "\n", "<br>" )}
+	<blockquote>@{entry.content.replace( "\n", "<br>" )}
 		<small>
 			@{entry.publisher.display_name},
 			@{entry.date_created.format("%Y-%m-%d at %H:%M:%S")}
 		</small>
 	</blockquote>
-	<br>
-	<hr>
+	<a href="/entries/@{entry.entry_id.to_string()}#comments">
+		@{entry.comment_count().to_string()} comment@{(entry.comment_count() == 1 ? "" : "s")}
+	</a>
+</div>

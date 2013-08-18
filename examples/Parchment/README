@@ -1,3 +1,3 @@
-The Parchment application forms a very simple blog application, and is the finished product of the tutorial on the Ambition Framework web site, available at <http://www.ambitionframework.org/wiki/tutorial/blog>.
+The Parchment application forms a very simple blog application, and is an enhanced version of the tutorial on the Ambition Framework web site, available at <http://www.ambitionframework.org/wiki/tutorial/blog>.
 
 The application requires a database, and is initially configured to use PostgreSQL. The application should work properly with SQLite. The SQL files in the sql/ directory need to be imported into a database, and the configuration in config/parchment.conf needs to reflect the new database configuration.
