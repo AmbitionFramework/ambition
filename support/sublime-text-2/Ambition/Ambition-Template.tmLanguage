@@ -829,7 +829,7 @@
       <key>paranthesesExpression</key>
       <dict>
          <key>begin</key>
-         <string>(@)\(</string>
+         <string>(@)\s*\(</string>
          <key>beginCaptures</key>
          <dict>
             <key>1</key>
@@ -1078,7 +1078,7 @@
       <key>templateHeader</key>
       <dict>
          <key>begin</key>
-         <string>(?&lt;=\A)(@)\(</string>
+         <string>(?&lt;=\A)(@)\s*\(</string>
          <key>beginCaptures</key>
          <dict>
             <key>1</key>
