@@ -49,6 +49,7 @@
         </span>
 @}
     </fieldset>
+@if( Ambition.Config.lookup("textcaptcha.key") != null ) {
     <fieldset>
         <p>
             To prove you are human, please answer the following question:
@@ -57,12 +58,14 @@
             @{TextCaptcha.get_new_question(state)}
         </label>
         <input type="text" id="text_captcha@{comment_id.to_string()}" name="text_captcha" class="reply_field" />
+}
 @foreach( var error in form.get_field_errors("text_captcha") ) {
         <span class="help-inline" style="color: #f33 !important;">
             @{error}
         </span>
 @}
     </fieldset>
+@}
 @}
     <fieldset>
 @{form.render_field( "submit", new TBSubmitButton() )}

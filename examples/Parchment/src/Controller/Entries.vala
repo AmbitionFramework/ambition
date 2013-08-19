@@ -44,6 +44,10 @@ namespace Parchment.Controller {
 		 * @param state State object.
 		 */
 		public Result reply( State state ) {
+			if ( Config.lookup_bool("allow_replies") == false ) {
+				return null;
+			}
+
 			int entry_id = int.parse( state.request.get_capture("entry_id") );
 			var entry = Entry.joined_search()
 							.eq( "entry_id", entry_id )

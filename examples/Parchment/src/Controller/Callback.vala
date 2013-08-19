@@ -14,6 +14,10 @@ namespace Parchment.Controller {
 		 * @param state State object.
 		 */
 		public Result reply( State state ) {
+			if ( Ambition.Config.lookup_bool("allow_replies") == false ) {
+				return null;
+			}
+
 			var comment_id_string = state.request.params["comment_id"];
 			var reply_to = "";
 			Entry entry = null;

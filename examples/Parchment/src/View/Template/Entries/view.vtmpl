@@ -2,6 +2,8 @@
 @using Parchment.Model.DB.Implementation
 @process( "Wrapper.header", entry.title )
 @process( "Entries.entry", entry )
+
+@if( Ambition.Config.lookup_bool("allow_replies") == true ) {
 <a name="#comments"></a>
 <div class="comment-section">
 
@@ -24,6 +26,7 @@
 @process( "Entries.comment", comment )
 @}
 </div>
+@}
 
 <script type="text/javascript">
 function replyLoad (commentId) {

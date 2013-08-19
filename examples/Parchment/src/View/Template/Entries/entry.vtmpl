@@ -8,7 +8,9 @@
 			@{entry.date_created.format("%Y-%m-%d at %H:%M:%S")}
 		</small>
 	</blockquote>
+@if( Ambition.Config.lookup_bool("allow_replies") == true ) {
 	<a href="/entries/@{entry.entry_id.to_string()}#comments">
 		@{entry.comment_count().to_string()} comment@{(entry.comment_count() == 1 ? "" : "s")}
 	</a>
+@}
 </div>

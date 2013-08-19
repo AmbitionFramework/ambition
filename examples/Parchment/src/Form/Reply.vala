@@ -30,7 +30,7 @@ namespace Parchment.Form {
 		}
 
 		public override bool validate_form() {
-			if ( state != null && ! state.has_user ) {
+			if ( state != null && ! state.has_user && Config.lookup("textcaptcha.key") != null ) {
 				if ( this.text_captcha != null ) {
 					bool success = Helper.TextCaptcha.check_existing_answer(
 						state,
@@ -43,6 +43,8 @@ namespace Parchment.Form {
 				this.add_field_error( "text_captcha", "Invalid response." );
 			} else if ( state.has_user ) {
 				display_name = ( (Publisher) state.user.get_object() ).display_name;
+				return true;
+			} else if ( Config.lookup("textcaptcha.key") == null ) {
 				return true;
 			}
 			return false;
