@@ -45,16 +45,19 @@ namespace Ambition {
 		private string root_path { get; set; }
 		private const string[] VALID_KEYWORDS = {
 			"if",
+			"else",
 			"for",
 			"foreach",
-			"else",
 			"while",
 			"do",
+			"break",
+			"continue",
 			"switch",
 			"case",
 			"default",
 			"try",
-			"catch"
+			"catch",
+			"finally"
 		};
 
 		/**
