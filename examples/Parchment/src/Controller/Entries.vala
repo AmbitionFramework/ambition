@@ -53,19 +53,6 @@ namespace Parchment.Controller {
 			reply_form.bind_state(state);
 
 			if ( state.request.method == HttpMethod.POST && reply_form.is_valid() && entry != null ) {
-				if ( ! state.has_user ) {
-					if ( reply_form.text_captcha != null ) {
-						bool success = Helper.TextCaptcha.check_existing_answer(
-							state,
-							reply_form.text_captcha
-						);
-						if (!success) {
-							return new CoreView.Redirect("/");
-						}
-					} else {
-						return new CoreView.Redirect("/");
-					}
-				}
 				var comment = new Comment();
 				comment.bind_data_from(reply_form);
 				comment.entry_id = entry.entry_id;
@@ -78,7 +65,12 @@ namespace Parchment.Controller {
 				return new CoreView.Redirect( "/entries/" + entry_id.to_string() );
 			}
 
-			return new CoreView.Redirect("/");
+			return new Template.Entries.reply(
+				entry,
+				reply_form.parent_comment_id,
+				reply_form.reply_to,
+				reply_form
+			);
 		}
 
 		/**

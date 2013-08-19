@@ -29,7 +29,7 @@ namespace Parchment.Controller {
 					comment_id = 0;
 				}
 			}
-			return new Template.Entries.reply( entry, comment_id, reply_to );
+			return new Template.Entries.reply_component( entry, comment_id, reply_to );
 		}
 
 	}

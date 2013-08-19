@@ -14,7 +14,7 @@
 		</div>
 		<div id="reply-content" class="accordion-body collapse">
 			<div class="accordion-inner">
-@process( "Entries.reply", entry )
+@process( "Entries.reply_component", entry )
 			</div>
 		</div>
 	</div>

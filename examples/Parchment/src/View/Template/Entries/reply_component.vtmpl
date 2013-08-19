@@ -1,0 +1,70 @@
+@parameters( Entry entry, int comment_id = 0, string reply_to = "", Form.Reply form = new Form.Reply() )
+@using Parchment.Model.DB.Implementation
+@using Ambition.Helper
+@using Ambition.Form
+@using Parchment
+<form class="comment_reply_box" method="post" action="/entries/@{entry.entry_id.to_string()}/reply" onsubmit="return checkSubmit( [ 'email_address', 'display_name', 'reply_text' ]@{( comment_id > 0 ? ", " + comment_id.to_string() : "" )} )">
+    <fieldset>
+@if( comment_id > 0 ) {
+        <input type="hidden" name="parent_comment_id" value="@{comment_id.to_string()}">
+@}
+@if( reply_to != null && reply_to.length > 0 ) {
+        <input type="hidden" name="reply_to" value="@{reply_to}">
+@}
+        <div class="reply_label" for="reply_text">
+            <span class="reply_to">
+                Post a reply
+@if( reply_to.length > 0 ) {
+                to <b>@{reply_to}</b>
+@}
+            </span>
+        </div>
+        <textarea class="reply_text span9" id="reply_text@{comment_id.to_string()}" name="content">@{form.content}</textarea>
+    </fieldset>
+    <fieldset>
+@if( state.has_user ) {
+        Logged in as <a href="">@{state.user.username}</a> (<a href="/admin/logout">Log out</a>)
+@} else {
+        Enter your information<!-- or <a href="/login">log in</a> -->.
+    </fieldset>
+    <fieldset>
+        <label for="display_name">
+            Your name:
+        </label>
+        <input type="text" id="display_name@{comment_id.to_string()}" name="display_name" class="reply_field" value="@{form.display_name}" />
+@foreach( var error in form.get_field_errors("display_name") ) {
+        <span class="help-inline" style="color: #f33 !important;">
+            @{error}
+        </span>
+@}
+    </fieldset>
+    <fieldset>
+        <label for="email_address">
+            Email Address:
+        </label>
+        <input type="text" id="email_address@{comment_id.to_string()}" name="email_address" class="reply_field" value="@{form.email_address}" />
+@foreach( var error in form.get_field_errors("email_address") ) {
+        <span class="help-inline" style="color: #f33 !important;">
+            @{error}
+        </span>
+@}
+    </fieldset>
+    <fieldset>
+        <p>
+            To prove you are human, please answer the following question:
+        </p>
+        <label for="text_captcha" style="width: 100%">
+            @{TextCaptcha.get_new_question(state)}
+        </label>
+        <input type="text" id="text_captcha@{comment_id.to_string()}" name="text_captcha" class="reply_field" />
+@foreach( var error in form.get_field_errors("text_captcha") ) {
+        <span class="help-inline" style="color: #f33 !important;">
+            @{error}
+        </span>
+@}
+    </fieldset>
+@}
+    <fieldset>
+@{form.render_field( "submit", new TBSubmitButton() )}
+    </fieldset>
+</form>

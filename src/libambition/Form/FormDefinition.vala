@@ -35,7 +35,7 @@ namespace Ambition.Form {
 		 * Bind the form with a valid State object
 		 * @param state State object
 		 */
-		public void bind_state( State state ) {
+		public virtual void bind_state( State state ) {
 			this.bind_request( state.request );
 		}
 
@@ -43,7 +43,7 @@ namespace Ambition.Form {
 		 * Bind the form with a valid Request object
 		 * @param request Request object
 		 */
-		public void bind_request( Request request ) {
+		public virtual void bind_request( Request request ) {
 			this.request = request;
 			do_property_bind();
 		}
