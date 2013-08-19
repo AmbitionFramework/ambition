@@ -58,7 +58,6 @@
             @{TextCaptcha.get_new_question(state)}
         </label>
         <input type="text" id="text_captcha@{comment_id.to_string()}" name="text_captcha" class="reply_field" />
-}
 @foreach( var error in form.get_field_errors("text_captcha") ) {
         <span class="help-inline" style="color: #f33 !important;">
             @{error}
