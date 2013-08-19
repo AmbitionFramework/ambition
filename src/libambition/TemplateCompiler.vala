@@ -128,7 +128,7 @@ namespace Ambition {
 					line_number++;
 					string left_line = line.chug();
 					if ( left_line.has_prefix("@") && !left_line.has_prefix("@{") ) {
-						left_line = "@" + line.substring(1).chug(); // Remove leading space after @
+						left_line = "@" + left_line.substring(1).chug(); // Remove leading space after @
 						if ( left_line.has_prefix("@parameters") ) {
 							parameters = left_line.chomp().replace( "@parameters(", "" );
 
