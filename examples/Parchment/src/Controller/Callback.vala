@@ -24,7 +24,7 @@ namespace Parchment.Controller {
 					entry = Entry.joined_search()
 								.eq( "entry_id", comment.entry_id )
 								.single();
-					reply_to = comment.display_name;
+					reply_to = ( comment.display_name == null ? "" : comment.display_name );
 				} else {
 					comment_id = 0;
 				}

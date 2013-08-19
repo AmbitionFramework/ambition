@@ -82,8 +82,11 @@ namespace Ambition.Authorization {
 
 			if ( authorizer != null ) {
 				authorizer.init(config);
+				return authorizer;
 			}
-			return authorizer;
+
+			Logger.error( "Unable to initialize authorizer: %s", authorization_type );
+			return null;
 		}
 	}
 }

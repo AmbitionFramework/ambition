@@ -1,5 +1,6 @@
 using Ambition;
 using Ambition.Form;
+using Parchment.Model.DB.Implementation;
 namespace Parchment.Form {
 
 	/**
@@ -41,6 +42,7 @@ namespace Parchment.Form {
 				}
 				this.add_field_error( "text_captcha", "Invalid response." );
 			} else if ( state.has_user ) {
+				display_name = ( (Publisher) state.user.get_object() ).display_name;
 				return true;
 			}
 			return false;

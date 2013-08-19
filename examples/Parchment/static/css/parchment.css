@@ -1,3 +1,7 @@
+.container > div.text-error {
+    text-align: center;
+}
+
 .reply_text {
 	height: 180px;
 }
