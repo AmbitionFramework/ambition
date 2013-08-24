@@ -14,14 +14,8 @@ namespace Parchment.Controller {
 		 * @param state State object.
 		 */
 		public Result list( State state ) {
-			int page = 1;
+			int page = get_page(state);
 			int pages = 1 + (int) ( (double) Entry.entry_count() / 10 - 0.1 );
-
-			var page_string = state.request.get_capture("page");
-			if ( page_string != null ) {
-				page = int.parse(page_string);
-			}
-
 			var entries = Entry.paged_entries(page).list();
 
 			return new Template.Entries.list( entries, page, pages );
@@ -29,6 +23,29 @@ namespace Parchment.Controller {
 
 		/**
 		 * List entries page for Entries.
+		 * @param state State object.
+		 */
+		public Result list_tag( State state ) {
+			int page = get_page(state);
+			var tag_pack = Entry.paged_tag_entries( state.request.get_capture("tag"), page );
+			int pages = 1 + (int) ( (double) tag_pack.count / 10 - 0.1 );
+			var entries = tag_pack.entries;
+
+			return new Template.Entries.list( entries, page, pages );
+		}
+
+		private int get_page( State state ) {
+			int page = 1;
+
+			var page_string = state.request.get_capture("page");
+			if ( page_string != null ) {
+				page = int.parse(page_string);
+			}
+			return page;
+		}
+
+		/**
+		 * View entry page for Entries.
 		 * @param state State object.
 		 */
 		public Result view( State state ) {

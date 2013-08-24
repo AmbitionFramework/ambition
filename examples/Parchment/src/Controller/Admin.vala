@@ -48,6 +48,7 @@ namespace Parchment.Controller {
 			if ( entry_id != null ) {
 				var entry = new Almanna.Search<Implementation.Entry>().lookup( int.parse(entry_id) );
 				entry.bind_data_to(form);
+				form.tags = arraylist_joinv( ",", entry.tags() );
 			}
 
 			if ( state.request.method == HttpMethod.POST ) {
@@ -64,6 +65,7 @@ namespace Parchment.Controller {
 					entry.publisher_id = state.user.id;
 					try {
 						entry.save();
+						entry.add_tags( form.parsed_tags() );
 					} catch (Almanna.EntityError e) {
 						form.add_form_error("Unable to save entry.");
 					}

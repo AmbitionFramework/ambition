@@ -39,3 +39,11 @@
 	margin-top: 6px;
 	font-size: 12px;
 }
+
+.tag-container {
+    font-size: 11px;
+}
+
+.tag-container span {
+    font-weight: bold;
+}

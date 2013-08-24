@@ -5,6 +5,9 @@
 @foreach( var entry in entries ) {
 @process( "Entries.entry", entry )
 @}
+@if( entries.size == 0 ) {
+	No entries.
+@}
 <div style="text-align: center">
 @if ( page > 1 ) {
 	<a href="/page/@{(page - 1).to_string()}">&lt; Last Page</a>

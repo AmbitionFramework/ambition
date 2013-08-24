@@ -17,6 +17,7 @@
 @}
 @{form.render_field( "title", new TBTextInput.with_class("span9") )}
 @{form.render_field( "content", new TBTextarea.with_class("span9") )}
+@{form.render_field( "tags", new TBTextInput.with_class("span9") )}
 @{form.render_field( "submit", new TBSubmitButton() )}
 </form>
 @process("Wrapper.footer")

@@ -11,6 +11,10 @@ namespace Parchment.Model.DB.Implementation {
 			base.register_entity();
 		}
 
+		/**
+		 * Override save to compute the SHA1 hash for a comment and add the
+		 * created date.
+		 */
 		public override void save() {
 			if ( this.dirty_columns.contains("content") ) {
 				this.comment_sha1 = Checksum.compute_for_string( ChecksumType.SHA1, content );

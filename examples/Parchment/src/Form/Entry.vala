@@ -11,6 +11,9 @@ namespace Parchment.Form {
 
         public string content { get; set; }
 
+        [Description( nick = "Tags (comma-separated)" )]
+        public string tags { get; set; }
+
         [Description( nick = "Publish" )]
         public string submit { get; set; }
 
@@ -23,6 +26,10 @@ namespace Parchment.Form {
             }
 
             return !this.has_errors();
+        }
+
+        public string[] parsed_tags() {
+            return /,\s*/.split( this.tags );
         }
     }
 }

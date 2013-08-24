@@ -1,5 +1,6 @@
 @parameters( Entry entry )
 @using Parchment.Model.DB.Implementation
+@using Gee
 <div class="entry-container">
 	<h3><a href="/entries/@{entry.entry_id.to_string()}">@{entry.title}</a></h3>
 	<blockquote>@{entry.content.replace( "\n", "<br>" )}
@@ -8,6 +9,16 @@
 			@{entry.date_created.format("%Y-%m-%d at %H:%M:%S")}
 		</small>
 	</blockquote>
+	<div class="tag-container">
+		<span>Tags:</span>
+@if( entry.tag_count() > 0 ) {
+	@foreach( var tag in entry.tags() ) {
+		<a href="/tag/@{tag.replace( " ", "_" )}">@{tag}</a>
+	@}
+@} else {
+		none
+@}
+	</div>
 @if( Ambition.Config.lookup_bool("allow_replies") == true ) {
 	<a href="/entries/@{entry.entry_id.to_string()}#comments">
 		@{entry.comment_count().to_string()} comment@{(entry.comment_count() == 1 ? "" : "s")}
