@@ -129,6 +129,14 @@ public static int execute_command( bool as_interactive, string? command, string[
 			}
 			return m.run();
 
+		case "build":
+			var m = new Ambition.Utility.Run();
+			if ( !in_application() ) {
+				usage( "build", as_interactive );
+				return 1;
+			}
+			return m.run_build();
+
 		case "run":
 			var m = new Ambition.Utility.Run();
 			if ( !in_application() ) {
@@ -251,6 +259,13 @@ public static void usage( string? method = null, bool as_interactive = false ) {
 			"Launch the Ambition interactive shell. This will allow you to run "
 			+ "commands from within an interactive environment.  Must be run "
 			+ "from an application directory.\n"
+		);
+	}
+	if ( method == null || method == "build" ) {
+		stdout.printf("build\n");
+		wrap(
+			"Build the current application without executing. Must be run from "
+			+ "an application directory.\n"
 		);
 	}
 	if ( method == null || method == "run" ) {

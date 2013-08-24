@@ -48,6 +48,20 @@ namespace Ambition.Utility {
 			return 0;
 		}
 
+		public int run_build() {
+			var app_name = get_application_name();
+			if ( app_name == null ) {
+				Logger.error("Somehow, we are not in a project directory.");
+				return -1;
+			}
+			application_name = app_name;
+			build();
+			if ( Environment.get_current_dir().has_suffix("build") ) {
+				Environment.set_current_dir("..");
+			}
+			return 0;
+		}
+
 		public int test() {
 			var app_name = get_application_name();
 			if ( app_name == null ) {
@@ -103,6 +117,26 @@ namespace Ambition.Utility {
 		}
 
 		/**
+		 * Build current project.
+		 */
+		internal int build() {
+			var plugin = new Plugin();
+			if ( plugin.resolve_plugins() == false ) {
+				return -1;
+			}
+			if ( setup_build_directory() != 0 ) {
+				return -1;
+			}
+			if ( cmake_project() != 0 ) {
+				return -1;
+			}
+			if ( build_project() != 0 ) {
+				return -1;
+			}
+			return 0;
+		}
+
+		/**
 		 * Build and run current project.
 		 */
 		internal int build_and_run( bool daemonize = false ) {
@@ -124,18 +158,9 @@ namespace Ambition.Utility {
 				}
 			}
 
-			var plugin = new Plugin();
-			if ( plugin.resolve_plugins() == false ) {
-				return -1;
-			}
-			if ( setup_build_directory() != 0 ) {
-				return -1;
-			}
-			if ( cmake_project() != 0 ) {
-				return -1;
-			}
-			if ( build_project() != 0 ) {
-				return -1;
+			int response = build();
+			if ( response < 0 ) {
+				return response;
 			}
 
 			// Spawn webapp
