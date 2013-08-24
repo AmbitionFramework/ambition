@@ -55,5 +55,25 @@ namespace Ambition.Form {
 			return ( /^\-?[\d\.]+$/.match(value) && value.index_of(".") == value.last_index_of(".") ? true : false );
 		}
 
+		/**
+		 * Return true if value has a value.
+		 * @param value String field value
+		 * @return boolean
+		 */
+		public static bool has_value( string? value ) {
+			return ( value != null && value.length > 0 );
+		}
+
+		/**
+		 * Return true if value looks like an email address. This is a very
+		 * simple check, and it's recommended to actually email the user to
+		 * make sure an email address is valid.
+		 * @param value String field value
+		 * @return boolean
+		 */
+		public static bool is_email_address( string? value ) {
+			return /^.+\@.+\..+$/.match(value);
+		}
+
 	}
 }

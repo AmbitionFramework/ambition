@@ -61,7 +61,7 @@ namespace Ambition.Form {
 			return dl( null, main_sb.str );
 		}
 
-		protected virtual string assemble_values( string form_name, string field, string value ) {
+		protected virtual string assemble_values( string form_name, string field, string? value ) {
 			var sb = new StringBuilder();
 			for ( int option_index = 0; option_index < values.length; option_index++ ) {				
 				var input_hm = new HashMap<string,string>();
