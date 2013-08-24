@@ -37,6 +37,9 @@ namespace Ambition.Form {
 			var div_hm = new HashMap<string,string>();
 			div_hm["class"] = "control-group";
 
+			var div_control_hm = new HashMap<string,string>();
+			div_control_hm["class"] = "controls";
+
 			var textarea_hm = new HashMap<string,string>();
 			textarea_hm.set( "id", id );
 			textarea_hm.set( "name", field );
@@ -62,8 +65,11 @@ namespace Ambition.Form {
 			return div(
 				div_hm,
 				( nick != null && nick != field ? label_class( "control-label", id, nick ) : "" )
-				+ textarea( textarea_hm, ( value != null ? value : "" ) )
-				+ span_text
+				+ div(
+					div_control_hm,
+					textarea( textarea_hm, ( value != null ? value : "" ) )
+					+ span_text
+				)
 			);
 		}
 	}

@@ -33,6 +33,9 @@ namespace Ambition.Form {
 			var div_hm = new HashMap<string,string>();
 			div_hm["class"] = "control-group";
 
+			var div_control_hm = new HashMap<string,string>();
+			div_control_hm["class"] = "controls";
+
 			var input_hm = new HashMap<string,string>();
 			input_hm.set( "type", input_type );
 			input_hm.set( "id", id );
@@ -57,8 +60,11 @@ namespace Ambition.Form {
 			return div(
 				div_hm,
 				label_class( "control-label", id, ( nick == null ? field : nick ) )
-				+ assemble_values( form_name, field, value )
-				+ span_text
+				+ div(
+					div_control_hm,
+					assemble_values( form_name, field, value )
+					+ span_text
+				)
 			);
 		}
 	}
