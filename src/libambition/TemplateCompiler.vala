@@ -123,6 +123,7 @@ namespace Ambition {
 			// Parse file into vala source
 			try {
 				var input_stream = new DataInputStream( file.read() );
+				input_stream.set_newline_type( DataStreamNewlineType.ANY );
 				string line;
 				while ( ( line = input_stream.read_line(null) ) != null ) {
 					line_number++;
