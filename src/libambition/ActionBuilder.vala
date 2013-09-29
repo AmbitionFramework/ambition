@@ -147,7 +147,7 @@ using Ambition;
 			} else {
 				var re_named = /\[([^\]]+)\]/;
 				try {
-					path = re_named.replace( path, -1, 0, "(?<\\1>.+?)/?" );
+					path = re_named.replace( path, -1, 0, "(?<\\1>.+?)" );
 				} catch (RegexError e) {
 					Logger.error( "Unable to create matches from placeholders in path. (%s)".printf( e.message ) );
 				}

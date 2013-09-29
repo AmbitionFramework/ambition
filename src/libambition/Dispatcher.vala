@@ -294,12 +294,13 @@ namespace Ambition {
 					state.request.captures = info.fetch_all();
 
 					// Determine named captures
-					var re_named = /\(?<([\w\d_]+)>/;
+					var re_named = /\(\?<([^>]+)>/;
 					MatchInfo named_info = null;
 					if ( re_named.match( action_pattern, 0, out named_info ) ) {
-						var matches = named_info.fetch_all();
-						foreach ( string match in matches ) {
-							state.request.named_captures[match] = info.fetch_named(match);
+						while ( named_info.matches() ) {
+							string name = named_info.fetch(1);
+							state.request.named_captures[name] = info.fetch_named(name);
+							named_info.next();
 						}
 					}
 
