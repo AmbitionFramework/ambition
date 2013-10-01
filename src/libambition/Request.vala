@@ -72,7 +72,13 @@ namespace Ambition {
 		public string base_uri {
 			get { 
 				string port_addon = "";
-				if ( ( protocol == "http" && port != 80 ) || ( protocol == "https" && port != 443 ) ) {
+				if (
+					! host.contains(":")
+					&& (
+						( protocol == "http" && port != 80 )
+						|| ( protocol == "https" && port != 443 )
+					)
+				) {
 					port_addon = ":%d".printf(port);
 				}
 				_base_uri = "%s://%s%s".printf( protocol, host, port_addon );
