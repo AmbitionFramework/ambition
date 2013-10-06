@@ -109,6 +109,11 @@ namespace Ambition {
 		public string path { get; set; }
 
 		/**
+		 * User agent/browser string.
+		 */
+		public string user_agent { get; set; }
+
+		/**
 		 * Raw, unparsed request body. Note that if the content type is
 		 * multipart/form-data, this will only contain the form-data portion
 		 * of the incoming MIME document.

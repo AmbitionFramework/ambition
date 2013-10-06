@@ -300,7 +300,12 @@ namespace Ambition {
 						while ( named_info.matches() ) {
 							string name = named_info.fetch(1);
 							state.request.named_captures[name] = info.fetch_named(name);
-							named_info.next();
+							try {
+								named_info.next();
+							} catch ( RegexError e ) {
+								Logger.error( "Error matching next capture in URL: %s", e.message );
+								break;
+							}
 						}
 					}
 

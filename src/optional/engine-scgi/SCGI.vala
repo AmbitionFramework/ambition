@@ -77,6 +77,7 @@ namespace Ambition.Engine {
 				headers,
 				content_type
 			);
+			state.request.user_agent = scgi_req.params["USER_AGENT"];
 			
 			if ( content_length > 0 ) {
 				var stream = new DataInputStream( scgi_req.input );
@@ -91,9 +92,13 @@ namespace Ambition.Engine {
 		}
 		
 		private void write_response( scgi.Request scgi_req, State state ) {
-			scgi_req.output.write(
-				"HTTP/1.1 %i %s\r\n".printf(state.response.status, STATUS_TEXT[state.response.status]).data
-			);
+			try {
+				scgi_req.output.write(
+					"HTTP/1.1 %i %s\r\n".printf(state.response.status, STATUS_TEXT[state.response.status]).data
+				);
+			} catch ( IOError e ) {
+				Logger.error( "Unable to write HTTP status to SCGI: %s", e.message );
+			}
 			
 			var raw_headers = new HashMap<string,string>();
 			raw_headers.set_all(state.response.headers);
@@ -105,15 +110,27 @@ namespace Ambition.Engine {
 			}
 
 			foreach ( var header_key in raw_headers.keys ) {
-				scgi_req.output.write(
-					"%s: %s\r\n".printf( header_key, raw_headers[header_key] ).data
-				);
+				try {
+					scgi_req.output.write(
+						"%s: %s\r\n".printf( header_key, raw_headers[header_key] ).data
+					);
+				} catch ( IOError e ) {
+					Logger.error( "Unable to write header %s to SCGI: %s", header_key, e.message );
+				}
 			}
 			
-			scgi_req.output.write("\r\n".data);
+			try {
+				scgi_req.output.write("\r\n".data);
+			} catch ( IOError e ) {
+				Logger.error( "Unable to finish writing headers to SCGI: %s", e.message );
+			}
 			
 			if ( state.request.method != HttpMethod.HEAD && state.response.get_body_length() > 0 ) {
-				scgi_req.output.splice( state.response.get_body_data(), OutputStreamSpliceFlags.CLOSE_SOURCE  );
+				try {
+					scgi_req.output.splice( state.response.get_body_data(), OutputStreamSpliceFlags.CLOSE_SOURCE  );
+				} catch ( IOError e ) {
+					Logger.error( "Unable to write body data to SCGI: %s", e.message );
+				}
 			}
 		}
 	}

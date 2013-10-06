@@ -275,6 +275,7 @@ namespace Ambition.Engine {
 				headers,
 				content_type
 			);
+			state.request.user_agent = headers["User-Agent"];
 
 			if ( content_length > 0 ) {
 				hook_parse_request_body( state, content_length, data_in );
@@ -294,8 +295,7 @@ namespace Ambition.Engine {
 			);
 			
 			var raw_headers = new HashMap<string,string>();
-			
-			raw_headers["Server"] = "Ambition/%s".printf( Ambition.VERSION );
+
 			raw_headers["Date"] = new DateTime.now_utc().format("%a, %d %b %Y %H:%M:%S %Z");
 			raw_headers["Connection"] = (result == ConnectionResult.KEEPALIVE ? "keep-alive" : "close");
 			if ( state.response.body != null ) {
