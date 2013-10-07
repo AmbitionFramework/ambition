@@ -31,7 +31,9 @@ using Gee;
 public static HashMap<string,IUtility> utilities;
 
 public static int main( string[] args ) {
-	utilities = new HashMap<string,IUtility>();
+	// Cache args
+	AmbitionBinary.args = args;
+
 	/*
 	 * Load utility plugins, if available
 	 */
@@ -418,4 +420,11 @@ public static string? get_application_name() {
  */
 public static void wrap( string text, int indent = 4 ) {
 	Ambition.Utility.wrap( text, indent );
+}
+
+/**
+ * Store global application data.
+ */
+public class AmbitionBinary : Object {
+	public static string[] args = null;
 }
