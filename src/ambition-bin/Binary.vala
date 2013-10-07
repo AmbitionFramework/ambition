@@ -34,6 +34,7 @@ public static int main( string[] args ) {
 	// Cache args
 	AmbitionBinary.args = args;
 
+	utilities = new HashMap<string,IUtility>();
 	/*
 	 * Load utility plugins, if available
 	 */
