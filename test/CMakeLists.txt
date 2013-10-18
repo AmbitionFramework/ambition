@@ -26,6 +26,7 @@ vala_precompile(TA_VALA_C
 	controller_static.vala
 	coreview_file.vala
 	coreview_none.vala
+	coreview_rawstring.vala
 	coreview_redirect.vala
 	coreview_json.vala
 	pluginloader.vala

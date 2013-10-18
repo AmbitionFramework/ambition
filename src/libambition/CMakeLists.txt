@@ -40,6 +40,7 @@ SET( LAM_VALA_FILES
 	CoreView/JSON.vala
 	CoreView/None.vala
 	CoreView/Redirect.vala
+	CoreView/RawString.vala
 	CoreView/Template.vala
 	Form/Button.vala
 	Form/CheckboxGroupInput.vala

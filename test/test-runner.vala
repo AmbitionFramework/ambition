@@ -47,6 +47,7 @@ void main ( string[] args ) {
 	CoreViewNoneTest.add_tests();
 	CoreViewRedirectTest.add_tests();
 	CoreViewJsonTest.add_tests();
+	CoreViewRawStringTest.add_tests();
 
 	PluginLoaderTest.add_tests();
 	ActionBuilderTest.add_tests();
