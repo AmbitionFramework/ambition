@@ -79,7 +79,7 @@ namespace Ambition {
 			Regex process = null;
 			try {
 				interpolate = new Regex("@\\{(.*?)\\}");
-				process = new Regex("process\\(\\s*['\"](.*?)['\"](,\\s*(.*?)\\s*)?\\)$");
+				process = new Regex("process\\(\\s*['\"](.*?)['\"](,\\s*(.*?))?\\s*\\)$");
 			} catch ( RegexError re ) {
 				stderr.printf( re.message );
 				return null;
@@ -241,6 +241,12 @@ namespace Ambition {
 			var file_list = new ArrayList<string>();
 			var files = enumerate_directory( input_path, ".vtmpl" );
 			foreach ( string template in files ) {
+				// Avoid dot-files
+				if ( "/." in template ) {
+					continue;
+				}
+
+				// Compile template
 				string vala_source;
 				try {
 					vala_source = compile(template);
@@ -248,7 +254,12 @@ namespace Ambition {
 					e.message = template + ": " + e.message;
 					throw e;
 				}
-				string path = template.replace( root_path + "/", "" ).replace( ".vtmpl", ".vala" ).replace( "/", "." );
+
+				// Write to generated file
+				string path = template
+								.replace( root_path + "/", "" )
+								.replace( ".vtmpl", ".vala" )
+								.replace( "/", "." );
 				write_to_file( vala_source, output_path + "/" + path );
 				file_list.add( output_path + "/" + path );
 			}
