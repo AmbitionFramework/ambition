@@ -175,6 +175,14 @@ public static int execute_command( bool as_interactive, string? command, string[
 			}
 			return m.run(command);
 
+		case "fullclean":
+			var m = new Ambition.Utility.Clean();
+			if ( !in_application() ) {
+				usage( "fullclean", as_interactive );
+				return 1;
+			}
+			return m.run(command);
+
 		case "plugin":
 			var m = new Ambition.Utility.Plugin();
 			if ( !in_application() || args.length < 1 ) {
@@ -289,6 +297,13 @@ public static void usage( string? method = null, bool as_interactive = false ) {
 		wrap(
 			"Clean the current application. Must be run from an application "
 			+ "directory.\n"
+		);
+	}
+	if ( method == null || method == "fullclean" ) {
+		stdout.printf("fullclean\n");
+		wrap(
+			"Clean the current application and all build artifacts. Must be run "
+			+ "from an application directory.\n"
 		);
 	}
 	if ( method == null || method == "test" ) {
