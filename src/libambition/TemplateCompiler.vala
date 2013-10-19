@@ -169,7 +169,7 @@ namespace Ambition {
 							+ interpolate.replace( line, -1, 0, verbatim + " + \\1 + " + verbatim )
 							+ verbatim
 							+ " + \"\\n\" "
-							+ "); // L%d".printf(line_number)
+							+ "); // Line %d".printf(line_number)
 							+ "\n"
 						);
 					}
