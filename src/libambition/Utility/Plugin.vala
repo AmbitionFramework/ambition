@@ -163,7 +163,10 @@ namespace Ambition.Utility {
 				}
 			}
 
-			generate_plugins_cmake();
+			if ( to_install.size > 0 ) {
+				generate_plugins_cmake();
+				clean();
+			}
 
 			return true;
 		}
@@ -246,6 +249,7 @@ namespace Ambition.Utility {
 
 			add_plugin_to_directory( plugin_name, temp_dir );
 			generate_plugins_cmake();
+			clean();
 
 			stdout.printf( "Added plugin '%s' to project.\n", plugin_name );
 		}
@@ -263,6 +267,7 @@ namespace Ambition.Utility {
 
 			// Remove plugin from plugins directory
 			remove_plugin_from_directory(plugin_name);
+			clean();
 
 			stdout.printf( "Removed plugin '%s' from project.\n", plugin_name );
 		}
@@ -535,6 +540,11 @@ ENDFOREACH()
 			} catch (Error e) {
 				stderr.printf( "%s\n", e.message );
 			}
+		}
+
+		private void clean() {
+			var clean = new Clean();
+			clean.run("fullclean");
 		}
 	}
 }

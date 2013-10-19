@@ -47,27 +47,15 @@ namespace Ambition.Utility {
 
 			switch (command) {
 				case "clean":
-					return do_clean();
-				case "fullclean":
-					do_clean();
-
-					Logger.info( "Full cleaning..." );
-					string standard_output, standard_error;
-					int exit_status;
-					try {
-						Process.spawn_command_line_sync(
-							"rm -rf src test CMakeFiles Makefile CMakeCache.txt cmake_install.cmake CTestTestfile.cmake",
-							out standard_output,
-							out standard_error,
-							out exit_status
-						);
-					} catch (SpawnError se) {
-						Logger.error( "Unable to run: %s".printf( se.message ) );
-						return -1;
+					int result = do_clean();
+					if ( result > 0 ) {
+						return result;
 					}
-					if ( exit_status != 0 ) {
-						Logger.error( "Error cleaning current application:\n%s".printf(standard_error) );
-						return -1;
+					break;
+				case "fullclean":
+					int result = full_clean();
+					if ( result > 0 ) {
+						return result;
 					}
 					break;
 			}
@@ -78,7 +66,7 @@ namespace Ambition.Utility {
 			return 0;
 		}
 
-		private int do_clean() {
+		public int do_clean() {
 			Logger.info( "Cleaning project..." );
 			string standard_output, standard_error;
 			int exit_status;
@@ -97,6 +85,29 @@ namespace Ambition.Utility {
 				Logger.error( "Error cleaning current application:\n%s".printf(standard_error) );
 				return -1;
 			}
+			return 0;
+		}
+
+		public int full_clean() {
+			Logger.info( "Full cleaning..." );
+			string standard_output, standard_error;
+			int exit_status;
+			try {
+				Process.spawn_command_line_sync(
+					"rm -rf src test CMakeFiles Makefile CMakeCache.txt cmake_install.cmake CTestTestfile.cmake",
+					out standard_output,
+					out standard_error,
+					out exit_status
+				);
+			} catch (SpawnError se) {
+				Logger.error( "Unable to run: %s".printf( se.message ) );
+				return -1;
+			}
+			if ( exit_status != 0 ) {
+				Logger.error( "Error cleaning current application:\n%s".printf(standard_error) );
+				return -1;
+			}
+
 			return 0;
 		}
 	}
