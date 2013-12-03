@@ -179,15 +179,35 @@ using Ambition;
 			string[] targets = info.fetch(6).chug().strip().split(",");
 			foreach ( string target in targets ) {
 				string clean = target.chug().strip();
+				string? filter = null;
+
+				// Check if we are running the method through another filter
+				if ( ":" in clean ) {
+					filter = clean.substring( 0, clean.index_of(":") );
+					var new_clean = clean.substring( clean.index_of(":") + 1 );
+					clean = new_clean;
+				}
+
 				string controller = clean.substring( 0, clean.last_index_of(".") );
 				string method = clean.substring( clean.last_index_of(".") + 1 );
 
-				target_line = target_line + ".add_target_method( new Ambition.ActionMethod( %s.%s, \"/%s/%s\" ) )".printf(
-					normalize_controller(controller),
-					method,
-					pathify_controller(controller),
-					method
-				);
+				string target_method = "%s.%s".printf( normalize_controller(controller), method );
+				if ( filter != null ) {
+					target_line = target_line + ".add_target_method( new Ambition.ActionMethod.with_filter( %s, new %s(%s), \"/%s/%s\" ) )".printf(
+						"Ambition.Filter.%s.filter".printf( filter ),
+						"Ambition.Filter.%s".printf( filter ),
+						target_method,
+						pathify_controller(controller),
+						method
+					);
+				} else {
+					target_line = target_line + ".add_target_method( new Ambition.ActionMethod( %s, \"/%s/%s\" ) )".printf(
+						target_method,
+						pathify_controller(controller),
+						method
+					);
+				}
+
 				controllers.add(controller);
 			}
 

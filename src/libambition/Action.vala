@@ -101,7 +101,6 @@ namespace Ambition {
 		public bool responds_to_request( string decoded_path, HttpMethod method, out MatchInfo info = null ) {
 			Regex re = this._regex;
 			if ( re.match( decoded_path, 0, out info ) ) {
-				// Why ( method in this.methods ) doesn't work, I do not know.
 				foreach ( var supported_method in this.methods ) {
 					if ( supported_method == method ) {
 						return true;
