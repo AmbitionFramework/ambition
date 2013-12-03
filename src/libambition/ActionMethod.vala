@@ -26,11 +26,21 @@ namespace Ambition {
 	public delegate Result ActionMethodCall( State state );
 
 	/**
+	 * Delegate method for an action filter.
+	 */
+	public delegate Result ActionFilterCall( State state, IActionFilter filtered_method );
+
+	/**
 	 * Wraps an ActionMethodCall.
 	 */
 	public class ActionMethod {
-		public unowned ActionMethodCall execute { get; set; }
 		public string? path { get; set; }
+
+		private unowned ActionMethodCall? execute_method;
+		private unowned ActionFilterCall? execute_filter;
+		private IActionFilter filtered_method;
+		private bool has_method { get { return ( execute_method != null ); } }
+		private bool has_filter { get { return ( execute_filter != null ); } }
 
 		/**
 		 * Create a new ActionMethod with a method call and an optional path.
@@ -38,8 +48,33 @@ namespace Ambition {
 		 * @param path A path
 		 */
 		public ActionMethod( ActionMethodCall am, string? path = null ) {
-			this.execute = am;
+			this.execute_method = am;
 			this.path = path;
+		}
+
+		/**
+		 * Create a new ActionMethod with a filter and an optional path.
+		 * @param af A method filter
+		 * @param filtered_object 
+		 * @param path A path
+		 */
+		public ActionMethod.with_filter( ActionFilterCall af, IActionFilter filtered_method, string? path = null ) {
+			this.execute_filter = af;
+			this.filtered_method = filtered_method;
+			this.path = path;
+		}
+
+		/**
+		 * Execute method or filter with the given State.
+		 * @param state State object
+		 */
+		public Result? execute( State state ) {
+			if ( this.has_method ) {
+				return this.execute_method(state);
+			} else if ( this.has_filter ) {
+				return this.execute_filter( state, this.filtered_method );
+			}
+			return null;
 		}
 	}
 }

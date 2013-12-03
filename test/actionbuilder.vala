@@ -23,6 +23,7 @@ public class ActionBuilderTest {
 	public static const string action_1 = "/                               GET      Root.index";
 	public static const string action_2 = "/example/path                   GET,POST Root.begin, Root.index";
 	public static const string action_3 = "/foo/[page]/bar                 GET      Foo.bar";
+	public static const string action_4 = "/categories/baz                 GET      Service:Foo.baz";
 
 	public static void add_tests() {
 		Test.add_func("/ambition/actionbuilder/init", () => {
@@ -36,11 +37,19 @@ public class ActionBuilderTest {
 			assert( a.normalize_controller("Actions.Testing") == "actions_testing" );
 			assert( a.normalize_controller("nonCompliant_Tester") == "noncompliant_tester" );
 		});
-		Test.add_func("/ambition/actionbuilder/is_valid_action_line", () => {
+		Test.add_func("/ambition/actionbuilder/is_valid_action_line/1", () => {
 			var a = new Ambition.ActionBuilder();
 
 			assert( a.is_valid_action_line(action_1) != null );
+		});
+		Test.add_func("/ambition/actionbuilder/is_valid_action_line/2", () => {
+			var a = new Ambition.ActionBuilder();
+
 			assert( a.is_valid_action_line(action_2) != null );
+		});
+		Test.add_func("/ambition/actionbuilder/is_valid_action_line/3", () => {
+			var a = new Ambition.ActionBuilder();
+
 			assert( a.is_valid_action_line(action_3) != null );
 		});
 		Test.add_func("/ambition/actionbuilder/parse_action_line", () => {
@@ -53,6 +62,17 @@ public class ActionBuilderTest {
 			assert( controllers.contains("Root") );
 			assert( "root.index" in result );
 			assert( result == """( new Ambition.Action() ).regex(/^\/$/).allow_method( HttpMethod.GET ).add_target_method( new Ambition.ActionMethod( root.index, "/root/index" ) )""" );
+		});
+		Test.add_func("/ambition/actionbuilder/parse_action_line/filter", () => {
+			var a = new Ambition.ActionBuilder();
+
+			var controllers = new Gee.HashSet<string>();
+			string result = a.parse_action_line( action_4, controllers );
+			assert( result != null );
+			assert( controllers.size == 1 );
+			assert( controllers.contains("Foo") );
+			assert( "foo.baz" in result );
+			assert( result == """( new Ambition.Action() ).regex(/^\/categories\/baz\/?$/).allow_method( HttpMethod.GET ).add_target_method( new Ambition.ActionMethod.with_filter( Ambition.Filter.Service.filter, new Ambition.Filter.Service(foo.baz), "/foo/baz" ) )""" );
 		});
 		Test.add_func("/ambition/actionbuilder/build_action_block", () => {
 			var a = new Ambition.ActionBuilder();
