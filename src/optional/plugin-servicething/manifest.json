@@ -1,0 +1,14 @@
+{
+	"name" : "ServiceThing",
+	"version" : "0.1.0",
+	"author" : "ambitionframework.org",
+	"description" : "Easy Services for Ambition",
+	"require-link" : true,
+	"documentation" : "documentation.md",
+	"headers" : [
+		"ambition-plugin-servicething-0.1.0.h"
+	],
+	"libraries" : [
+		"ambition-plugin-servicething-0.1.0"
+	]
+}
