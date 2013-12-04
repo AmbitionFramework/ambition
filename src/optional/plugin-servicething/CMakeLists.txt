@@ -5,7 +5,9 @@ SET( APST_VALA_FILES
 	ServiceThingPlugin.vala
 	Service.vala
 	Serializer/ISerializer.vala
+	Serializer/HTML.vala
 	Serializer/JSON.vala
+	Serializer/XML.vala
 )
 
 SET( APST_DEPS_PACKAGES

@@ -21,9 +21,12 @@
 
 using Gee;
 namespace Ambition.PluginSupport.ServiceThing.Serializer {
-	public delegate void SerializeValue( Value v, Json.Builder b );
 
+	/**
+	 * Serialize Service data to JSON.
+	 */
 	public class JSON : Object,ISerializer {
+		public delegate void SerializeValue( Value v, Json.Builder b );
 		public HashMap<Type,SerializeValueWrapper> serializers { get; set; default = new HashMap<Type,SerializeValueWrapper>(); }
 
 		public JSON() {
@@ -68,9 +71,9 @@ namespace Ambition.PluginSupport.ServiceThing.Serializer {
 	}
 
 	public class SerializeValueWrapper : Object {
-		public SerializeValue serializer { get; set; }
+		public unowned JSON.SerializeValue? serializer { get; set; }
 
-		public SerializeValueWrapper( SerializeValue sv ) {
+		public SerializeValueWrapper( JSON.SerializeValue? sv ) {
 			this.serializer = sv;
 		}
 	}

@@ -31,6 +31,34 @@ public static void add_tests() {
 		assert( plugin != null );
 		plugin.register_plugin();
 	});
+	Test.add_func("/ambition/plugin/servicething/parse_accept", () => {
+		var service = new Ambition.Filter.Service(null);
+		assert( Ambition.Filter.Service.serializers != null );
+
+		string accept_header_1 = "text/*;q=0.3, text/html;q=0.7, text/html;level=1, text/html;level=2;q=0.4, */*;q=0.5";
+		string result = Ambition.Filter.Service.parse_accept_header(accept_header_1);
+		assert( result != null );
+		assert( result == "text/html" );
+
+		string accept_header_2 = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8,application/json";
+		result = Ambition.Filter.Service.parse_accept_header(accept_header_2);
+		assert( result != null );
+		assert( result == "text/html" );
+
+		string accept_header_3 = "application/json,text/html,application/xhtml+xml,application/xml;q=0.9";
+		result = Ambition.Filter.Service.parse_accept_header(accept_header_3);
+		assert( result != null );
+		assert( result == "application/json" );
+
+		string accept_header_4 = "application/json;q=0.8,text/html;q=0.5,application/xhtml+xml,application/xml;q=0.9";
+		result = Ambition.Filter.Service.parse_accept_header(accept_header_4);
+		assert( result != null );
+		assert( result == "application/xml" );
+
+		string accept_header_5 = "application/jsv;q=0.8,text/plain;q=0.5,application/xhtml+xml,application/filemaker;q=0.9";
+		result = Ambition.Filter.Service.parse_accept_header(accept_header_5);
+		assert( result == null );
+	});
 	Test.add_func("/ambition/plugin/servicething/serialize/json", () => {
 		var json = new Ambition.PluginSupport.ServiceThing.Serializer.JSON();
 		assert( json != null );
