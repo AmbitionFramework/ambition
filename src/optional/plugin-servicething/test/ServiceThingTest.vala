@@ -33,6 +33,7 @@ public static void add_tests() {
 	});
 	Test.add_func("/ambition/plugin/servicething/parse_accept", () => {
 		var service = new Ambition.Filter.Service(null);
+		assert( service != null );
 		assert( Ambition.Filter.Service.serializers != null );
 
 		string accept_header_1 = "text/*;q=0.3, text/html;q=0.7, text/html;level=1, text/html;level=2;q=0.4, */*;q=0.5";
@@ -80,6 +81,52 @@ public static void add_tests() {
 		result = json.serialize( new TestStringUnderscoreObject() );
 		assert( result != null );
 		assert( result == """{"foo-baz":"bar"}""" );
+
+
+		Ambition.PluginSupport.ServiceThing.Serializer.JSONConfig.transform_dash_to_underscore = true;
+	});
+	Test.add_func("/ambition/plugin/servicething/serialize/json/int", () => {
+		var json = new Ambition.PluginSupport.ServiceThing.Serializer.JSON();
+		string result = json.serialize( new TestIntObject() );
+		assert( result != null );
+		assert( result == """{"foo":42}""" );
+	});
+	Test.add_func("/ambition/plugin/servicething/serialize/json/double", () => {
+		var json = new Ambition.PluginSupport.ServiceThing.Serializer.JSON();
+		string result = json.serialize( new TestDoubleObject() );
+		assert( result != null );
+		assert( """{"foo":62.31""" in result ); // Double precision issue?
+	});
+	Test.add_func("/ambition/plugin/servicething/serialize/json/bool", () => {
+		var json = new Ambition.PluginSupport.ServiceThing.Serializer.JSON();
+		string result = json.serialize( new TestBoolObject() );
+		assert( result != null );
+		assert( result == """{"foo":true}""" );
+	});
+	Test.add_func("/ambition/plugin/servicething/serialize/json/string_array", () => {
+		var json = new Ambition.PluginSupport.ServiceThing.Serializer.JSON();
+		string result = json.serialize( new TestStringArrayObject() );
+		assert( result != null );
+		assert( result == """{"foo":["bar","baz"]}""" );
+	});
+	Test.add_func("/ambition/plugin/servicething/serialize/json/string_arraylist", () => {
+		var json = new Ambition.PluginSupport.ServiceThing.Serializer.JSON();
+		string result = json.serialize( new TestStringArrayListObject() );
+		assert( result != null );
+		assert( result == """{"foo":["bar","baz"]}""" );
+	});
+	Test.add_func("/ambition/plugin/servicething/serialize/json/object", () => {
+		var json = new Ambition.PluginSupport.ServiceThing.Serializer.JSON();
+		string result = json.serialize( new TestObjectObject() );
+		assert( result != null );
+		assert( result == """{"bar":{"foo":["bar","baz"]}}""" );
+	});
+	Test.add_func("/ambition/plugin/servicething/serialize/json/everything", () => {
+		var json = new Ambition.PluginSupport.ServiceThing.Serializer.JSON();
+		string result = json.serialize( new TestEverythingObject() );
+		assert( result != null );
+		stdout.printf( "\n%s\n", result );
+		assert( result == """{"foo_baz":"bar","some_int":42,"is_something":false,"list_of_things":["thing","another","so wow"],"super_container":{"container":{"foo":["bar","baz"]},"example":"I am here"}}""" );
 	});
 }
 
@@ -89,4 +136,46 @@ public class TestStringObject : Object {
 
 public class TestStringUnderscoreObject : Object {
 	public string foo_baz { get; set; default = "bar"; }
+}
+
+public class TestIntObject : Object {
+	public int foo { get; set; default = 42; }
+}
+
+public class TestDoubleObject : Object {
+	public double foo { get; set; default = 62.31; }
+}
+
+public class TestBoolObject : Object {
+	public bool foo { get; set; default = true; }
+}
+
+public class TestStringArrayObject : Object {
+	public string[] foo { get; set; default = { "bar", "baz" }; }
+}
+
+public class TestStringArrayListObject : Object {
+	public Gee.ArrayList<string> foo { get; set; default = new Gee.ArrayList<string>(); }
+
+	public TestStringArrayListObject() {
+		foo.add("bar");
+		foo.add("baz");
+	}
+}
+
+public class TestObjectObject : Object {
+	public Object bar { get; set; default = new TestStringArrayObject(); }
+}
+
+public class TestEverythingObject : Object {
+	public string foo_baz { get; set; default = "bar"; }
+	public int some_int { get; set; default = 42; }
+	public bool is_something { get; set; default = false; }
+	public string[] list_of_things { get; set; default = { "thing", "another", "so wow" }; }
+	public Object super_container { get; set; default = new TestEverythingContainerObject(); }
+}
+
+public class TestEverythingContainerObject : Object {
+	public Object container { get; set; default = new TestStringArrayListObject(); }
+	public string example { get; set; default = "I am here"; }
 }
