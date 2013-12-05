@@ -19,7 +19,6 @@ SET(LIB_INSTALL_DIR lib)
 ENDIF()
 
 option( WITH_TEXTCAPTCHA "Include TextCaptcha plugin" ON )
-option( WITH_COUCH "Include Couch plugin" ON )
 option( WITH_TWITTER "Include TwitterBootstrap plugin" ON )
 
 set (PKGNAME ambition)
@@ -67,10 +66,6 @@ add_subdirectory (test)
 if (WITH_TWITTER)
 	add_subdirectory (src/optional/plugin-twitter-bootstrap)
 endif (WITH_TWITTER)
-
-if (WITH_COUCH)
-	add_subdirectory (src/optional/plugin-couchdb)
-endif (WITH_COUCH)
 
 if (WITH_TEXTCAPTCHA)
 	add_subdirectory (src/optional/textcaptcha)
