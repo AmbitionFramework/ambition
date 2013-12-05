@@ -1,8 +1,0 @@
-{
-	"name" : "SCGI",
-	"version" : "0.1.0",
-	"author" : "ambitionframework.org",
-	"description" : "Provide built-in support for a SCGI engine.",
-	"documentation" : "documentation.md",
-	"require-link" : false
-}

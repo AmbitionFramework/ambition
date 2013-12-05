@@ -19,7 +19,6 @@ SET(LIB_INSTALL_DIR lib)
 ENDIF()
 
 option( WITH_ALMANNA "Include Almanna Integration plugin (requires libalmanna)" ON )
-option( WITH_SCGI "Include SCGI Engine plugin (requires libgscgi)" ON )
 option( WITH_TEXTCAPTCHA "Include TextCaptcha plugin" ON )
 option( WITH_COUCH "Include Couch plugin" ON )
 option( WITH_TWITTER "Include TwitterBootstrap plugin" ON )
@@ -77,10 +76,6 @@ endif (WITH_COUCH)
 if (WITH_TEXTCAPTCHA)
 	add_subdirectory (src/optional/textcaptcha)
 endif (WITH_TEXTCAPTCHA)
-
-if (WITH_SCGI)
-	add_subdirectory (src/optional/engine-scgi)
-endif (WITH_SCGI)
 
 if (WITH_ALMANNA)
 	add_subdirectory (src/optional/plugin-almanna)
