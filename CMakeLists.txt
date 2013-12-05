@@ -18,8 +18,6 @@ ELSE()
 SET(LIB_INSTALL_DIR lib)
 ENDIF()
 
-option( WITH_TEXTCAPTCHA "Include TextCaptcha plugin" ON )
-
 set (PKGNAME ambition)
 set (PKGVERSION 0.1)
 set (PREFIX ${CMAKE_INSTALL_PREFIX})
@@ -46,7 +44,7 @@ SET( CORE_DEPS_PACKAGES
 	gio-2.0
 	json-glib-1.0
 	gmodule-2.0
-    libsoup-2.4
+	libsoup-2.4
 )
 find_package(PkgConfig)
 pkg_check_modules(CORE_DEPS REQUIRED ${CORE_DEPS_PACKAGES} glib-2.0>=2.32)
@@ -61,8 +59,4 @@ add_subdirectory (share)
 add_subdirectory (src/libambition)
 add_subdirectory (src/ambition-bin)
 add_subdirectory (test)
-
-if (WITH_TEXTCAPTCHA)
-	add_subdirectory (src/optional/textcaptcha)
-endif (WITH_TEXTCAPTCHA)
 
