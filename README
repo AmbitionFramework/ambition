@@ -19,11 +19,6 @@ At minimum, the following libraries are required:
 * libsoup-2.4
 * json-glib-1.0
 
-For optional plugins, which default to ON, the following libraries are required:
-
-* libgscgi-1.0 (WITH_SCGI)
-* almanna-0.1 (WITH_ALMANNA)
-
 BUILDING/INSTALLING FROM GIT
 
 Ambition uses CMake to configure and prepare the source for installation. By
