@@ -37,7 +37,7 @@ namespace Ambition.PluginSupport.ServiceThing.Serializer {
 			serializers[ typeof(double) ] = new SerializeValueWrapper(serialize_double);
 			serializers[ typeof(bool) ] = new SerializeValueWrapper(serialize_bool);
 			serializers[ typeof(string[]) ] = new SerializeValueWrapper(serialize_stringarray);
-			serializers[ typeof(ArrayList) ] = new SerializeValueWrapper(serialize_stringarraylist);
+			serializers[ typeof(ArrayList) ] = new SerializeValueWrapper(serialize_arraylist);
 			serializers[ typeof(Object) ] = new SerializeValueWrapper(serialize_object);
 		}
 
@@ -65,6 +65,10 @@ namespace Ambition.PluginSupport.ServiceThing.Serializer {
 					continue;
 				}
 
+				if ( ps.get_blurb() != null && ps.get_blurb() == "ignore" ) {
+					continue;
+				}
+
 				// Only serialize property if we have a serializer
 				SerializeValueWrapper? serializer_wrapper = serializers[ps.value_type];
 				if ( serializer_wrapper == null && ps.value_type.is_object() ) {
@@ -72,8 +76,11 @@ namespace Ambition.PluginSupport.ServiceThing.Serializer {
 				}
 				if ( serializer_wrapper != null ) {
 					string member_name = ps.name;
+					if ( ps.get_nick() != null && ps.get_nick() != "" && ps.get_nick() != member_name ) {
+						member_name = ps.get_nick();
+					}
 					if ( JSONConfig.transform_dash_to_underscore ) {
-						member_name = ps.name.replace( "-", "_" );
+						member_name = member_name.replace( "-", "_" );
 					}
 					b.set_member_name(member_name);
 					Value v = Value( ps.value_type );
@@ -114,11 +121,40 @@ namespace Ambition.PluginSupport.ServiceThing.Serializer {
 			b.end_array();
 		}
 
-		private static void serialize_stringarraylist( Value v, Json.Builder b ) {
-			ArrayList<string> array = (ArrayList<string>) v;
+		private static void serialize_arraylist( Value v, Json.Builder b ) {
+			Type generic_type = ( (ArrayList) v ).element_type;
 			b.begin_array();
-			foreach ( var element in array ) {
-				b.add_string_value(element);
+			switch (generic_type.name()) {
+				case "gchararray":
+					ArrayList<string> array = (ArrayList<string>) v;
+					foreach ( var element in array ) {
+						b.add_string_value(element);
+					}
+					break;
+				case "gint":
+					ArrayList<int> array = (ArrayList<int>) v;
+					foreach ( var element in array ) {
+						b.add_int_value(element);
+					}
+					break;
+				case "gboolean":
+					ArrayList<bool> array = (ArrayList<bool>) v;
+					foreach ( var element in array ) {
+						b.add_boolean_value(element);
+					}
+					break;
+				case "gdouble":
+					ArrayList<double?> array = (ArrayList<double?>) v;
+					foreach ( var element in array ) {
+						b.add_double_value(element);
+					}
+					break;
+				case "GObject":
+					ArrayList<Object> array = (ArrayList<Object>) v;
+					foreach ( var element in array ) {
+						serialize_object_as_object( element, b );
+					}
+					break;
 			}
 			b.end_array();
 		}

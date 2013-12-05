@@ -125,8 +125,19 @@ public static void add_tests() {
 		var json = new Ambition.PluginSupport.ServiceThing.Serializer.JSON();
 		string result = json.serialize( new TestEverythingObject() );
 		assert( result != null );
-		stdout.printf( "\n%s\n", result );
 		assert( result == """{"foo_baz":"bar","some_int":42,"is_something":false,"list_of_things":["thing","another","so wow"],"super_container":{"container":{"foo":["bar","baz"]},"example":"I am here"}}""" );
+	});
+	Test.add_func("/ambition/plugin/servicething/serialize/json/ignore", () => {
+		var json = new Ambition.PluginSupport.ServiceThing.Serializer.JSON();
+		string result = json.serialize( new TestIgnoreObject() );
+		assert( result != null );
+		assert( result == """{"not_ignored":"woohoo"}""" );
+	});
+	Test.add_func("/ambition/plugin/servicething/serialize/json/rename", () => {
+		var json = new Ambition.PluginSupport.ServiceThing.Serializer.JSON();
+		string result = json.serialize( new TestRenameObject() );
+		assert( result != null );
+		assert( result == """{"renamed":"woohoo"}""" );
 	});
 }
 
@@ -178,4 +189,15 @@ public class TestEverythingObject : Object {
 public class TestEverythingContainerObject : Object {
 	public Object container { get; set; default = new TestStringArrayListObject(); }
 	public string example { get; set; default = "I am here"; }
+}
+
+public class TestIgnoreObject : Object {
+	public string not_ignored { get; set; default = "woohoo"; }
+	[Description( blurb = "ignore" )]
+	public string ignored { get; set; default = "boo"; }
+}
+
+public class TestRenameObject : Object {
+	[Description( nick = "renamed" )]
+	public string something { get; set; default = "woohoo"; }
 }
