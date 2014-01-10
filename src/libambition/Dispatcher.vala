@@ -174,11 +174,10 @@ namespace Ambition {
 		}
 
 		/**
-		 * AFTER a State has been initialized by an engine with 
-		 * request headers, cookies and a session prepared, THEN
-		 * run a request through the dispatcher. Iterate through each path to
-		 * determine if the request matches, run through those actions, and
-		 * set up the response.
+		 * AFTER a State has been initialized by an engine with request headers,
+		 * cookies and a session prepared, THEN nrun a request through the
+		 * dispatcher. Iterate through each path to determine if the request
+		 * matches, run through those actions, and set up the response.
 		 * @param state Current engine state
 		 */
 		public void handle_request( State state ) {

@@ -33,7 +33,32 @@ namespace Ambition.Utility {
 			Logger.error("Somehow, we are not in a project directory.");
 			return null;
 		}
-		return project_dir.get_basename();
+
+		// Get appname from CMakeLists.txt
+		var cmakelists = File.new_for_path("CMakeLists.txt");
+		if ( !cmakelists.query_exists() ) {
+			Logger.error( "Fatal: Unable to load CMakeLists.txt." );
+			return null;
+		}
+		try {
+			var input_stream = new DataInputStream( cmakelists.read() );
+			string line;
+			while ( ( line = input_stream.read_line(null) ) != null ) {
+				if ( "set (APPNAME " in line ) {
+					int start = line.index_of("NAME ") + 5;
+					string app_name = line.substring(
+						start,
+						line.index_of(")") - start
+					);
+					return app_name;
+				}
+			}
+		} catch ( Error e ) {
+			Logger.error( "Fatal: Unable to read CMakeLists.txt" );
+			return null;
+		}
+
+		return null;
 	}
 
 	/**
