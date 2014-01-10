@@ -163,8 +163,8 @@ namespace Ambition.Utility {
 				}
 			}
 
+			generate_plugins_cmake();
 			if ( to_install.size > 0 ) {
-				generate_plugins_cmake();
 				clean();
 			}
 
