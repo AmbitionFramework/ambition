@@ -119,18 +119,6 @@ namespace Ambition.Utility {
 					remove_plugin_from_directory(installed_plugin.name);
 					installed.remove(installed_plugin);
 				}
-
-				if (is_osx) {
-					string library_path = Environment.get_variable("DYLD_LIBRARY_PATH");
-					if ( library_path == null ) {
-						library_path = "";
-					} else {
-						library_path = library_path + ":";
-					}
-					library_path = library_path + "plugins/" + installed_plugin.name;
-
-					Environment.set_variable( "DYLD_LIBRARY_PATH", library_path, true );
-				}
 			}
 
 			// Queue installation of any missing plugins
@@ -166,6 +154,19 @@ namespace Ambition.Utility {
 			generate_plugins_cmake();
 			if ( to_install.size > 0 ) {
 				clean();
+			}
+
+			if (is_osx) {
+				string library_path = Environment.get_variable("DYLD_LIBRARY_PATH");
+				foreach ( var configured_name in configured.keys ) {
+					if ( library_path == null ) {
+						library_path = "";
+					} else {
+						library_path = library_path + ":";
+					}
+					library_path = library_path + "plugins/" + configured_name;
+				}
+				Environment.set_variable( "DYLD_LIBRARY_PATH", library_path, true );
 			}
 
 			return true;
