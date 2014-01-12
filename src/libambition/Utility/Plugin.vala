@@ -166,7 +166,9 @@ namespace Ambition.Utility {
 					}
 					library_path = library_path + "plugins/" + configured_name;
 				}
-				Environment.set_variable( "DYLD_LIBRARY_PATH", library_path, true );
+				if ( library_path != null && library_path.length > 0 ) {
+					Environment.set_variable( "DYLD_LIBRARY_PATH", library_path, true );
+				}
 			}
 
 			return true;
