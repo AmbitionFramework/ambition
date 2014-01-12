@@ -165,7 +165,7 @@ public static int execute_command( bool as_interactive, string? command, string[
 				usage( "daemon", as_interactive );
 				return 1;
 			}
-			return m.run(true);
+			return m.run( true, args );
 
 		case "clean":
 			var m = new Ambition.Utility.Clean();
@@ -287,9 +287,10 @@ public static void usage( string? method = null, bool as_interactive = false ) {
 		);
 	}
 	if ( !as_interactive && method == null || method == "daemon" ) {
-		stdout.printf("daemon\n");
+		stdout.printf("daemon <--pid PATH_TO_PID>\n");
 		wrap(
-			"As a background process, perform the same actions as 'run'.\n"
+			"As a background process, perform the same actions as 'run'."
+			+ "Using the --pid flag, you may optionally specify a pid file.\n"
 		);
 	}
 	if ( method == null || method == "clean" ) {

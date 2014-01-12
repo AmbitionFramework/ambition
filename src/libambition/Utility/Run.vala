@@ -34,14 +34,14 @@ namespace Ambition.Utility {
 		private string application_name { get; set; }
 		internal static bool interrupted { get; set; default = false; }
 
-		public int run( bool daemonize = false ) {
+		public int run( bool daemonize = false, string[]? new_args = null ) {
 			var app_name = get_application_name();
 			if ( app_name == null ) {
 				Logger.error("Somehow, we are not in a project directory.");
 				return -1;
 			}
 			application_name = app_name;
-			build_and_run(daemonize);
+			build_and_run( daemonize, new_args );
 			if ( Environment.get_current_dir().has_suffix("build") ) {
 				Environment.set_current_dir("..");
 			}
@@ -139,7 +139,7 @@ namespace Ambition.Utility {
 		/**
 		 * Build and run current project.
 		 */
-		internal int build_and_run( bool daemonize = false ) {
+		internal int build_and_run( bool daemonize = false, string[]? new_args = null ) {
 			int exit_status;
 
 			if (daemonize) {
@@ -154,6 +154,36 @@ namespace Ambition.Utility {
 				// Daemonize
 				var pid = Posix.fork();
 				if ( pid > 0 ) {
+					if ( new_args != null && new_args.length >= 2 ) {
+						for ( var i = 0; i < new_args.length; i += 2 ) {
+							if ( i + 1 >= new_args.length ) {
+								break;
+							}
+							string flag = new_args[i];
+							string value = new_args[i + 1];
+							if ( flag == "--pid" ) {
+								try {
+									var file = File.new_for_path(value);
+									{
+										FileOutputStream stream;
+										if ( file.query_exists() ) {
+											stream = file.replace( null, false, FileCreateFlags.NONE );
+										} else {
+											stream = file.create(FileCreateFlags.NONE);
+										}
+										if ( file.query_exists() ) {
+											var data_stream = new DataOutputStream(stream);
+											data_stream.put_string( "%ld".printf( (long) pid ) );
+										} else {
+											Logger.error( "Unable to open pid file '%s' for writing", value );
+										}
+									}
+								} catch (Error e) {
+									Logger.error( "Unable to write to pid file '%s': ", e.message );
+								}
+							}
+						}
+					}
 					return 0;
 				}
 			}
