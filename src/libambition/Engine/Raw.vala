@@ -298,7 +298,7 @@ namespace Ambition.Engine {
 
 			raw_headers["Date"] = new DateTime.now_utc().format("%a, %d %b %Y %H:%M:%S %Z");
 			raw_headers["Connection"] = (result == ConnectionResult.KEEPALIVE ? "keep-alive" : "close");
-			if ( state.response.body != null ) {
+			if ( state.response.get_body_length() > 0 ) {
 				raw_headers["Content-Type"] = state.response.content_type;
 				raw_headers["Content-Length"] = state.response.get_body_length().to_string();
 			}
