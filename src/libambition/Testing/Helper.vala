@@ -48,6 +48,10 @@ namespace Ambition.Testing {
 		 */
 		public static Request get_mock_request( HttpMethod method, string path ) {
 			var request = new Request();
+			var params = new HashMap<string,string>();
+			if ( path.index_of("?") > -1 ) {
+				params = Request.params_from_string( path.substring( path.index_of("?") + 1 ) );
+			}
 			request.initialize(
 				method,
 				"127.0.0.1",
@@ -55,7 +59,7 @@ namespace Ambition.Testing {
 				"localhost",
 				path,
 				( path.index_of("?") > -1 ? path.substring( 0, path.index_of("?") ) : path ),
-				new HashMap<string,string>(),
+				params,
 				new HashMap<string,string>()
 			);
 			return request;
