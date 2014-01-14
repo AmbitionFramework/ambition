@@ -45,7 +45,7 @@ namespace Ambition.CoreView {
 
 		public override InputStream? render() {
 			size = renderable.length;
-			if ( state.response.content_type != null ) {
+			if ( state.response.content_type == null ) {
 				state.response.content_type = "text/html";
 			}
 			return new MemoryInputStream.from_data( renderable.data, GLib.g_free );
