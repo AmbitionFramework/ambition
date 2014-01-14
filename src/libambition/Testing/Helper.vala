@@ -75,10 +75,10 @@ namespace Ambition.Testing {
 		 */
 		public static TestResponse mock_dispatch_with_request( Application app, Request mock_request, HashMap<string,string>? config_override = null ) {
 			Config.reset();
-			var file = File.new_for_path(".");
+			var application_name = Ambition.Utility.get_application_name();
 			var i = typeof(Engine.Test);
 			if ( i > 0 ) {}
-			string path = Environment.get_current_dir() + "/bin/" + file.get_basename() + "-bin";
+			string path = Environment.get_current_dir() + "/bin/" + application_name + "-bin";
 			Dispatcher.set_default_config({path});
 			Config.get_instance().parse_config();
 			Config.set_value( "app.log_level", "error" );
