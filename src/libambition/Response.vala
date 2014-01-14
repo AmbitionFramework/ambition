@@ -69,7 +69,7 @@ namespace Ambition {
 		/**
 		 * Content type of the response, defaults to "text/html".
 		 */
-		public string content_type { get; set; default = "text/html"; }
+		public string? content_type { get; set; default = "text/html"; }
 
 		private bool _done { get; set; default = false; }
 

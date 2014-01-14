@@ -40,15 +40,13 @@ namespace Ambition.Testing {
 		}
 
 		/**
-		 * Perform a mock request against a given path. Runs through the
-		 * dispatcher without launching the full application.
-		 * @param app Instance of the application to test.
+		 * Retrieve a mock Request object using the same values as the
+		 * mock_dispatch() method. You may use the result of this to modify and
+		 * then send to mock_dispatch_with_request().
 		 * @param method HttpMethod for the request
 		 * @param path URI path to request
-		 * @param config_override Optionally provide a HashMap containing config
-		 * overrides for this request.
 		 */
-		public static TestResponse mock_dispatch( Application app, HttpMethod method, string path, HashMap<string,string>? config_override = null ) {
+		public static Request get_mock_request( HttpMethod method, string path ) {
 			var request = new Request();
 			request.initialize(
 				method,
@@ -60,6 +58,20 @@ namespace Ambition.Testing {
 				new HashMap<string,string>(),
 				new HashMap<string,string>()
 			);
+			return request;
+		}
+
+		/**
+		 * Perform a mock request against a given path. Runs through the
+		 * dispatcher without launching the full application.
+		 * @param app Instance of the application to test.
+		 * @param method HttpMethod for the request
+		 * @param path URI path to request
+		 * @param config_override Optionally provide a HashMap containing config
+		 * overrides for this request.
+		 */
+		public static TestResponse mock_dispatch( Application app, HttpMethod method, string path, HashMap<string,string>? config_override = null ) {
+			var request = get_mock_request( method, path );
 			return mock_dispatch_with_request( app, request, config_override );
 		}
 
