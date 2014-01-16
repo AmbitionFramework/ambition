@@ -62,7 +62,7 @@ namespace Ambition.Utility {
 			return 0;
 		}
 
-		public int test() {
+		public int test( string[] args ) {
 			var app_name = get_application_name();
 			if ( app_name == null ) {
 				Logger.error("Somehow, we are not in a project directory.");
@@ -96,7 +96,17 @@ namespace Ambition.Utility {
 			Logger.info( "Running tests..." );
 			var cur_dir = Environment.get_current_dir();
 			Environment.set_current_dir( cur_dir.substring( 0, cur_dir.length - 5 ) );
-			string[] args = { "%s/build/test/test-application".printf( Environment.get_current_dir() ) };
+			string[] args = {};
+
+			// Find gtester
+			string? gtester = Environment.find_program_in_path("gtester");
+			if ( gtester != null ) {
+				args += gtester;
+				args += "--verbose";
+			}
+
+			args += "%s/build/test/test-application".printf( Environment.get_current_dir() );
+
 			try {
 				Process.spawn_sync(
 					null,

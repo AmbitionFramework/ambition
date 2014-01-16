@@ -154,7 +154,7 @@ public static int execute_command( bool as_interactive, string? command, string[
 				usage( "test", as_interactive );
 				return 1;
 			}
-			return m.test();
+			return m.test(args);
 
 		case "daemon":
 			if (as_interactive) {
