@@ -69,14 +69,14 @@ namespace Ambition.Utility {
 				return -1;
 			}
 			application_name = app_name;
-			run_tests();
+			run_tests(args);
 			if ( Environment.get_current_dir().has_suffix("build") ) {
 				Environment.set_current_dir("..");
 			}
 			return 0;
 		}
 
-		internal int run_tests() {
+		internal int run_tests( string[] args ) {
 			int exit_status;
 
 			var plugin = new Plugin();
@@ -96,21 +96,29 @@ namespace Ambition.Utility {
 			Logger.info( "Running tests..." );
 			var cur_dir = Environment.get_current_dir();
 			Environment.set_current_dir( cur_dir.substring( 0, cur_dir.length - 5 ) );
-			string[] args = {};
+			string[] exec_args = {};
 
 			// Find gtester
 			string? gtester = Environment.find_program_in_path("gtester");
 			if ( gtester != null ) {
-				args += gtester;
-				args += "--verbose";
+				exec_args += gtester;
+				exec_args += "--verbose";
+
+				// Append args if given
+				if ( args != null && args.length > 0 ) {
+					foreach ( var arg in args ) {
+						exec_args += arg;
+					}
+				}
 			}
 
-			args += "%s/build/test/test-application".printf( Environment.get_current_dir() );
+			// Add test binary
+			exec_args += "%s/build/test/test-application".printf( Environment.get_current_dir() );
 
 			try {
 				Process.spawn_sync(
 					null,
-					args,
+					exec_args,
 					null,
 					SpawnFlags.CHILD_INHERITS_STDIN,
 					null,
