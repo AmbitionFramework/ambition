@@ -28,6 +28,7 @@ namespace Ambition.Utility {
 	 * Monitor an application for changes, build if it does.
 	 */
 	public class Monitor : Object {
+#if !WIN32
 		private static const int timeout = 1000;
 		private HashMap<string,FileMonitorEvent> changed_files { get; set; default = new HashMap<string,FileMonitorEvent>(); }
 		private ArrayList<FileMonitor> monitor_list = null;
@@ -206,5 +207,6 @@ namespace Ambition.Utility {
 			}
 			return 0;
 		}
+#endif
 	}
 }

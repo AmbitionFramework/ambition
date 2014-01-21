@@ -7,7 +7,7 @@ enable_testing()
 find_package(Vala REQUIRED)
 include(ValaVersion)
 include(ValaPrecompile)
-ensure_vala_version("0.16.0" MINIMUM)
+ensure_vala_version("0.18.0" MINIMUM)
 
 IF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 	SET(CMAKE_INSTALL_PREFIX "/usr" CACHE PATH "install prefix" FORCE)
@@ -23,6 +23,11 @@ set (PKGVERSION 0.1)
 set (PREFIX ${CMAKE_INSTALL_PREFIX})
 set (DOLLAR "$")
 
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+	set (WIN32 1)
+	set (FLAGS --define=WIN32)
+ENDIF()
+
 set (BINSOURCE ${CMAKE_BINARY_DIR}/src/libambition)
 set (VAPIDIRS 
 	--vapidir='${CMAKE_SOURCE_DIR}'
@@ -36,6 +41,7 @@ set (DEFAULT_VALA_OPTIONS
 	--target-glib=2.32
 	--debug
 	-g
+	${FLAGS}
 )
 
 SET( CORE_DEPS_PACKAGES

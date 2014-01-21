@@ -112,7 +112,7 @@ public static int execute_command( bool as_interactive, string? command, string[
 				profiles = args[1:args.length];
 			}
 			return s.run( args[0], profiles );
-
+#if !WIN32
 		case "monitor":
 			var m = new Ambition.Utility.Monitor();
 			if ( !in_application() ) {
@@ -120,7 +120,7 @@ public static int execute_command( bool as_interactive, string? command, string[
 				return 1;
 			}
 			return m.run();
-
+#endif
 		case "shell":
 			if (as_interactive) {
 				return no_interactive();
@@ -156,6 +156,7 @@ public static int execute_command( bool as_interactive, string? command, string[
 			}
 			return m.test(args);
 
+#if !WIN32
 		case "daemon":
 			if (as_interactive) {
 				return no_interactive();
@@ -166,6 +167,7 @@ public static int execute_command( bool as_interactive, string? command, string[
 				return 1;
 			}
 			return m.run( true, args );
+#endif
 
 		case "clean":
 			var m = new Ambition.Utility.Clean();
@@ -286,6 +288,7 @@ public static void usage( string? method = null, bool as_interactive = false ) {
 			+ "environment. Must be run from an application directory.\n"
 		);
 	}
+#if !WIN32
 	if ( !as_interactive && method == null || method == "daemon" ) {
 		stdout.printf("daemon <--pid PATH_TO_PID>\n");
 		wrap(
@@ -293,6 +296,7 @@ public static void usage( string? method = null, bool as_interactive = false ) {
 			+ "Using the --pid flag, you may optionally specify a pid file.\n"
 		);
 	}
+#endif
 	if ( method == null || method == "clean" ) {
 		stdout.printf("clean\n");
 		wrap(
@@ -313,6 +317,7 @@ public static void usage( string? method = null, bool as_interactive = false ) {
 			"Build run unit tests in the test directory.\n"
 		);
 	}
+#if !WIN32
 	if ( method == null || method == "monitor" ) {
 		stdout.printf("monitor\n");
 		wrap(
@@ -322,6 +327,7 @@ public static void usage( string? method = null, bool as_interactive = false ) {
 			+ "work on Mac OS X/Darwin or Win32.\n"
 		);
 	}
+#endif
 	if ( method == null || method == "controller" ) {
 		stdout.printf("controller <name>\n");
 		wrap(

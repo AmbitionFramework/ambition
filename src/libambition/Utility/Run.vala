@@ -160,6 +160,7 @@ namespace Ambition.Utility {
 		internal int build_and_run( bool daemonize = false, string[]? new_args = null ) {
 			int exit_status;
 
+#if !WIN32
 			if (daemonize) {
 				// Figure out where to store the log
 				Config.set_value( "ambition.app_name", application_name );
@@ -205,6 +206,7 @@ namespace Ambition.Utility {
 					return 0;
 				}
 			}
+#endif
 
 			int response = build();
 			if ( response < 0 ) {
