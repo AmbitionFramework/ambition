@@ -30,7 +30,7 @@ public class CoreViewFileTest {
 			assert( r != null );
 		});
 		Test.add_func("/ambition/coreview/file/validate", () => {
-			var r = new Ambition.CoreView.File( get_file() );
+			var r = new Ambition.CoreView.File( get_file(), "text/plain" );
 			r.state = new Ambition.State("a");
 			r.state.request = new Ambition.Request();
 			r.state.response = new Ambition.Response();
