@@ -68,6 +68,7 @@ Content-Type: text/plain
 %s
 --AaB03x--
 """.printf(txt_data).replace( "\n", "\r\n" );
+
 			InputStream is_testdata = new MemoryInputStream.from_data( st_testdata.data, null );
 
 			var c = new Ambition.Engine.Base();

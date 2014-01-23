@@ -124,6 +124,9 @@ namespace Ambition.Engine {
 					if ( c == '\r' ) {
 						break;
 					}
+					if ( c == '\n' && post_data.len == 0 ) {
+						continue;
+					}
 					post_data.append_unichar( (unichar) c );
 					if ( post_data.len == content_length ) {
 						break;
@@ -182,10 +185,11 @@ namespace Ambition.Engine {
 				if ( line == null ) {
 					break;
 				}
-				if ( line == "" ) {
+				var fline = line.chug();
+				if ( fline == "" ) {
 					break;
 				}
-				string[] split = line.split(": ");
+				string[] split = fline.split(": ");
 				switch( split[0] ) {
 					case "Content-Disposition":
 						string val = split[1].substring( 0, split[1].index_of(" ") ).replace( ";", "" ).replace( "\"", "" );
