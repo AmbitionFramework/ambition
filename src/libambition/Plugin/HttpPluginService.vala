@@ -80,6 +80,9 @@ namespace Ambition.Plugin {
 
 		public ArrayList<PluginResult> check_outdated_plugin( HashMap<string,string> installed_plugins ) {
 			var results = new ArrayList<PluginResult>();
+			if ( installed_plugins.size == 0 ) {
+				return results;
+			}
 
 			// Generate JSON request from list of plugins
 			var params = new HashMap<string,string>();
@@ -109,7 +112,15 @@ namespace Ambition.Plugin {
 					Logger.error( "Service unavailable. (%s)", e.message );
 					return results;
 				}
+				if ( parser.get_root() == null ) {
+					Logger.error( "Service unavailable. (Invalid response)" );
+					return results;
+				}
 				var root_object = parser.get_root().get_object();
+				if ( root_object.has_member("error") && root_object.get_string_member("error").length > 0 ) {
+					Logger.error( "Error: %s", root_object.get_string_member("error") );
+					return results;
+				}
 				foreach ( var plugin_node in root_object.get_array_member("plugins").get_elements() ) {
 					var plugin_result = (PluginResult) Json.gobject_deserialize( typeof(PluginResult), plugin_node );
 					results.add(plugin_result);
