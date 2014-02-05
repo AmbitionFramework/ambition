@@ -149,6 +149,7 @@ namespace Ambition.Plugin {
 		private Soup.Message? http_get_message( string path, HashMap<string,string>? params ) {
 			var session = new Soup.SessionSync();
 			var message = new Soup.Message( "GET", construct_url( path, params ) );
+			message.request_headers.append( "Accept", "application/json" );
 			session.send_message(message);
 			if ( message.status_code == 200 ) {
 				return message;
