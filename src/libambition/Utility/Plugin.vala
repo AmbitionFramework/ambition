@@ -307,7 +307,10 @@ namespace Ambition.Utility {
 					}
 				}
 				stdout.printf( "Required plugins:\n" );
-				wrap( manifest.plugin_dependencies != null ? string.joinv( ", ", manifest.plugin_dependencies ) : "None" );
+				wrap(
+					manifest.plugin_dependencies != null && manifest.plugin_dependencies.length > 0
+						? string.joinv( ", ", manifest.plugin_dependencies ) : "None"
+				);
 			} else {
 				stdout.printf( "No plugin found.\n" );
 			}

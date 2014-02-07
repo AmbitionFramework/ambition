@@ -36,13 +36,16 @@ namespace Ambition.Plugin {
 				params["b"] = version;
 			}
 			File? archive_file = retrieve_archive(params);
-			if ( archive_file != null ) {
-				var temp_directory = unarchive_file(archive_file);
-				if ( temp_directory != null ) {
-					return temp_directory;
-				}
+			if ( archive_file == null ) {
+				return null;
 			}
-			return null;
+			var temp_directory = unarchive_file(archive_file);
+			if ( temp_directory == null ) {
+				return null;
+			}
+			var plugin_directory = build_plugin(temp_directory);
+			cleanup(temp_directory);
+			return plugin_directory;
 		}
 
 		public bool cleanup( File retrieved_plugin ) {
@@ -242,6 +245,80 @@ namespace Ambition.Plugin {
 			Environment.set_current_dir(current_dir);
 
 			return temp_dir;
+		}
+
+		private File? build_plugin( File temp_directory ) {
+			var current_dir = Environment.get_current_dir();
+			
+			// Create deploy directory
+			string temp_name = "%s/ambtmp-deploy".printf( Environment.get_tmp_dir() );
+			File deploy_dir = File.new_for_path(temp_name);
+			if ( deploy_dir.make_directory() == false ) {
+				Logger.error( "Unable to create deploy directory: %s", deploy_dir.get_path() );
+				return null;
+			}
+
+			// Create build directory
+			File build_dir = File.new_for_path( "%s/%s".printf( temp_directory.get_path(), "build" ) );
+			if ( build_dir.make_directory() == false ) {
+				Logger.error( "Unable to create build directory: %s", build_dir.get_path() );
+				return null;
+			}
+			Environment.set_current_dir( build_dir.get_path() );
+
+			// Run cmake
+			string standard_output, standard_error;
+			int exit_status;
+			try {
+				Process.spawn_command_line_sync(
+					"cmake -DCMAKE_INSTALL_PREFIX='%s' ..".printf( deploy_dir.get_path() ),
+					out standard_output,
+					out standard_error,
+					out exit_status
+				);
+			} catch (SpawnError se) {
+				Logger.error( "Unable to run cmake: %s".printf( se.message ) );
+				clean_directory(build_dir);
+				return null;
+			}
+			stdout.printf(standard_output);
+			stderr.printf(standard_error);
+
+			// make
+			try {
+				Process.spawn_command_line_sync(
+					"make",
+					out standard_output,
+					out standard_error,
+					out exit_status
+				);
+			} catch (SpawnError se) {
+				Logger.error( "Unable to run make: %s".printf( se.message ) );
+				clean_directory(build_dir);
+				return null;
+			}
+			stdout.printf(standard_output);
+			stderr.printf(standard_error);
+
+			// make install
+			try {
+				Process.spawn_command_line_sync(
+					"make install",
+					out standard_output,
+					out standard_error,
+					out exit_status
+				);
+			} catch (SpawnError se) {
+				Logger.error( "Unable to run make install: %s".printf( se.message ) );
+				clean_directory(build_dir);
+				return null;
+			}
+			stdout.printf(standard_output);
+			stderr.printf(standard_error);
+
+			Environment.set_current_dir(current_dir);
+
+			return deploy_dir;
 		}
 
 		private void clean_directory( File directory ) {
