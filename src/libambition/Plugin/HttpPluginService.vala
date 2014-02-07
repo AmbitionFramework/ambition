@@ -27,7 +27,14 @@ namespace Ambition.Plugin {
 	 */
 	public class HttpPluginService : Object,IPluginService {
 		public HashMap<string,string> config { get; set; }
-		private string plugin_url = "http://localhost:8099/service";
+		private string plugin_url = "http://plugins.ambitionframework.org/service";
+
+		public HttpPluginService() {
+			string? url_override = Environment.get_variable("AMBITION_PLUGIN_URL");
+			if ( url_override != null ) {
+				plugin_url = url_override;
+			}
+		}
 
 		public File? retrieve_plugin( string plugin_name, string? version = null ) throws Error {
 			var params = new HashMap<string,string>();
@@ -252,16 +259,28 @@ namespace Ambition.Plugin {
 			
 			// Create deploy directory
 			string temp_name = "%s/ambtmp-deploy".printf( Environment.get_tmp_dir() );
-			File deploy_dir = File.new_for_path(temp_name);
-			if ( deploy_dir.make_directory() == false ) {
-				Logger.error( "Unable to create deploy directory: %s", deploy_dir.get_path() );
+			File deploy_dir;
+			try {
+				deploy_dir = File.new_for_path(temp_name);
+				if ( deploy_dir.make_directory() == false ) {
+					Logger.error( "Unable to create deploy directory: %s", deploy_dir.get_path() );
+					return null;
+				}
+			} catch (Error e) {
+				Logger.error( "Unable to create build directory" );
 				return null;
 			}
 
 			// Create build directory
-			File build_dir = File.new_for_path( "%s/%s".printf( temp_directory.get_path(), "build" ) );
-			if ( build_dir.make_directory() == false ) {
-				Logger.error( "Unable to create build directory: %s", build_dir.get_path() );
+			File build_dir;
+			try {
+				build_dir = File.new_for_path( "%s/%s".printf( temp_directory.get_path(), "build" ) );
+				if ( build_dir.make_directory() == false ) {
+					Logger.error( "Unable to create build directory: %s", build_dir.get_path() );
+					return null;
+				}
+			} catch (Error e) {
+				Logger.error( "Unable to create build directory" );
 				return null;
 			}
 			Environment.set_current_dir( build_dir.get_path() );
@@ -281,8 +300,12 @@ namespace Ambition.Plugin {
 				clean_directory(build_dir);
 				return null;
 			}
-			stdout.printf(standard_output);
-			stderr.printf(standard_error);
+			if ( exit_status != 0 ) {
+				Logger.error( "Error during cmake:" );
+				stdout.printf(standard_output);
+				stderr.printf(standard_error);
+				return null;
+			}
 
 			// make
 			try {
@@ -297,8 +320,12 @@ namespace Ambition.Plugin {
 				clean_directory(build_dir);
 				return null;
 			}
-			stdout.printf(standard_output);
-			stderr.printf(standard_error);
+			if ( exit_status != 0 ) {
+				Logger.error( "Error during make:" );
+				stdout.printf(standard_output);
+				stderr.printf(standard_error);
+				return null;
+			}
 
 			// make install
 			try {
@@ -313,8 +340,12 @@ namespace Ambition.Plugin {
 				clean_directory(build_dir);
 				return null;
 			}
-			stdout.printf(standard_output);
-			stderr.printf(standard_error);
+			if ( exit_status != 0 ) {
+				Logger.error( "Error during make install:" );
+				stdout.printf(standard_output);
+				stderr.printf(standard_error);
+				return null;
+			}
 
 			Environment.set_current_dir(current_dir);
 
