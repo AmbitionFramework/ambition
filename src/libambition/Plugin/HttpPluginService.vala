@@ -216,6 +216,7 @@ namespace Ambition.Plugin {
 		}
 
 		private File? unarchive_file( File archive ) {
+			Logger.debug( "Unarchiving." );
 			string sanitized_name = archive.get_basename().down().replace( " ", "_" ).replace( ".tar.gz", "" );
 
 			// Create temporary directory
@@ -255,6 +256,7 @@ namespace Ambition.Plugin {
 		}
 
 		private File? build_plugin( File temp_directory ) {
+			Logger.debug( "Building." );
 			var current_dir = Environment.get_current_dir();
 			
 			// Create deploy directory
