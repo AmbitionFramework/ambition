@@ -269,7 +269,7 @@ namespace Ambition.Plugin {
 					return null;
 				}
 			} catch (Error e) {
-				Logger.error( "Unable to create build directory" );
+				Logger.error( "Unable to create deploy directory" );
 				return null;
 			}
 
@@ -283,6 +283,7 @@ namespace Ambition.Plugin {
 				}
 			} catch (Error e) {
 				Logger.error( "Unable to create build directory" );
+				cleanup(deploy_dir);
 				return null;
 			}
 			Environment.set_current_dir( build_dir.get_path() );
@@ -306,6 +307,8 @@ namespace Ambition.Plugin {
 				Logger.error( "Error during cmake:" );
 				stdout.printf(standard_output);
 				stderr.printf(standard_error);
+				cleanup(deploy_dir);
+				cleanup(build_dir);
 				return null;
 			}
 
@@ -326,6 +329,8 @@ namespace Ambition.Plugin {
 				Logger.error( "Error during make:" );
 				stdout.printf(standard_output);
 				stderr.printf(standard_error);
+				cleanup(deploy_dir);
+				cleanup(build_dir);
 				return null;
 			}
 
@@ -346,6 +351,8 @@ namespace Ambition.Plugin {
 				Logger.error( "Error during make install:" );
 				stdout.printf(standard_output);
 				stderr.printf(standard_error);
+				cleanup(deploy_dir);
+				cleanup(build_dir);
 				return null;
 			}
 
