@@ -27,7 +27,7 @@ namespace Ambition.Form {
 	public class Button : FieldRenderer {
 		protected string input_type { get; set; default = "button"; }
 
-		public override string render( string form_name, string field, string? value = "", string? nick, string? blurb, string[]? errors = null ) {
+		public override string render( string form_name, string field, string? value = "", string? nick = null, string? blurb = null, string[]? errors = null ) {
 			string id = make_id( form_name, field );
 			var input_hm = new HashMap<string,string>();
 			input_hm.set( "type", input_type );

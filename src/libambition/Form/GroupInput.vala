@@ -31,7 +31,7 @@ namespace Ambition.Form {
 			this.labels = labels;
 		}
 
-		public override string render( string form_name, string field, string? value = "", string? nick, string? blurb, string[]? errors = null ) {
+		public override string render( string form_name, string field, string? value = "", string? nick = null, string? blurb = null, string[]? errors = null ) {
 			string id = make_id( form_name, field );
 			var main_sb = new StringBuilder();
 			var input_sb = new StringBuilder();

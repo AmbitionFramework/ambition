@@ -34,7 +34,7 @@ namespace Ambition.Form {
 		 * @param blurb     GObject "blurb" of the property
 		 * @return string containing the content
 		 */
-		public abstract string render( string form_name, string field, string? value = "", string? nick, string? blurb, string[]? errors = null );
+		public abstract string render( string form_name, string field, string? value = "", string? nick = null, string? blurb = null, string[]? errors = null );
 
 		public string make_id( string form_name, string field ) {
 			return form_name + "_" + field;
