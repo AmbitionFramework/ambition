@@ -1,0 +1,11 @@
+usr/include
+usr/lib
+usr/lib/pkgconfig
+usr/bin
+usr/share/vala/vapi
+usr/share/ambition-framework
+usr/share/ambition-framework/scaffold
+usr/share/ambition-framework/scaffold/src
+usr/share/ambition-framework/scaffold/test
+usr/share/ambition-framework/scaffold/static
+usr/share/ambition-framework/scaffold/cmake

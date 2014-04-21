@@ -1,0 +1,14 @@
+Source: ambition
+Priority: optional
+Maintainer: Nick Melnick <nick@abstractwankery.com>
+Build-Depends: debhelper (>= 8.0.0), cmake
+Standards-Version: 3.9.4
+Section: libs
+Homepage: http://www.ambitionframework.org
+
+Package: ambition1
+Section: libs
+Architecture: any
+Depends: cmake, valac (>= 0.18.0), libglib2.0-dev, libgee-0.8-dev, libjson-glib-dev, libreadline-dev, libsoup2.4-dev, ${shlibs:Depends}, ${misc:Depends}
+Description: Ambition MVC Framework
+ The Ambition MVC Framework for Vala/GObject.
