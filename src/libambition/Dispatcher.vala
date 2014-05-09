@@ -29,6 +29,7 @@ namespace Ambition {
 	 */
 	public class Dispatcher : Object {
 		private Engine.Base _engine = null;
+		private Ambition.Application application = null;
 		private bool show_powered_by = false;
 		private string[] args;
 
@@ -45,13 +46,14 @@ namespace Ambition {
 		public ArrayList<Action?> actions { get; set; }
 		public ArrayList<IPlugin?> plugins { get; private set; default = new ArrayList<IPlugin?>(); }
 
-		public Dispatcher( string[] args ) {
+		public Dispatcher( Ambition.Application application, string[] args ) {
 			// Register dynamic types
 			typeof(Engine.Raw).name();
 
 			set_default_config(args);
 			App.set_log_level( Config.lookup_with_default( "app.log_level", "debug" ) );
 			this.args = args;
+			this.application = application;
 		}
 
 		public static void set_default_config( string[] args ) {
@@ -194,6 +196,9 @@ namespace Ambition {
 				state.request.path
 			);
 
+			// Call on_request_dispatch hook in application.
+			application.on_request_dispatch(state);
+
 			// Call on_request_dispatch hook on registered plugins.
 			foreach( IPlugin p in this.plugins ) {
 				p.on_request_dispatch(state);
@@ -206,6 +211,8 @@ namespace Ambition {
 				var action_response = execute_action_list( action_list, state );
 				display_action_response( action_response, state );
 			}
+			// Call on_request_end hook in application.
+			application.on_request_end(state);
 
 			// Call on_request_end hook on registered plugins.
 			foreach( IPlugin p in this.plugins ) {

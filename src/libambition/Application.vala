@@ -46,7 +46,7 @@ namespace Ambition {
 		 */
 		public virtual void run( string[] args ) {
 			// Initialize the application's dispatcher
-			this.dispatcher = new Dispatcher(args);
+			this.dispatcher = new Dispatcher( this, args );
 
 			// Import actions
 			dispatcher.add_actions_class( get_actions() );
@@ -59,5 +59,17 @@ namespace Ambition {
 			// Start the application
 			dispatcher.run();
 		}
+
+		/**
+		 * Block of code to run when a request is initially dispatched.
+		 * @param state State
+		 */
+		public virtual void on_request_dispatch( State state ) {}
+
+		/**
+		 * Block of code tor un when a request is completed.
+		 * @param state State
+		 */
+		public virtual void on_request_end( State state ) {}
 	}
 }

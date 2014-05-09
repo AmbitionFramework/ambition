@@ -316,6 +316,11 @@ namespace Ambition.Utility {
 					manifest.pkgconfig_dependencies != null && manifest.pkgconfig_dependencies.length > 0
 						? string.joinv( ", ", manifest.pkgconfig_dependencies ) : "None"
 				);
+				stdout.printf( "Required packages:\n" );
+				wrap(
+					manifest.libraries != null && manifest.libraries.length > 0
+						? string.joinv( ", ", manifest.libraries ) : "None"
+				);
 			} else {
 				stdout.printf( "No plugin found.\n" );
 			}
