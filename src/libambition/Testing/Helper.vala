@@ -40,6 +40,20 @@ namespace Ambition.Testing {
 		}
 
 		/**
+		 * Retrieve a mock State object with mock Request object.
+		 * @param mock_request A Request object.
+		 * @param id Optional request ID, defaults to "test".
+		 */
+		public static State get_mock_state_with_request( Request mock_request, string id = "test" ) {
+			var state = new State(id);
+			state.dispatcher = null;
+			state.request = mock_request;
+			state.response = new Response();
+
+			return state;
+		}
+
+		/**
 		 * Retrieve a mock Request object using the same values as the
 		 * mock_dispatch() method. You may use the result of this to modify and
 		 * then send to mock_dispatch_with_request().
