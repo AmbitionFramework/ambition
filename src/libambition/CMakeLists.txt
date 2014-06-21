@@ -12,7 +12,6 @@ SET( LAM_VALA_FILES
 	DispatcherUtils.vala
 	HttpMethod.vala
 	IActionFilter.vala
-	Logger.vala
 	Request.vala
 	RequestFile.vala
 	Response.vala
