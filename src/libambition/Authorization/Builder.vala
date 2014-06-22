@@ -26,6 +26,7 @@ namespace Ambition.Authorization {
 	 * Build authenticators.
 	 */
 	public class Builder : Object {
+		private static Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.ActionBuilder");
 
 		public static void build_authorizers() {
 
@@ -57,12 +58,12 @@ namespace Ambition.Authorization {
 				var params = config_breakdown.get(auth_name);
 				var type = params.get("type");
 				if ( type == null ) {
-					Logger.warn( "Authorization '%s' has a missing type.".printf(auth_name) );
+					logger.warn( "Authorization '%s' has a missing type.".printf(auth_name) );
 				} else {
 					params["auth_name"] = auth_name;
 					var authorizer = build_from_string( type, params );
 					if ( authorizer == null ) {
-						Logger.warn( "Could not find authorization type '%s' for '%s'.".printf( type, auth_name ) );
+						logger.warn( "Could not find authorization type '%s' for '%s'.".printf( type, auth_name ) );
 					} else {
 						App.authorizers.set( auth_name, authorizer );
 					}
@@ -85,7 +86,7 @@ namespace Ambition.Authorization {
 				return authorizer;
 			}
 
-			Logger.error( "Unable to initialize authorizer: %s", authorization_type );
+			logger.error( "Unable to initialize authorizer: %s".printf(authorization_type) );
 			return null;
 		}
 	}

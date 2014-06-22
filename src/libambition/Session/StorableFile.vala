@@ -30,6 +30,7 @@ namespace Ambition.Session {
 	 * application config.
 	 */
 	public class StorableFile : Object,IStorable {
+		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Session.StorableFile");
 
 		public void store( string session_id, Interface i ) {
 			string full_path = get_file_root() + "/" + session_id + ".session";
@@ -40,7 +41,7 @@ namespace Ambition.Session {
 		public Interface? retrieve( string session_id ) {
 			var file = File.new_for_path( get_file_root() + "/" + session_id + ".session" );
 			if ( !file.query_exists() ) {
-				Logger.info("Session not found");
+				logger.info("Session not found");
 				return null;
 			}
 			try {
@@ -52,7 +53,7 @@ namespace Ambition.Session {
 				}
 				return new Interface.from_serialized( session_id, sb.str );
 			} catch (Error e) {
-				Logger.warn( "Error reading from storage: %s".printf( e.message ) );
+				logger.warn( "Error reading from storage", e );
 			}
 			return null;
 		}

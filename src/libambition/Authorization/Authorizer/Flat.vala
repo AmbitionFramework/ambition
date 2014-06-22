@@ -26,6 +26,8 @@ namespace Ambition.Authorization.Authorizer {
 	 * Authorize users using a flat file.
 	 */
 	public class Flat : Object,IAuthorizer {
+		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.ActionBuilder");
+	
 		protected HashMap<string,string> config { get; set; }
 		private string file_path { get; set; }
 		private string delimiter { get; set; default = "|"; }
@@ -87,7 +89,7 @@ namespace Ambition.Authorization.Authorizer {
 					}
 				}
 			} catch ( Error e ) {
-				Logger.error( e.message );
+				logger.error( "Error reading file", e );
 			}
 			return null;
 		}
@@ -112,7 +114,7 @@ namespace Ambition.Authorization.Authorizer {
 					}
 				}
 			} catch ( Error e ) {
-				Logger.error( e.message );
+				logger.error( "Error reading file", e );
 			}
 			return 0;
 		}

@@ -26,6 +26,8 @@ namespace Ambition.Form {
 	 * and rendering.
 	 */
 	public abstract class FormDefinition : Object {
+		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Form.FormDefinition");
+
 		public Request request { get; set; }
 		public string form_name { get; set; default = ""; }
 		public ArrayList<string> form_errors = new ArrayList<string>();
@@ -157,7 +159,7 @@ namespace Ambition.Form {
 
 				return renderer.render( this.form_name, field, converted_value, p.get_nick(), blurb, get_field_errors(field).to_array() );
 			}
-			Logger.error( "Field not found: %s".printf(field) );
+			logger.error( "Field not found: %s".printf(field) );
 			return "";
 		}
 

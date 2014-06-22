@@ -26,10 +26,12 @@ namespace Ambition.CoreView {
 	 * Returns a file.
 	 */
 	public class File : Result {
+		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.CoreView.File");
+
 		public override State state { get; set; }
 		public override int64 size { get; set; }
-		private GLib.File file { get; set; }
-		private string? content_type { get; set; }
+		private GLib.File file;
+		private string? content_type;
 
 		/**
 		 * Create a File view, to the file provided. A content type may be
@@ -49,7 +51,7 @@ namespace Ambition.CoreView {
 				size = file_info.get_size();
 				return file.read();
 			} catch ( Error e ) {
-				Logger.error( e.message );
+				logger.error( "Error accessing file", e );
 				state.response.status = 500;
 				state.response.body = "";
 				return null;

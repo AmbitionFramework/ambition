@@ -34,6 +34,14 @@ public static int main( string[] args ) {
 	// Cache args
 	AmbitionBinary.args = args;
 
+	// Init Log4Vala with local config, if available
+	var log4vala_config = File.new_for_path("config/log4vala.conf");
+	if ( log4vala_config.query_exists() ) {
+		Log4Vala.init("config/log4vala.conf");
+	} else {
+		Log4Vala.init();
+	}
+
 	utilities = new HashMap<string,IUtility>();
 	/*
 	 * Load utility plugins, if available
@@ -236,7 +244,7 @@ public static bool in_application() {
 				}
 			}
 		} catch (Error e) {
-			Logger.error( e.message );
+			Log4Vala.Logger.get_logger("Ambition.Binary").error( "Error trying to read Application.vala", e );
 			return false;
 		}
 		Config.set_value( "ambition.app_path", Environment.get_current_dir() );

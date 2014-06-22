@@ -47,7 +47,7 @@ namespace Ambition.Utility {
 					return (ScaffoldManifest) Json.gobject_deserialize( typeof(ScaffoldManifest), parser.get_root() );
 				}
 			} catch ( Error e ) {
-				Logger.error( "Fatal: Unable to load manifest from '%s': %s".printf( scaffold_directory, e.message ) );
+				Log4Vala.Logger.get_logger("Ambition.Utility.ScaffoldManifest").error( "Fatal: Unable to load manifest from '%s': %s".printf( scaffold_directory, e.message ) );
 			}
 			return null;
 		}

@@ -41,7 +41,7 @@ namespace Ambition.Utility {
 			try {
 				var directory = File.new_for_path(directory_path);
 				if ( ! directory.query_exists() ) {
-					Logger.error( "The 'plugins' directory does not exist." );
+					Log4Vala.Logger.get_logger("Ambition.Utility.UtilityLoader").error( "The 'plugins' directory does not exist." );
 					return plugins;
 				}
 
@@ -64,7 +64,7 @@ namespace Ambition.Utility {
 					}
 				}
 			} catch (Error e) {
-				Logger.error( "Unable to enumerate plugins directory: %s".printf( e.message ) );
+				Log4Vala.Logger.get_logger("Ambition.Utility.UtilityLoader").error( "Unable to enumerate plugins directory", e );
 				return plugins;
 			}
 
@@ -80,7 +80,7 @@ namespace Ambition.Utility {
 		public static IUtility? load_plugin( string directory_path, string filename ) {
 			Module module = Module.open( "%s/%s".printf( directory_path, filename), ModuleFlags.BIND_LOCAL );
 			if ( module == null ) {
-				Logger.error( "Unable to load utility '%s': %s. Skipping.".printf( filename, Module.error() ) );
+				Log4Vala.Logger.get_logger("Ambition.Utility.UtilityLoader").error( "Unable to load utility '%s': %s. Skipping.".printf( filename, Module.error() ) );
 				return null;
 			}
 			void* register_function;

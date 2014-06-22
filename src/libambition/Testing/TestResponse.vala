@@ -61,7 +61,7 @@ namespace Ambition.Testing {
 						response.get_body_data().read_all( buffer, out size );
 						_result_content = (string) buffer;
 					} catch (IOError e) {
-						Logger.error( e.message );
+						Log4Vala.Logger.get_logger("Ambition.Testing.TestResponse").error( "Error reading body data", e );
 					}
 				}
 				return _result_content;

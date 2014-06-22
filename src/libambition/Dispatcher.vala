@@ -28,6 +28,7 @@ namespace Ambition {
 	 * dispatch a request from a web endpoint to a method or series of methods.
 	 */
 	public class Dispatcher : Object {
+		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Dispatcher");
 		private Engine.Base _engine = null;
 		private Ambition.Application application = null;
 		private bool show_powered_by = false;
@@ -72,7 +73,7 @@ namespace Ambition {
 		
 		public bool run() {
 			if ( actions == null ) {
-				Logger.error("No actions specified, nothing to do!");
+				logger.error("No actions specified, nothing to do!");
 				return false;
 			}
 
@@ -110,17 +111,17 @@ namespace Ambition {
 
 			// Show actions
 			this.actions.add_all( Controller.Static.add_actions() );
-			Logger.debug("Actions:");
+			logger.debug("Actions:");
 			foreach ( var action in actions ) {
 				Regex re = action._regex;
 				if ( action.methods.size == 0 ) {
 					action.methods.add( HttpMethod.ALL );
 				}
 
-				// Normally, we rely on Logger to determine whether to output
+				// Normally, we rely on logger to determine whether to output
 				// anything, but in this case, let's save some minor ops if we
 				// are not in debug mode.
-				if ( App.log_level == Logger.DEBUG ) {
+				if ( logger.log_level == Log4Vala.Level.DEBUG ) {
 					var methods = new ArrayList<string>();
 					foreach ( HttpMethod hm in action.methods ) {
 						methods.add( hm.to_string().substring( 0, 1 ) );
@@ -131,7 +132,7 @@ namespace Ambition {
 						targets.add( am.path );
 					}
 
-					Logger.debug(
+					logger.debug(
 						" %-4s %-32s %s".printf(
 							arraylist_joinv( "", methods ),
 							( re.get_pattern().length > 32 ? ( re.get_pattern().substring( 0, 31 ) + "…" ) : re.get_pattern() ),
@@ -144,12 +145,13 @@ namespace Ambition {
 			// Create authorizers
 			Authorization.Builder.build_authorizers();
 			if ( App.authorizers.size > 0 ) {
-				Logger.debug("Authorizers:");
+				logger.debug("Authorizers:");
 				foreach ( var authorizer_name in App.authorizers.keys ) {
-					Logger.debug(
-						" %s (%s)",
-						authorizer_name,
-						App.authorizers[authorizer_name].get_name()
+					logger.debug(
+						" %s (%s)".printf(
+							authorizer_name,
+							App.authorizers[authorizer_name].get_name()
+						)
 					);
 				}
 			}
@@ -188,12 +190,13 @@ namespace Ambition {
 				return;
 			}
 
-			state.log.info("");
-			state.log.info(
-				"Request from %s: %s %s",
-				state.request.ip,
-				state.request.method.to_string(),
-				state.request.path
+			logger.info("");
+			logger.info(
+				"Request from %s: %s %s".printf(
+					state.request.ip,
+					state.request.method.to_string(),
+					state.request.path
+				)
 			);
 
 			// Call on_request_dispatch hook in application.
@@ -225,12 +228,13 @@ namespace Ambition {
 			}
 
 			// Output response
-			state.log.info(
-				"Rendered %lld bytes, type %s, status %d. %0.4f ms.",
-				state.response.get_body_length(),
-				state.response.content_type,
-				state.response.status,
-				state.elapsed_ms()
+			logger.info(
+				"Rendered %lld bytes, type %s, status %d. %0.4f ms.".printf(
+					state.response.get_body_length(),
+					state.response.content_type,
+					state.response.status,
+					state.elapsed_ms()
+				)
 			);
 		}
 
@@ -256,7 +260,7 @@ namespace Ambition {
 		 */
 		public void display_action_response( ArrayList<string> action_result, State state ) {
 			foreach ( string a in action_result ) {
-				state.log.debug(a);
+				logger.debug(a);
 			}
 		}
 
@@ -297,7 +301,7 @@ namespace Ambition {
 				string action_pattern = action._regex.get_pattern();
 				MatchInfo info = null;
 				if ( action.responds_to_request( decoded_path, state.request.method, out info ) ) {
-					state.log.debug( "Matched pattern %s", action_pattern );
+					logger.debug( "Matched pattern %s".printf(action_pattern) );
 					state.request.captures = info.fetch_all();
 
 					// Determine named captures
@@ -310,7 +314,7 @@ namespace Ambition {
 							try {
 								named_info.next();
 							} catch ( RegexError e ) {
-								Logger.error( "Error matching next capture in URL: %s", e.message );
+								logger.error( "Error matching next capture in URL", e );
 								break;
 							}
 						}
@@ -321,7 +325,7 @@ namespace Ambition {
 						try {
 							state.request._arguments = action._regex.replace( decoded_path, -1, 0, "" );
 						} catch ( RegexError e ) {
-							Logger.error("Invalid regex for arguments");
+							logger.error("Invalid regex for arguments");
 						}
 					}
 
@@ -335,7 +339,7 @@ namespace Ambition {
 			// Initialize Plugins
 			foreach ( IPlugin p in plugins ) {
 				p.register_plugin();
-				Logger.info( "Registered plugin '%s'.".printf( p.name ) );
+				logger.info( "Registered plugin '%s'.".printf( p.name ) );
 				p.on_application_start(this);
 			}
 		}
@@ -345,7 +349,7 @@ namespace Ambition {
 			if ( t > 0 ) {
 				this.engine = (Engine.Base) Object.new(t);
 			} else {
-				Logger.error( "Invalid engine specified: %s".printf(engine_name) );
+				logger.error( "Invalid engine specified: %s".printf(engine_name) );
 			}
 		}
 	}

@@ -31,13 +31,14 @@ namespace Ambition.Utility {
 	 * that can be dynamically loaded by Utility. oof.
 	 */
 	public class Run : Object {
-		private string application_name { get; set; }
+		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Utility.Run");
+		private string application_name;
 		internal static bool interrupted { get; set; default = false; }
 
 		public int run( bool daemonize = false, string[]? new_args = null ) {
 			var app_name = get_application_name();
 			if ( app_name == null ) {
-				Logger.error("Somehow, we are not in a project directory.");
+				logger.error("Somehow, we are not in a project directory.");
 				return -1;
 			}
 			application_name = app_name;
@@ -51,7 +52,7 @@ namespace Ambition.Utility {
 		public int run_build() {
 			var app_name = get_application_name();
 			if ( app_name == null ) {
-				Logger.error("Somehow, we are not in a project directory.");
+				logger.error("Somehow, we are not in a project directory.");
 				return -1;
 			}
 			application_name = app_name;
@@ -65,7 +66,7 @@ namespace Ambition.Utility {
 		public int test( string[] args ) {
 			var app_name = get_application_name();
 			if ( app_name == null ) {
-				Logger.error("Somehow, we are not in a project directory.");
+				logger.error("Somehow, we are not in a project directory.");
 				return -1;
 			}
 			application_name = app_name;
@@ -93,7 +94,7 @@ namespace Ambition.Utility {
 				return -1;
 			}
 
-			Logger.info( "Running tests..." );
+			logger.info( "Running tests..." );
 			var cur_dir = Environment.get_current_dir();
 			Environment.set_current_dir( cur_dir.substring( 0, cur_dir.length - 5 ) );
 			string[] exec_args = {};
@@ -127,7 +128,7 @@ namespace Ambition.Utility {
 					out exit_status
 				);
 			} catch (SpawnError wse) {
-				Logger.error( "Unable to run tests: %s".printf( wse.message ) );
+				logger.error( "Unable to run tests: %s".printf( wse.message ) );
 				return -1;
 			}
 
@@ -194,11 +195,11 @@ namespace Ambition.Utility {
 											var data_stream = new DataOutputStream(stream);
 											data_stream.put_string( "%ld".printf( (long) pid ) );
 										} else {
-											Logger.error( "Unable to open pid file '%s' for writing", value );
+											logger.error( "Unable to open pid file '%s' for writing".printf(value) );
 										}
 									}
 								} catch (Error e) {
-									Logger.error( "Unable to write to pid file '%s': ", e.message );
+									logger.error( "Unable to write to pid file", e );
 								}
 							}
 						}
@@ -215,7 +216,7 @@ namespace Ambition.Utility {
 
 			// Spawn webapp
 			while ( interrupted == false ) {
-				Logger.info( "Executing application..." );
+				logger.info( "Executing application..." );
 				var cur_dir = Environment.get_current_dir();
 				Environment.set_current_dir( cur_dir.substring( 0, cur_dir.length - 5 ) );
 				string[] args = { "%s/build/src/%s-bin".printf( Environment.get_current_dir(), application_name ) };
@@ -232,13 +233,13 @@ namespace Ambition.Utility {
 						out exit_status
 					);
 				} catch (SpawnError wse) {
-					Logger.error( "Unable to run web application: %s".printf( wse.message ) );
+					logger.error( "Unable to run web application: %s".printf( wse.message ) );
 					Posix.signal( Posix.SIGINT, null );
 					interrupted = false;
 					return -1;
 				}
 				if ( interrupted == false ) {
-					Logger.info( "Captured error (%d).".printf(exit_status) );
+					logger.info( "Captured error (%d).".printf(exit_status) );
 					parse_exit_status(exit_status);
 				}
 			}
@@ -258,11 +259,11 @@ namespace Ambition.Utility {
 					build_directory.make_directory();
 				}
 			} catch (Error e) {
-				Logger.error( "Unable to create or query build directory: %s".printf( e.message ) );
+				logger.error( "Unable to create or query build directory: %s".printf( e.message ) );
 				return -1;
 			}
 			if ( Environment.set_current_dir("build") == -1 ) {
-				Logger.error( "Unable to change to build directory" );
+				logger.error( "Unable to change to build directory" );
 				return -1;
 			}
 			return 0;
@@ -275,7 +276,7 @@ namespace Ambition.Utility {
 			string standard_output, standard_error;
 			int exit_status;
 
-			Logger.info( "Running cmake..." );
+			logger.info( "Running cmake..." );
 			try {
 				Process.spawn_command_line_sync(
 					"cmake ..",
@@ -284,12 +285,12 @@ namespace Ambition.Utility {
 					out exit_status
 				);
 			} catch (SpawnError se) {
-				Logger.error( "Unable to run make: %s".printf( se.message ) );
+				logger.error( "Unable to run make: %s".printf( se.message ) );
 				return_home();
 				return -1;
 			}
 			if ( exit_status != 0 ) {
-				Logger.error( "Error building project files via cmake:\n%s".printf(standard_error) );
+				logger.error( "Error building project files via cmake:\n%s".printf(standard_error) );
 				return_home();
 				return -1;
 			}
@@ -304,7 +305,7 @@ namespace Ambition.Utility {
 			string standard_output, standard_error;
 			int exit_status;
 
-			Logger.info( "Building project..." );
+			logger.info( "Building project..." );
 			try {
 				Process.spawn_command_line_sync(
 					"make",
@@ -313,12 +314,12 @@ namespace Ambition.Utility {
 					out exit_status
 				);
 			} catch (SpawnError se) {
-				Logger.error( "Unable to run make: %s".printf( se.message ) );
+				logger.error( "Unable to run make: %s".printf( se.message ) );
 				return_home();
 				return -1;
 			}
 			if ( exit_status != 0 ) {
-				Logger.error( "Error building current application:\n%s", standard_error );
+				logger.error( "Error building current application:\n%s".printf(standard_error) );
 				return_home();
 				return -1;
 			}
@@ -340,7 +341,7 @@ namespace Ambition.Utility {
 					if ( gdb != null ) {
 						var file = File.new_for_path("core");
 						if ( file.query_exists() ) {
-							Logger.info("Able to run against core");
+							logger.info("Able to run against core");
 						}
 					}
 					break;
@@ -350,6 +351,6 @@ namespace Ambition.Utility {
 
 	public static void ignore_signal( int signum ) {
 		Run.interrupted = true;
-		Logger.info("Application interrupted");
+		Log4Vala.Logger.get_logger("Ambition.Utility.Run").info("Application interrupted");
 	}
 }

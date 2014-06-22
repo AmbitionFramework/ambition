@@ -245,7 +245,7 @@ namespace Ambition.Utility {
 			var file = File.new_for_path(path);
 
 			if ( !file.query_exists() ) {
-				Logger.error( "Fatal: Unable to load template '%s'".printf(path) );
+				stderr.printf( "Fatal: Unable to load template '%s'", path );
 				return null;
 			}
 			try {
@@ -256,7 +256,7 @@ namespace Ambition.Utility {
 					sb.append("\n");
 				}
 			} catch ( Error e ) {
-				Logger.error( "Fatal: Unable to read template '%s'".printf(path) );
+				stderr.printf( "Fatal: Unable to read template '%s'", path );
 				return null;
 			}
 
@@ -305,7 +305,7 @@ namespace Ambition.Utility {
 					}
 				}
 			} catch (Error e) {
-				Logger.error( "Error while enumerating directory '%s': %s".printf( directory_path, e.message ) );
+				stderr.printf( "Error while enumerating directory '%s': %s", directory_path, e.message );
 			}
 
 			return list;

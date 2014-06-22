@@ -99,16 +99,10 @@ namespace Ambition {
 		}
 
 		/**
-		 * Logging instance of this request
-		 */
-		public Ambition.Logger.Unique log;
-
-		/**
 		 * Create new State object with a given identifier.
 		 */
 		public State( string id ) {
 			start = new DateTime.now_utc();
-			log = new Ambition.Logger.Unique(id);
 		}
 
 		/**

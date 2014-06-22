@@ -25,6 +25,7 @@ namespace Ambition.Authorization {
 	 * Provides authorization functions to a state object.
 	 */
 	public class Authorize : Object {
+		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Authorization.Authorize");
 		public IUser? user { get; private set; }
 
 		/**
@@ -38,7 +39,7 @@ namespace Ambition.Authorization {
 		public bool authorize( string authorizer_name, string username, string password, HashMap<string,string>? options = null ) {
 			var authorizer = App.authorizers.get(authorizer_name);
 			if ( authorizer == null ) {
-				Logger.warn( "No such authorizer: %s".printf(authorizer_name) );
+				logger.warn( "No such authorizer: %s".printf(authorizer_name) );
 				return false;
 			}
 			IUser user = authorizer.authorize( username, password, options );
@@ -67,7 +68,7 @@ namespace Ambition.Authorization {
 		public bool authorize_previous( string authorizer_name, string serialized ) {
 			var authorizer = App.authorizers.get(authorizer_name);
 			if ( authorizer == null ) {
-				Logger.warn( "No such authorizer: %s".printf(authorizer_name) );
+				logger.warn( "No such authorizer: %s".printf(authorizer_name) );
 				return false;
 			}
 			IUser user = authorizer.get_user_from_serialized(serialized);
@@ -89,13 +90,13 @@ namespace Ambition.Authorization {
 		public string? encode_password( string authorizer_name, string password, HashMap<string,string>? options = null ) {
 			var authorizer = App.authorizers.get(authorizer_name);
 			if ( authorizer == null ) {
-				Logger.warn( "No such authorizer: %s".printf(authorizer_name) );
+				logger.warn( "No such authorizer: %s".printf(authorizer_name) );
 				return null;
 			}
 
 			var p_type = authorizer.get_password_type_instance();
 			if ( p_type == null ) {
-				Logger.warn("Authorizer does not support external password types.");
+				logger.warn("Authorizer does not support external password types.");
 				return null;
 			}
 			return p_type.convert( password, options );

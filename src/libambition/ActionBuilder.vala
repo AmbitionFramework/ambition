@@ -36,6 +36,7 @@ namespace Ambition {
 	 * Parses action configuration to create an Actions generator.
 	 */
 	public class ActionBuilder : Object {
+		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.ActionBuilder");
 		private const string class_template = """/*
  * Ambition generated actions class
  * This file is auto-generated. Do not edit!
@@ -149,7 +150,7 @@ using Ambition;
 				try {
 					path = re_named.replace( path, -1, 0, "(?<\\1>.+?)" );
 				} catch (RegexError e) {
-					Logger.error( "Unable to create matches from placeholders in path. (%s)".printf( e.message ) );
+					logger.error( "Unable to create matches from placeholders in path.", e );
 				}
 				regex = "/^" + path.replace( "/", "\\/" );
 				if ( regex.has_suffix("*") ) {

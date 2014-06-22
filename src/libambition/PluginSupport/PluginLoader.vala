@@ -26,7 +26,7 @@ namespace Ambition.PluginSupport {
  	 * Load plugins from plugin directory.
  	 */
 	public class PluginLoader : Object {
-
+		private static Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.PluginSupport.PluginLoader");
 		private delegate Type InitPluginFunction();
 
 		/**
@@ -41,7 +41,7 @@ namespace Ambition.PluginSupport {
 			try {
 				var directory = File.new_for_path(directory_path);
 				if ( ! directory.query_exists() ) {
-					Logger.error( "The 'plugins' directory does not exist." );
+					logger.error( "The 'plugins' directory does not exist." );
 					return plugins;
 				}
 
@@ -64,7 +64,7 @@ namespace Ambition.PluginSupport {
 					}
 				}
 			} catch (Error e) {
-				Logger.error( "Unable to enumerate plugins directory: %s".printf( e.message ) );
+				logger.error( "Unable to enumerate plugins directory", e );
 				return plugins;
 			}
 
@@ -80,12 +80,12 @@ namespace Ambition.PluginSupport {
 		public static IPlugin? load_plugin( string directory_path, string filename ) {
 			Module module = Module.open( "%s/%s".printf( directory_path, filename), ModuleFlags.BIND_LOCAL );
 			if ( module == null ) {
-				Logger.error( "Unable to load plugin '%s': %s. Skipping.".printf( filename, Module.error() ) );
+				logger.error( "Unable to load plugin '%s': %s. Skipping.".printf( filename, Module.error() ) );
 				return null;
 			}
 			void* register_function;
 			if ( ! module.symbol( "init_plugin", out register_function ) ) {
-				Logger.error( "Invalid plugin '%s', missing init_plugin() function, skipping. %s".printf(filename,Module.error()) );
+				logger.error( "Invalid plugin '%s', missing init_plugin() function, skipping. %s".printf(filename,Module.error()) );
 				return null;
 			}
 

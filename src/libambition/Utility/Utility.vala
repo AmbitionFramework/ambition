@@ -21,6 +21,11 @@
 
 using Gee;
 namespace Ambition.Utility {
+
+	private static Log4Vala.Logger logger() {
+		return Log4Vala.Logger.get_logger("Ambition.Utility");
+	}
+
 	/**
 	 * Get current application name.
 	 */
@@ -30,14 +35,14 @@ namespace Ambition.Utility {
 			!project_dir.query_exists()
 			|| project_dir.query_file_type(FileQueryInfoFlags.NONE) != FileType.DIRECTORY
 		) {
-			Logger.error("Somehow, we are not in a project directory.");
+			logger().error("Somehow, we are not in a project directory.");
 			return null;
 		}
 
 		// Get appname from CMakeLists.txt
 		var cmakelists = File.new_for_path("CMakeLists.txt");
 		if ( !cmakelists.query_exists() ) {
-			Logger.error( "Fatal: Unable to load CMakeLists.txt." );
+			logger().error( "Fatal: Unable to load CMakeLists.txt." );
 			return null;
 		}
 		try {
@@ -54,7 +59,7 @@ namespace Ambition.Utility {
 				}
 			}
 		} catch ( Error e ) {
-			Logger.error( "Fatal: Unable to read CMakeLists.txt" );
+			logger().error( "Fatal: Unable to read CMakeLists.txt" );
 			return null;
 		}
 
@@ -152,7 +157,7 @@ namespace Ambition.Utility {
 		var builder = new StringBuilder();
 
 		if ( !cmakelists.query_exists() ) {
-			Logger.error( "Fatal: Unable to load CMakeLists.txt." );
+			logger().error( "Fatal: Unable to load CMakeLists.txt." );
 			return false;
 		}
 		try {
@@ -163,7 +168,7 @@ namespace Ambition.Utility {
 				builder.append("\n");
 			}
 		} catch ( Error e ) {
-			Logger.error( "Fatal: Unable to read CMakeLists.txt" );
+			logger().error( "Fatal: Unable to read CMakeLists.txt", e );
 			return false;
 		}
 
@@ -190,7 +195,7 @@ namespace Ambition.Utility {
 				output_stream.write( "\n".data );
 			}
 		} catch ( Error e ) {
-			Logger.error( "Fatal: Unable to write CMakeLists.txt" );
+			logger().error( "Fatal: Unable to write CMakeLists.txt", e );
 			return false;
 		}
 

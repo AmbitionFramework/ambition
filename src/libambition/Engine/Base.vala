@@ -27,6 +27,8 @@ namespace Ambition.Engine {
 	 * Base class for an Engine implementation.
 	 */
 	public class Base : Component {
+		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Engine.Base");
+
 		public virtual string name { get { return ""; } }
 
 		protected static HashMap<int,string> STATUS_TEXT = new HashMap<int,string>();
@@ -239,7 +241,7 @@ namespace Ambition.Engine {
 			try {
 				temp_file = File.new_tmp( "amb-upload-XXXXXX.tmp", out iostream );
 			} catch (Error e) {
-				Logger.error( "Cannot create temp file for incoming file: %s".printf( e.message ) );
+				logger.error( "Cannot create temp file for incoming file", e );
 				return;
 			}
 			DataOutputStream dos = new DataOutputStream( iostream.output_stream );

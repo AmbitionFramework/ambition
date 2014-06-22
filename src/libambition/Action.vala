@@ -25,6 +25,7 @@ namespace Ambition {
 	 * Action definition.
 	 */
 	public class Action : Object {
+		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Action");
 		public ArrayList<HttpMethod?> methods { get; set; default = new ArrayList<HttpMethod?>(); }
 		public ArrayList<ActionMethod?> targets { get; set; default = new ArrayList<ActionMethod?>(); }
 		public string last_path { get { return this.targets.get( this.targets.size - 1 ).path; } }
@@ -45,7 +46,7 @@ namespace Ambition {
 				var re = new Regex( "^" + escaped + ( with_args ? "" : "$" ) );
 				this.regex(re);
 			} catch (RegexError e) {
-				Logger.error( "Invalid regex from path: %s (%s)".printf( path, e.message ) );
+				logger.error( "Invalid regex from path: %s".printf(path), e );
 			}
 
 			return this;

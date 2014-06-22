@@ -61,7 +61,7 @@ namespace Ambition.Session {
 			string decoded = (string) Base64.decode(serialized);
 			string[] signature = decoded.split(HEAD_SEP);
 			if ( signature[0] != VER ) {
-				Logger.warn("Cannot deserialize session");
+				Log4Vala.Logger.get_logger("Ambition.Session.Interface").warn("Cannot deserialize session");
 				return;
 			} else {
 				string[] pairs = signature[1].split(RECORD_SEP);

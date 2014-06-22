@@ -26,6 +26,7 @@ namespace Ambition.Plugin {
 	 * HTTP plugin service.
 	 */
 	public class HttpPluginService : Object,IPluginService {
+		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Plugin.HttpPluginService");
 		public HashMap<string,string> config { get; set; }
 		private string plugin_url = "http://plugins.ambitionframework.org/service";
 
@@ -72,7 +73,7 @@ namespace Ambition.Plugin {
 				try {
 					parser.load_from_data( content, -1 );
 				} catch (Error e) {
-					Logger.error( "Service unavailable. (%s)", e.message );
+					logger.error( "Service unavailable", e );
 					return results;
 				}
 				var root_object = parser.get_root().get_object();
@@ -119,16 +120,16 @@ namespace Ambition.Plugin {
 				try {
 					parser.load_from_data( content, -1 );
 				} catch (Error e) {
-					Logger.error( "Service unavailable. (%s)", e.message );
+					logger.error( "Service unavailable.", e );
 					return results;
 				}
 				if ( parser.get_root() == null ) {
-					Logger.error( "Service unavailable. (Invalid response)" );
+					logger.error( "Service unavailable. (Invalid response)" );
 					return results;
 				}
 				var root_object = parser.get_root().get_object();
 				if ( root_object.has_member("error") && root_object.get_string_member("error").length > 0 ) {
-					Logger.error( "Error: %s", root_object.get_string_member("error") );
+					logger.error( "Error: %s".printf( root_object.get_string_member("error") ) );
 					return results;
 				}
 				foreach ( var plugin_node in root_object.get_array_member("plugins").get_elements() ) {
@@ -148,7 +149,7 @@ namespace Ambition.Plugin {
 				try {
 					parser.load_from_data( content, -1 );
 				} catch (Error e) {
-					Logger.error( "Service unavailable. (%s)", e.message );
+					logger.error( "Service unavailable.", e );
 					return null;
 				}
 				var root = parser.get_root();
@@ -175,7 +176,7 @@ namespace Ambition.Plugin {
 			if ( message.status_code == 200 ) {
 				return message;
 			} else {
-				Logger.error( "Received status %u during GET, aborting.".printf( message.status_code ) );
+				logger.error( "Received status %u during GET, aborting.".printf( message.status_code ) );
 				return null;
 			}
 		}
@@ -191,7 +192,7 @@ namespace Ambition.Plugin {
 		}
 
 		private File? retrieve_archive( HashMap<string,string> params ) {
-			Logger.debug("Retrieving archive.");
+			logger.debug("Retrieving archive.");
 			var message = http_get_message( "retrieve", params );
 			if ( message != null ) {
 				try {
@@ -199,24 +200,24 @@ namespace Ambition.Plugin {
 						"%s/%s.tar.gz".printf( Environment.get_tmp_dir(), params["n"] )
 					);
 					if ( archive_file.query_exists() ) {
-						Logger.debug("Deleting old temporary file.");
+						logger.debug("Deleting old temporary file.");
 						archive_file.delete();
 					}
 					var stream = archive_file.create( FileCreateFlags.REPLACE_DESTINATION );
 					size_t bytes;
 					stream.write_all( message.response_body.data, out bytes );
 					stream.close();
-					Logger.debug( "Retrieved %dk.", ( (int) bytes / 1024 ) );
+					logger.debug( "Retrieved %dk.".printf( (int) bytes / 1024 ) );
 					return archive_file;
 				} catch (Error e) {
-					Logger.error( "Unable to write archive file: %s", e.message );
+					logger.error( "Unable to write archive file", e );
 				}
 			}
 			return null;
 		}
 
 		private File? unarchive_file( File archive ) {
-			Logger.debug( "Unarchiving." );
+			logger.debug( "Unarchiving." );
 			string sanitized_name = archive.get_basename().down().replace( " ", "_" ).replace( ".tar.gz", "" );
 
 			// Create temporary directory
@@ -225,12 +226,12 @@ namespace Ambition.Plugin {
 			try {
 				temp_dir.make_directory();
 			} catch (Error e) {
-				Logger.error(e.message);
+				logger.error(e.message);
 				return null;
 			}
 			var current_dir = Environment.get_current_dir();
 			if ( Environment.set_current_dir(temp_name) == -1 ) {
-				Logger.error( "Unable to change to temp directory: " + temp_name );
+				logger.error( "Unable to change to temp directory: " + temp_name );
 				return null;
 			}
 
@@ -245,7 +246,7 @@ namespace Ambition.Plugin {
 					out exit_status
 				);
 			} catch (SpawnError se) {
-				Logger.error( "Unable to run tar xf: %s".printf( se.message ) );
+				logger.error( "Unable to run tar xf", se );
 				clean_directory(temp_dir);
 				return null;
 			}
@@ -256,7 +257,7 @@ namespace Ambition.Plugin {
 		}
 
 		private File? build_plugin( File temp_directory ) {
-			Logger.debug( "Building." );
+			logger.debug( "Building." );
 			var current_dir = Environment.get_current_dir();
 			
 			// Create deploy directory
@@ -265,11 +266,11 @@ namespace Ambition.Plugin {
 			try {
 				deploy_dir = File.new_for_path(temp_name);
 				if ( deploy_dir.make_directory() == false ) {
-					Logger.error( "Unable to create deploy directory: %s", deploy_dir.get_path() );
+					logger.error( "Unable to create deploy directory: %s".printf( deploy_dir.get_path() ) );
 					return null;
 				}
 			} catch (Error e) {
-				Logger.error( "Unable to create deploy directory" );
+				logger.error( "Unable to create deploy directory" );
 				return null;
 			}
 
@@ -278,11 +279,11 @@ namespace Ambition.Plugin {
 			try {
 				build_dir = File.new_for_path( "%s/%s".printf( temp_directory.get_path(), "build" ) );
 				if ( build_dir.make_directory() == false ) {
-					Logger.error( "Unable to create build directory: %s", build_dir.get_path() );
+					logger.error( "Unable to create build directory: %s".printf( build_dir.get_path() ) );
 					return null;
 				}
 			} catch (Error e) {
-				Logger.error( "Unable to create build directory" );
+				logger.error( "Unable to create build directory" );
 				cleanup(deploy_dir);
 				return null;
 			}
@@ -299,12 +300,12 @@ namespace Ambition.Plugin {
 					out exit_status
 				);
 			} catch (SpawnError se) {
-				Logger.error( "Unable to run cmake: %s".printf( se.message ) );
+				logger.error( "Unable to run cmake", se );
 				clean_directory(build_dir);
 				return null;
 			}
 			if ( exit_status != 0 ) {
-				Logger.error( "Error during cmake:" );
+				logger.error( "Error during cmake:" );
 				stdout.printf(standard_output);
 				stderr.printf(standard_error);
 				cleanup(deploy_dir);
@@ -321,12 +322,12 @@ namespace Ambition.Plugin {
 					out exit_status
 				);
 			} catch (SpawnError se) {
-				Logger.error( "Unable to run make: %s".printf( se.message ) );
+				logger.error( "Unable to run make", se );
 				clean_directory(build_dir);
 				return null;
 			}
 			if ( exit_status != 0 ) {
-				Logger.error( "Error during make:" );
+				logger.error( "Error during make:" );
 				stdout.printf(standard_output);
 				stderr.printf(standard_error);
 				cleanup(deploy_dir);
@@ -343,12 +344,12 @@ namespace Ambition.Plugin {
 					out exit_status
 				);
 			} catch (SpawnError se) {
-				Logger.error( "Unable to run make install: %s".printf( se.message ) );
+				logger.error( "Unable to run make install", se );
 				clean_directory(build_dir);
 				return null;
 			}
 			if ( exit_status != 0 ) {
-				Logger.error( "Error during make install:" );
+				logger.error( "Error during make install:" );
 				stdout.printf(standard_output);
 				stderr.printf(standard_error);
 				cleanup(deploy_dir);
@@ -377,7 +378,7 @@ namespace Ambition.Plugin {
 				}
 				directory.delete();
 			} catch (Error e) {
-				Logger.error( "Error while enumerating directory '%s': %s".printf( directory.get_path(), e.message ) );
+				logger.error( "Error while enumerating directory '%s'".printf( directory.get_path() ), e );
 			}
 		}
 	}

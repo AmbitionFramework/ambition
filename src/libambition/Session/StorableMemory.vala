@@ -40,7 +40,7 @@ namespace Ambition.Session {
 				return sessions.get(session_id);
 			}
 
-			Logger.info("Session not found");
+			Log4Vala.Logger.get_logger("Ambition.Session.StorableMemory").info("Session not found");
 			return null;
 		}
 	}

@@ -46,6 +46,7 @@
 		"cmake/Translations.cmake",
 		"config",
 		"config/actions.conf",
+		"config/log4vala.conf",
 		"config/plugins.conf",
 		"src",
 		"src/CMakeLists.txt",

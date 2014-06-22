@@ -29,6 +29,7 @@ namespace Ambition.Utility {
 	 */
 	public class Monitor : Object {
 #if !WIN32
+		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Utility.Monitor");
 		private static const int timeout = 1000;
 		private HashMap<string,FileMonitorEvent> changed_files { get; set; default = new HashMap<string,FileMonitorEvent>(); }
 		private ArrayList<FileMonitor> monitor_list = null;
@@ -42,7 +43,7 @@ namespace Ambition.Utility {
 				!project_dir.query_exists()
 				|| project_dir.query_file_type(FileQueryInfoFlags.NONE) != FileType.DIRECTORY
 			) {
-				Logger.error("Somehow, we are not in a project directory.");
+				logger.error("Somehow, we are not in a project directory.");
 			}
 
 			int return_type = build_and_run();
@@ -54,7 +55,7 @@ namespace Ambition.Utility {
 			time.set_callback(() => {
 				if ( changed_files.size > 0 ) {
 					foreach ( string file in changed_files.keys ) {
-						Logger.info( "File '%s' %s.".printf( file, changed_files[file].to_string().substring(21).down() ) );
+						logger.info( "File '%s' %s.".printf( file, changed_files[file].to_string().substring(21).down() ) );
 					}
 					changed_files = new HashMap<string,FileMonitorEvent>();
 					build_and_run();
@@ -80,7 +81,7 @@ namespace Ambition.Utility {
 					monitor_list.add(monitor);
 				}
 			} catch ( Error e ) {
-				Logger.error( "Could not monitor directory: %s".printf( e.message ) );
+				logger.error( "Could not monitor directory", e );
 				return 1;
 			}
 			return 0;
@@ -124,7 +125,7 @@ namespace Ambition.Utility {
 					}
 				}
 			} catch (Error e) {
-				Logger.error( e.message );
+				logger.error( e.message );
 			}
 			return dirs;
 		}
@@ -184,7 +185,7 @@ namespace Ambition.Utility {
 					out pid
 				);
 			} catch (SpawnError wse) {
-				Logger.error( "Unable to run web application: %s".printf( wse.message ) );
+				logger.error( "Unable to run web application", wse );
 				re_monitor();
 				return 0;
 			}

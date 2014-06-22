@@ -52,7 +52,7 @@ namespace Ambition.Plugin {
 					return manifest;
 				}
 			} catch ( Error e ) {
-				Logger.error( "Fatal: Unable to load manifest from '%s': %s".printf( plugin_directory, e.message ) );
+				Log4Vala.Logger.get_logger("Ambition.Plugin.PluginManifest").error( "Fatal: Unable to load manifest from '%s'".printf( plugin_directory ), e );
 			}
 			return null;
 		}

@@ -26,8 +26,9 @@ namespace Ambition.Utility {
 	 * Scaffold new controller/model/view/forms.
 	 */
 	public class Creator : Object {
-		private string application_name { get; set; }
-		private string full_path { get; set; }
+		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Utility.Creator");
+		private string application_name;
+		private string full_path;
 
 		/**
 		 * Entry point for Creator.
@@ -37,7 +38,7 @@ namespace Ambition.Utility {
 		public int run ( string type, string name ) {
 			application_name = get_application_name();
 			if ( application_name == null ) {
-				Logger.error("Somehow, we are not in a project directory.");
+				logger.error("Somehow, we are not in a project directory.");
 				return -1;
 			}
 
@@ -51,7 +52,7 @@ namespace Ambition.Utility {
 				case "form":
 					return scaffold_form(name);
 				default:
-					Logger.error( "Cannot scaffold a '%s'.".printf(type) );
+					logger.error( "Cannot scaffold a '%s'.".printf(type) );
 					return -1;
 			}
 		}
@@ -222,11 +223,11 @@ namespace %s.Form%s {
 			try {
 				fos.write( content.data );
 			} catch (IOError e) {
-				Logger.error( "Cannot write to file." );
+				logger.error( "Cannot write to file.", e );
 				return -1;
 			}
 
-			Logger.info( "Created '%s'.".printf(full_path) );
+			logger.info( "Created '%s'.".printf(full_path) );
 			alter_cmakelists();
 			return 0;
 		}
@@ -255,7 +256,7 @@ namespace %s.Form%s {
 				var file = File.new_for_path(full_path);
 				return file.create( FileCreateFlags.NONE );
 			} catch ( Error e ) {
-				Logger.error( "Error creating file: %s".printf( e.message ) );
+				logger.error( "Error creating file", e );
 			}
 			return null;
 		}
@@ -268,7 +269,7 @@ namespace %s.Form%s {
 			var builder = new StringBuilder();
 
 			if ( !cmakelists.query_exists() ) {
-				Logger.error( "Fatal: Unable to load CMakeLists.txt." );
+				logger.error( "Fatal: Unable to load CMakeLists.txt." );
 				return false;
 			}
 			try {
@@ -279,7 +280,7 @@ namespace %s.Form%s {
 					builder.append("\n");
 				}
 			} catch ( Error e ) {
-				Logger.error( "Fatal: Unable to read CMakeLists.txt" );
+				logger.error( "Fatal: Unable to read CMakeLists.txt", e );
 				return false;
 			}
 
@@ -308,7 +309,7 @@ namespace %s.Form%s {
 					output_stream.write( "\n".data );
 				}
 			} catch ( Error e ) {
-				Logger.error( "Fatal: Unable to write CMakeLists.txt" );
+				logger.error( "Fatal: Unable to write CMakeLists.txt", e );
 				return false;
 			}
 

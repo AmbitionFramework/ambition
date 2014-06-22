@@ -32,6 +32,7 @@ namespace Ambition.Engine {
 	 * Raw engine, implemented using sockets.
 	 */
 	public class Raw : Base {
+		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Engine.Raw");
 		
 		private int count = 0;
 		
@@ -54,7 +55,7 @@ namespace Ambition.Engine {
 			try {
 				return ((InetSocketAddress) conn.get_local_address()).get_address().to_string();
 			} catch (Error e) {
-				Logger.error("couldn't get local address for connection: " + e.message);
+				Log4Vala.Logger.get_logger("Ambition.Engine.Raw").error( "couldn't get local address for connection", e );
 				return "";
 			}
 			
@@ -68,10 +69,10 @@ namespace Ambition.Engine {
 			try {
 				service.add_inet_port( PORT, null );
 			} catch (Error inet_err) {
-				Logger.error( "Couldn't bind to port: " + inet_err.message );
+				logger.error( "Couldn't bind to port", inet_err );
 				exit(-1);
 			}
-			Logger.info( "Starting Raw engine on port %d".printf(PORT) );
+			logger.info( "Starting Raw engine on port %d".printf(PORT) );
 			service.run.connect(handler);				
 			service.start();
 			
@@ -79,7 +80,7 @@ namespace Ambition.Engine {
 		}
 		
 		private bool handler( SocketConnection conn, Object? source_object ) {
-			Logger.debug("Accepted connection");
+			logger.debug("Accepted connection");
 			process_conn.begin( conn, (count++).to_string() );
 			return true;
 		}
@@ -91,7 +92,7 @@ namespace Ambition.Engine {
 			
 			while ( result == ConnectionResult.KEEPALIVE ) {
 				if ( state != null ) {
-					state.log.info("Reusing connection for new request");
+					logger.info("Reusing connection for new request");
 				}
 				
 				start = new DateTime.now_utc();
@@ -100,7 +101,7 @@ namespace Ambition.Engine {
 				try {
 					result = yield process_request(conn, state);
 				} catch ( IOError e ) {
-					state.log.info( "IO Error: " + e.message );
+					logger.info( "IO Error: " + e.message );
 					conn.close_async.begin();
 					return;
 				}
@@ -115,20 +116,20 @@ namespace Ambition.Engine {
 				try {
 					yield process_response(conn, state, result);
 				} catch ( IOError e2 ) {
-					state.log.info("IO Error: " + e2.message);
+					logger.info("IO Error: " + e2.message);
 					conn.close_async.begin();
 					return;
 				} 
-				state.log.info( "Complete in-engine time: %0.4f ms".printf( state.elapsed_ms() ) );
+				logger.info( "Complete in-engine time: %0.4f ms".printf( state.elapsed_ms() ) );
 				
 				// some people close anyway
 				if ( conn.input_stream.is_closed() ) {
-					state.log.info("connection was closed by other side");
+					logger.info("connection was closed by other side");
 					result = ConnectionResult.CLOSE;
 				}
 			}
 			
-			state.log.info("closing connection");
+			logger.info("closing connection");
 			conn.close_async.begin();
 		}
 		
@@ -155,7 +156,7 @@ namespace Ambition.Engine {
 					if ( INITIAL_LINE_RE.match( line, 0, out m ) ) {
 						method = m.fetch(1);
 						if ( !( method in ACCEPTED_METHODS ) ) {
-							state.log.debug( "not accepted method:" + method );
+							logger.debug( "not accepted method:" + method );
 							state.response.status = 501;
 							return ConnectionResult.BROKEN;
 						}
@@ -169,18 +170,19 @@ namespace Ambition.Engine {
 						if ( min_v != "0" ) {
 							send_continue_async.begin(conn);
 						}
-						state.log.debug(
-							"Request %s for %s - version %s.%s",
-							method,
-							req_path,
-							maj_v,
-							min_v
+						logger.debug(
+							"Request %s for %s - version %s.%s".printf(
+								method,
+								req_path,
+								maj_v,
+								min_v
+							)
 						);
 						got_init = true;
 						continue;
 					} else {
 						// non-matching first line
-						state.log.debug("didn't match first line");
+						logger.debug("didn't match first line");
 						state.response.status = 400;
 						return ConnectionResult.BROKEN;
 					}
@@ -212,14 +214,14 @@ namespace Ambition.Engine {
 								break;
 						}
 						if (!sane) {
-							state.log.debug("insane request");
+							logger.debug("insane request");
 							state.response.status = 400;
 							return ConnectionResult.BROKEN;
 						}
 						
 						if (headers["Transfer-Encoding"] == "chunked") {
 							// TODO wtf weird client
-							state.log.debug("chunked encoding ugh");
+							logger.debug("chunked encoding ugh");
 							state.response.status = 500;
 							return ConnectionResult.BROKEN;
 						}
@@ -233,7 +235,7 @@ namespace Ambition.Engine {
 						}
 						break;
 					} else {
-						state.log.debug("line didn't match after headers. line was <%s>. sending 400", line);
+						logger.debug( "line didn't match after headers. line was <%s>. sending 400".printf(line) );
 						state.response.status = 400;
 						return ConnectionResult.BROKEN;
 					}
@@ -244,7 +246,7 @@ namespace Ambition.Engine {
 			try {
 				remote_ip = ((InetSocketAddress) conn.get_remote_address()).get_address().to_string();
 			} catch (Error addr_err) {
-				state.log.error("trying to read remote address: " + addr_err.message);
+				logger.error( "trying to read remote address", addr_err );
 			}
 			
 			string raw_path = req_path;

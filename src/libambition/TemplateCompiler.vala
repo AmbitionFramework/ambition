@@ -4,7 +4,7 @@
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2013 Sensical, Inc.
+ * Copyright 2012-2014 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
  */
 
 using Gee;
-
 namespace Ambition {
 	/**
 	 * Represents an unrecoverable error during a template compilation.
@@ -325,7 +324,7 @@ namespace Ambition {
 					}
 				}
 			} catch (Error e) {
-				Logger.error( "Error while enumerating directory '%s': %s".printf( directory_path, e.message ) );
+				Log4Vala.Logger.get_logger("Ambition.TemplateCompiler").error( "Error while enumerating directory '%s'".printf( directory_path ), e );
 			}
 
 			return list;

@@ -26,6 +26,7 @@ namespace Ambition.Authorization.Authorizer {
 	 * Authorize users using a standard Apache htpasswd file.
 	 */
 	public class Htpasswd : Object,IAuthorizer {
+		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.ActionBuilder");
 		protected HashMap<string,string> config { get; set; }
 		private HashMap<string,string> cache { get; set; default = new HashMap<string,string>(); }
 		private string file_path { get; set; }
@@ -163,7 +164,7 @@ namespace Ambition.Authorization.Authorizer {
 					}
 				}
 			} catch ( Error e ) {
-				Logger.error( e.message );
+				logger.error( "Error reading htpasswd file", e );
 			}
 			return null;
 		}
@@ -188,7 +189,7 @@ namespace Ambition.Authorization.Authorizer {
 					}
 				}
 			} catch ( Error e ) {
-				Logger.error( e.message );
+				logger.error( "Error reading htpasswd file", e );
 			}
 			return 0;
 		}

@@ -26,22 +26,23 @@ namespace Ambition.Utility {
 	 * Clean the current application.
 	 */
 	public class Clean : Object {
-		private string application_name { get; set; }
+		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Utility.Clean");
+
 		public int run( string command ) {
 			var app_name = get_application_name();
 			if ( app_name == null ) {
-				Logger.error("Somehow, we are not in a project directory.");
+				logger.error("Somehow, we are not in a project directory.");
 				return -1;
 			}
 
 			// Make (if necessary) and change to build directory
 			var build_directory = File.new_for_path("build");
 			if ( ! build_directory.query_exists() ) {
-				Logger.info("No build directory to clean.");
+				logger.info("No build directory to clean.");
 				return 0;
 			}
 			if ( Environment.set_current_dir("build") == -1 ) {
-				Logger.error( "Unable to change to build directory" );
+				logger.error( "Unable to change to build directory" );
 				return 0;
 			}
 
@@ -67,7 +68,7 @@ namespace Ambition.Utility {
 		}
 
 		public int do_clean() {
-			Logger.info( "Cleaning project..." );
+			logger.info( "Cleaning project..." );
 			string standard_output, standard_error;
 			int exit_status;
 			try {
@@ -78,18 +79,18 @@ namespace Ambition.Utility {
 					out exit_status
 				);
 			} catch (SpawnError se) {
-				Logger.error( "Unable to run make clean: %s".printf( se.message ) );
+				logger.error( "Unable to run make clean", se );
 				return -1;
 			}
 			if ( exit_status != 0 ) {
-				Logger.error( "Error cleaning current application:\n%s".printf(standard_error) );
+				logger.error( "Error cleaning current application:\n%s".printf(standard_error) );
 				return -1;
 			}
 			return 0;
 		}
 
 		public int full_clean() {
-			Logger.info( "Full cleaning..." );
+			logger.info( "Full cleaning..." );
 			string standard_output, standard_error;
 			int exit_status;
 			try {
@@ -100,11 +101,11 @@ namespace Ambition.Utility {
 					out exit_status
 				);
 			} catch (SpawnError se) {
-				Logger.error( "Unable to run: %s".printf( se.message ) );
+				logger.error( "Unable to run", se );
 				return -1;
 			}
 			if ( exit_status != 0 ) {
-				Logger.error( "Error cleaning current application:\n%s".printf(standard_error) );
+				logger.error( "Error cleaning current application:\n%s".printf(standard_error) );
 				return -1;
 			}
 

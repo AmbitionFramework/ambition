@@ -117,6 +117,7 @@ namespace Ambition {
 	}
 
 	public class ConfigInstance : Object {
+		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.ConfigInstance");
 		public HashMap<string,string> config_hash = new HashMap<string,string>();
 
 		public string? lookup( string key ) {
@@ -172,7 +173,7 @@ namespace Ambition {
 			}
 
 			if ( file == null ) {
-				Logger.error( "Cannot find config file for '%s'.".printf(app_name) );
+				logger.error( "Cannot find config file for '%s'.".printf(app_name) );
 				return;
 			}
 
@@ -193,7 +194,7 @@ namespace Ambition {
 					}
 				}
 			} catch (Error e) {
-				Logger.error( "Error reading config \"%s\": %s".printf( file.get_path(), e.message ) );
+				logger.error( "Error reading config \"%s\"".printf( file.get_path() ), e );
 			}
 		}
 	}

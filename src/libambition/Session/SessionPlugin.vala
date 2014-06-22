@@ -46,7 +46,7 @@ namespace Ambition.Session {
 				if ( t > 0 ) {
 					this.session_store = (IStorable) Object.new(t);
 				} else {
-					Logger.error( "Invalid session.store specified: %s".printf(store) );
+					Log4Vala.Logger.get_logger("Ambition.Session.SessionPlugin").error( "Invalid session.store specified: %s".printf(store) );
 					return;
 				}
 			}
@@ -55,7 +55,7 @@ namespace Ambition.Session {
 		public void on_request_dispatch( State state ) {
 			initialize_session(state);
 			if ( state.session != null && state.session.session_id != null ) {
-				state.log.debug( "Found session %s".printf( state.session.session_id ) );
+				Log4Vala.Logger.get_logger("Ambition.Session.SesionPlugin").debug( "Found session %s".printf( state.session.session_id ) );
 			}
 		}
 

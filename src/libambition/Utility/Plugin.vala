@@ -27,12 +27,12 @@ namespace Ambition.Utility {
 	 * Handle plugins for the current application.
 	 */
 	public class Plugin : Object {
-		private string application_name { get; set; }
+		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Utility.Plugin");
 
 		public int run( string[] args ) {
 			var app_name = get_application_name();
 			if ( app_name == null ) {
-				Logger.error("Somehow, we are not in a project directory.");
+				logger.error("Somehow, we are not in a project directory.");
 				return -1;
 			}
 			
@@ -43,7 +43,7 @@ namespace Ambition.Utility {
 					file.make_directory();
 				}
 			} catch (Error e) {
-				Logger.error("Unable to create plugins directory.");
+				logger.error("Unable to create plugins directory.");
 				return -1;
 			}
 
@@ -68,14 +68,14 @@ namespace Ambition.Utility {
 					installed_plugin(args);
 					break;
 				default:
-					Logger.error("Invalid plugin command '%s'.".printf(plugin_command) );
+					logger.error("Invalid plugin command '%s'.".printf(plugin_command) );
 					return -1;
 			}
 			return 0;
 		}
 
 		public bool resolve_plugins() {
-			Logger.info("Resolving dependencies...");
+			logger.info("Resolving dependencies...");
 			string[] empty_args = {};
 			var service = determine_plugin_service(empty_args);
 			var configured = read_plugin_config();
@@ -88,7 +88,7 @@ namespace Ambition.Utility {
 					file.make_directory();
 				}
 			} catch (Error e) {
-				Logger.error("Unable to create plugins directory.");
+				logger.error( "Unable to create plugins directory.", e );
 				return false;
 			}
 
@@ -137,12 +137,12 @@ namespace Ambition.Utility {
 
 			// Install any plugins that are queued
 			foreach ( string plugin_name in to_install.keys ) {
-				Logger.info( "Installing %s %s".printf( plugin_name, to_install[plugin_name] ) );
+				logger.info( "Installing %s %s".printf( plugin_name, to_install[plugin_name] ) );
 
 				try {
 					File? temp_dir = service.retrieve_plugin(plugin_name);
 					if ( temp_dir == null ) {
-						Logger.error( "Unable to retrieve plugin." );
+						logger.error( "Unable to retrieve plugin." );
 						return false;
 					}
 					add_plugin_to_directory( plugin_name, temp_dir );
@@ -487,7 +487,7 @@ namespace Ambition.Utility {
 					}
 				}
 			} catch (Error e) {
-				Logger.error( "Error trying to get available plugins: %s".printf(e.message) );
+				logger.error( "Error trying to get available plugins", e );
 				return installed;
 			}
 
