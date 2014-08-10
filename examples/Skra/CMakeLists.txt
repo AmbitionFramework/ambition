@@ -7,7 +7,7 @@ enable_testing()
 find_package(Vala REQUIRED)
 include(ValaVersion)
 include(ValaPrecompile)
-ensure_vala_version("0.16.0" MINIMUM)
+ensure_vala_version("0.18.0" MINIMUM)
 
 IF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   SET(CMAKE_INSTALL_PREFIX "/usr" CACHE PATH "install prefix" FORCE)
