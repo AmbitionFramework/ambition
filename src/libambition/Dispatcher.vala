@@ -4,7 +4,7 @@
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2013 Sensical, Inc.
+ * Copyright 2012-2014 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -287,6 +287,29 @@ namespace Ambition {
 				}
 			}
 			return al;
+		}
+
+		/**
+		 * Inject a value into null properties corresponding to the given type.
+		 * @param search_type Type to inject
+		 * @param v Value to inject into property
+		 * @returns true if a value was injected
+		 */
+		public bool inject_to_application( Type search_type, Value v ) {
+			bool injected = false;
+			ParamSpec[] properties = this.application.get_class().list_properties();
+			foreach ( ParamSpec p in properties ) {
+				if ( p.value_type == search_type ) {
+					Value current_v = Value( p.value_type );
+					this.application.get_property( p.name, ref current_v );
+					// If value is null, then we can inject new value
+					if ( (int64) current_v.peek_pointer() == 0 ) {
+						this.application.set_property( p.name, v );
+						injected = true;
+					}
+				}
+			}
+			return injected;
 		}
 
 		/**

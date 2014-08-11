@@ -29,6 +29,7 @@ void main ( string[] args ) {
 	CookieTest.add_tests();
 	EngineTest.add_tests();
 	SessionTest.add_tests();
+	DispatcherTest.add_tests();
 
 	PasswordTypeTest.add_tests();
 	AuthorizerTest.add_tests();

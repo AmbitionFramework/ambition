@@ -13,6 +13,7 @@ vala_precompile(TA_VALA_C
 	actionbuilder.vala
 	config.vala
 	cookie.vala
+	dispatcher.vala
 	engine.vala
 	session.vala
 	stash.vala
