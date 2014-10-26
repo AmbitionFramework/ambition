@@ -41,6 +41,9 @@ namespace Ambition {
 		string[] list_array = new string[list.size];
 		int f_index = 0;
 		foreach ( string f in list ) {
+			if ( f == null ) {
+				f = "";
+			}
 			list_array[f_index++] = f;
 		}
 		return string.joinv( separator, list_array );
