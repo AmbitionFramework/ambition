@@ -33,7 +33,7 @@ namespace Skra.Model {
 		public static string process( string markdown_content ) {
 
 			// Process markdown content
-			string result = Markdown.to_string( markdown_content, 0, Markdown.Formats.HTML );
+			string result = Ambition.Helper.Markdown.process(markdown_content);
 
 			// Match [[foo]]
 			try {

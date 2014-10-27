@@ -30,7 +30,6 @@ SET( APP_VALA_PACKAGES
 	${APP_DEPS_PACKAGES}
 	${APP_PLUGIN_PACKAGES}
 	posix
-	markdown
 )
 
 find_package(PkgConfig)

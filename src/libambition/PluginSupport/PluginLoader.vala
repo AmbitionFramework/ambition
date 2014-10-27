@@ -85,7 +85,6 @@ namespace Ambition.PluginSupport {
 			}
 			void* register_function;
 			if ( ! module.symbol( "init_plugin", out register_function ) ) {
-				logger.error( "Invalid plugin '%s', missing init_plugin() function, skipping. %s".printf(filename,Module.error()) );
 				return null;
 			}
 
