@@ -13,10 +13,10 @@ before_install:
 before_script:
   - wget http://mirrors.us.kernel.org/ubuntu//pool/universe/c/couchdb-glib/libcouchdb-glib-1.0-2_0.7.4-0ubuntu3_i386.deb
   - wget http://mirrors.us.kernel.org/ubuntu//pool/universe/c/couchdb-glib/libcouchdb-glib-dev_0.7.4-0ubuntu3_i386.deb
-  - sudo dpkg -i libcouchdb-glib-1.0-2_0.7.4-0ubuntu3_i386.deb libcouchdb-glib-de
-v_0.7.4-0ubuntu3_i386.deb
+  - sudo dpkg -i libcouchdb-glib-1.0-2_0.7.4-0ubuntu3_i386.deb libcouchdb-glib-dev_0.7.4-0ubuntu3_i386.deb
   - mkdir build
   - cd build
   - cmake ..
 
 script: make
+
