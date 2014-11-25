@@ -5,18 +5,24 @@ compiler:
   - clang
 
 before_install:
+  - sudo add-apt-repository ppa:vala-team/ppa -y
   - sudo apt-get update -qq
-  - sudo apt-get install -qq build-essential cmake libglib2.0-dev libgee-0.8-dev
+  - sudo apt-get install -qq build-essential cmake libglib2.0-dev libgee-0.8
          libjson-glib-dev libreadline-dev libsoup2.4-dev libgda-5.0-dev
-         valac-0.18
+         valac-0.18 libcouchdb-glib-dev
 
 before_script:
-  - wget http://mirrors.us.kernel.org/ubuntu//pool/universe/c/couchdb-glib/libcouchdb-glib-1.0-2_0.7.4-0ubuntu3_i386.deb
-  - wget http://mirrors.us.kernel.org/ubuntu//pool/universe/c/couchdb-glib/libcouchdb-glib-dev_0.7.4-0ubuntu3_i386.deb
-  - sudo dpkg -i libcouchdb-glib-1.0-2_0.7.4-0ubuntu3_i386.deb libcouchdb-glib-dev_0.7.4-0ubuntu3_i386.deb
+  - git clone https://github.com/nmelnick/Log4Vala.git log4vala
+  - cd log4vala
+  - mkdir build
+  - cd build
+  - cmake ..
+  - make -j2
+  - sudo make install
+  - cd ../..
   - mkdir build
   - cd build
   - cmake ..
 
-script: make
+script: make -j2 && cd test && ./test-ambition
 
