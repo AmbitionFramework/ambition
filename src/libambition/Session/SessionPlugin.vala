@@ -55,7 +55,7 @@ namespace Ambition.Session {
 		public void on_request_dispatch( State state ) {
 			initialize_session(state);
 			if ( state.session != null && state.session.session_id != null ) {
-				Log4Vala.Logger.get_logger("Ambition.Session.SesionPlugin").debug( "Found session %s".printf( state.session.session_id ) );
+				Log4Vala.Logger.get_logger("Ambition.Session.SessionPlugin").debug( "Found session %s".printf( state.session.session_id ) );
 			}
 		}
 
