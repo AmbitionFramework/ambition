@@ -117,25 +117,26 @@ namespace Ambition.Engine {
 		}
 
 		private void parse_form_data( State state, int content_length, DataInputStream stream ) {
-			var post_data = new StringBuilder.sized(content_length);
-			int c;
+			uint8[] post_data = new uint8[content_length];
+			uint32 index = 0;
+			uint8 c;
 			try {
 				while ( ( c = stream.read_byte(null) ) != 0 ) {
 					if ( c == '\r' ) {
 						break;
 					}
-					if ( c == '\n' && post_data.len == 0 ) {
+					if ( c == '\n' && index == 0 ) {
 						continue;
 					}
-					post_data.append_unichar( (unichar) c );
-					if ( post_data.len == content_length ) {
+					post_data[index++] = c;
+					if ( index == content_length ) {
 						break;
 					}
 				}
 			} catch (IOError e) {}
-			if ( post_data.len > 0 ) {
-				state.request.params.set_all( Request.params_from_string( post_data.str ) );
-				state.request.request_body = post_data.data;
+			if ( index > 0 ) {
+				state.request.params.set_all( Request.params_from_string( (string) post_data ) );
+				state.request.request_body = post_data;
 			}
 		}
 
