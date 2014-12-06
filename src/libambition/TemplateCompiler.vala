@@ -32,11 +32,20 @@ namespace Ambition {
 		UNKNOWN_ERROR
 	}
 
+	public struct TemplateState {
+		string template_name;
+		int line_number;
+	}
+
 	/**
 	 * Functionality to compile Ambition templates into .vala source files. Used
 	 * by the ambition binary.
 	 */
-	public class TemplateCompiler {
+	public class TemplateCompiler : Object {
+		private Regex interpolate = null;
+		private Regex process = null;
+		private Log4Vala.Logger logger = null;
+
 		/**
 		 * Namespace of the template, used in the namespace directive.
 		 */
@@ -59,6 +68,16 @@ namespace Ambition {
 			"finally"
 		};
 
+		construct {
+			logger = Log4Vala.Logger.get_logger("Ambition.TemplateCompiler");
+			try {
+				interpolate = new Regex("@\\{(.*?)\\}");
+				process = new Regex("process\\(\\s*['\"](.*?)['\"](,\\s*(.*?))?\\s*\\)$");
+			} catch ( RegexError re ) {
+				logger.error( "Invalid regex", re );
+			}
+		}
+
 		/**
 		 * Compile the given template filename into the corresponding Vala
 		 * source.
@@ -71,18 +90,11 @@ namespace Ambition {
 		public string? compile( string template_name ) throws TemplateCompileError {
 			var builder = new StringBuilder();
 
-			int line_number = 0;
+			var state = TemplateState() {
+				template_name = template_name,
+				line_number = 0
+			};
 			string parameters = "";
-			string verbatim = "\"\"\"";
-			Regex interpolate = null;
-			Regex process = null;
-			try {
-				interpolate = new Regex("@\\{(.*?)\\}");
-				process = new Regex("process\\(\\s*['\"](.*?)['\"](,\\s*(.*?))?\\s*\\)$");
-			} catch ( RegexError re ) {
-				stderr.printf( re.message );
-				return null;
-			}
 
 			string path = template_name.replace( root_path + "/", "" ).replace( ".vtmpl", "" );
 			string[] path_array = path.split("/");
@@ -108,16 +120,16 @@ namespace Ambition {
 			// Write standard header
 			builder.append( "/* This file is auto generated, do not edit! */\n");
 			builder.append( "namespace %s {\n".printf(local_namespace) );
-			builder.append( "    public class " + class_name + " : " + base_class + " {\n" );
-			builder.append( "        public override Ambition.State state { get; set; }\n");
-			builder.append( "        public override int64 size { get; set; }\n");
+			builder.append( "  public class " + class_name + " : " + base_class + " {\n" );
+			builder.append( "    public override Ambition.State state { get; set; }\n");
+			builder.append( "    public override int64 size { get; set; }\n");
 			builder.append( "%%%PARAMS_PARSED%%%\n" );
-			builder.append( "        public " + class_name + "(%%%PARAMS%%%) {\n" );
+			builder.append( "    public " + class_name + "(%%%PARAMS%%%) {\n" );
 			builder.append( "%%%PARAMS_PARSED_SET%%%" );
-			builder.append( "        }\n\n" );
-			builder.append( "        public override string to_string() {\n" );
-			builder.append( "            StringBuilder b = new StringBuilder();\n" );
-			builder.append( "            state.ping();\n");
+			builder.append( "    }\n\n" );
+			builder.append( "    public override string to_string() {\n" );
+			builder.append( "       StringBuilder b = new StringBuilder();\n" );
+			builder.append( "       state.ping();\n");
 
 			// Parse file into vala source
 			try {
@@ -125,64 +137,17 @@ namespace Ambition {
 				input_stream.set_newline_type( DataStreamNewlineType.ANY );
 				string line;
 				while ( ( line = input_stream.read_line(null) ) != null ) {
-					line_number++;
-					string left_line = line.chug();
-					if ( left_line.has_prefix("@") && !left_line.has_prefix("@{") ) {
-						left_line = "@" + left_line.substring(1).chug(); // Remove leading space after @
-						if ( left_line.has_prefix("@parameters") ) {
-							parameters = left_line.chomp().replace( "@parameters(", "" );
-
-						} else if ( left_line.has_prefix("@using") ) {
-							builder.prepend( "using " + left_line.replace( "@using ", "" ) + "; // L%d\n".printf(line_number) );
-
-						} else if ( left_line.has_prefix("@process") ) {
-							MatchInfo info = null;
-							if ( process.match( left_line, 0, out info ) ) {
-								string template = info.fetch(1);
-								builder.append("            b.append(");
-								builder.append( "( new Template." + template + "(" );
-								if ( info.get_match_count() > 2 ) {
-									builder.append( info.fetch(3) );
-								}
-								builder.append( ").to_string_with_state(state) ) ); //L%d\n".printf(line_number) );
-							} else {
-								var msg = "Invalid usage of process in '%s' on line %d: %s\n".printf( template_name, line_number, line );
-								throw new TemplateCompileError.INVALID_USAGE(msg);
-							}
-
-						} else if ( left_line.has_prefix("@*") ) {
-							continue;
-
-						} else {
-							if ( check_valid(left_line) ) {
-								builder.append( "            " + left_line.substring(1) + " // L%d\n".printf(line_number) );
-							} else {
-								var msg = "Unrecognized or unavailable command in '%s' on line %d: %s\n".printf( template_name, line_number, line );
-								throw new TemplateCompileError.BAD_COMMAND(msg);
-							}
-						}
-					} else {
-						builder.append(
-							"            b.append("
-							+ verbatim
-							+ interpolate.replace( line, -1, 0, verbatim + " + \\1 + " + verbatim )
-							+ verbatim
-							+ " + \"\\n\" "
-							+ "); // Line %d".printf(line_number)
-							+ "\n"
-						);
-					}
+					state.line_number++;
+					parse_line( builder, state, line, ref parameters );
 				}
 			} catch ( Error e ) {
 				var msg = "Unknown error parsing '%s': %s\n".printf( template_name, e.message );
 				throw new TemplateCompileError.UNKNOWN_ERROR(msg);
 			}
 
-
 			// Close out file
-			builder.append("            return b.str;\n");
-			builder.append("        }\n    }\n");
-			builder.append("}\n");
+			builder.append("      return b.str;\n");
+			builder.append("    }\n  }\n|\n");
 
 			var param_builder = new StringBuilder();
 			var param_set_builder = new StringBuilder();
@@ -194,13 +159,74 @@ namespace Ambition {
 					param = param.substring( 0, param.index_of("=") ).chomp();
 				}
 				string var_name = param.substring( param.index_of(" ") + 1 ).chug().chomp();
-				param_builder.append( "        private %s { get; set;%s}\n".printf( param, default_value ) );
-				param_set_builder.append( "            this.%s = %s;\n".printf( var_name, var_name ) );
+				param_builder.append( "    private %s { get; set;%s}\n".printf( param, default_value ) );
+				param_set_builder.append( "      this.%s = %s;\n".printf( var_name, var_name ) );
 			}
 			return builder.str
 				.replace( "%%%PARAMS%%%", parameters )
 				.replace( "%%%PARAMS_PARSED%%%", param_builder.str )
 				.replace( "%%%PARAMS_PARSED_SET%%%", param_set_builder.str );
+		}
+
+		internal void parse_line( StringBuilder builder, TemplateState state, string line, ref string parameters ) {
+			string verbatim = "\"\"\"";
+			string left_line = line.chug();
+			if ( left_line.has_prefix("@") && !left_line.has_prefix("@{") ) {
+				left_line = "@" + left_line.substring(1).chug(); // Remove leading space after @
+				if ( left_line.has_prefix("@parameters") ) {
+					parameters = left_line.chomp().replace( "@parameters(", "" );
+
+				} else if ( left_line.has_prefix("@using") ) {
+					string using = "using " + left_line.replace( "@using ", "" );
+					if ( using.has_suffix(";") ) {
+						logger.warn( "Unnecessary semicolon at end of statement on line %d".printf( state.line_number ) );
+						using = using.substring( 0, using.length - 1 );
+					}
+					builder.prepend( using + "; // L%d\n".printf( state.line_number ) );
+
+				} else if ( left_line.has_prefix("@process") ) {
+					MatchInfo info = null;
+					if ( process.match( left_line, 0, out info ) ) {
+						string template = info.fetch(1);
+						builder.append("      b.append(");
+						builder.append( "(new Template." + template + "(" );
+						if ( info.get_match_count() > 2 ) {
+							builder.append( info.fetch(3) );
+						}
+						builder.append( ").to_string_with_state(state))); // L%d\n".printf( state.line_number ) );
+					} else {
+						var msg = "Invalid usage of process in '%s' on line %d: %s\n".printf( state.template_name, state.line_number, line );
+						throw new TemplateCompileError.INVALID_USAGE(msg);
+					}
+
+				} else if ( left_line.has_prefix("@*") ) {
+					return;
+
+				} else {
+					if ( check_valid(left_line) ) {
+						builder.append( "      " + left_line.substring(1) + " // L%d\n".printf( state.line_number ) );
+					} else {
+						var msg = "Unrecognized or unavailable command in '%s' on line %d: %s\n".printf( state.template_name, state.line_number, line );
+						throw new TemplateCompileError.BAD_COMMAND(msg);
+					}
+				}
+			} else {
+				string transformed;
+				try {
+					transformed = interpolate.replace( line, -1, 0, verbatim + " + \\1 + " + verbatim );
+				} catch (RegexError e) {
+					transformed = "";
+				}
+				builder.append(
+					"      b.append("
+					+ verbatim
+					+ transformed
+					+ verbatim
+					+ " + \"\\n\" "
+					+ "); // L%d".printf( state.line_number )
+					+ "\n"
+				);
+			}
 		}
 
 		/**
@@ -324,7 +350,7 @@ namespace Ambition {
 					}
 				}
 			} catch (Error e) {
-				Log4Vala.Logger.get_logger("Ambition.TemplateCompiler").error( "Error while enumerating directory '%s'".printf( directory_path ), e );
+				logger.error( "Error while enumerating directory '%s'".printf( directory_path ), e );
 			}
 
 			return list;

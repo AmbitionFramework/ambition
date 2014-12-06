@@ -17,6 +17,7 @@ vala_precompile(TA_VALA_C
 	engine.vala
 	session.vala
 	stash.vala
+	templatecompiler.vala
 	authorizer.vala
 	password_type.vala
 	request.vala
