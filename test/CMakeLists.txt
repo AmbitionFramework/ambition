@@ -15,6 +15,7 @@ vala_precompile(TA_VALA_C
 	cookie.vala
 	dispatcher.vala
 	engine.vala
+	pluginmanifest.vala
 	session.vala
 	stash.vala
 	templatecompiler.vala

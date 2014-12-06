@@ -31,6 +31,7 @@ void main ( string[] args ) {
 	SessionTest.add_tests();
 	DispatcherTest.add_tests();
 	TemplateCompilerTest.add_tests();
+	PluginManifestTest.add_tests();
 
 	PasswordTypeTest.add_tests();
 	AuthorizerTest.add_tests();

@@ -321,6 +321,7 @@ namespace Ambition.Utility {
 					manifest.libraries != null && manifest.libraries.length > 0
 						? string.joinv( ", ", manifest.libraries ) : "None"
 				);
+				stdout.printf( "Compatible Ambition versions: %s-%s\n", manifest.minimum_target_version, manifest.maximum_target_version );
 			} else {
 				stdout.printf( "No plugin found.\n" );
 			}

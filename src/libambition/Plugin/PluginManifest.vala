@@ -37,6 +37,8 @@ namespace Ambition.Plugin {
 		public string[]? pkgconfig_dependencies { get; set; }
 		public string[]? plugin_dependencies { get; set; }
 		public string[]? versions { get; set; }
+		public string? minimum_target_version { get; set; }
+		public string? maximum_target_version { get; set; }
 
 		/**
 		 * Load a manifest.json file from an existing plugin directory.
@@ -55,6 +57,25 @@ namespace Ambition.Plugin {
 				Log4Vala.Logger.get_logger("Ambition.Plugin.PluginManifest").error( "Fatal: Unable to load manifest from '%s'".printf( plugin_directory ), e );
 			}
 			return null;
+		}
+
+		public bool check_version( string target_version ) {
+			int min_version = parse_version(minimum_target_version);
+			int max_version = parse_version(maximum_target_version);
+			int tar_version = parse_version(target_version);
+			return ( tar_version >= min_version && tar_version <= max_version );
+		}
+
+		internal int parse_version( string version ) {
+			string[] components = version.split(".");
+			if ( components.length == 2 ) {
+				components += "0";
+			}
+			string new_version = "1";
+			foreach ( var component in components ) {
+				new_version = new_version + "%02d".printf( int.parse(component) );
+			}
+			return int.parse(new_version);
 		}
 	}
 }
