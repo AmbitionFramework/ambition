@@ -1,5 +1,5 @@
 /*
- * pluginmanifest.vala
+ * app.vala
  *
  * The Ambition Web Framework
  * http://www.ambitionframework.org
@@ -19,21 +19,22 @@
  * limitations under the License.
  */
 
-public class PluginManifestTest {
+public class AppTest {
 	public static void add_tests() {
-		Test.add_func("/ambition/pluginmanifest/init", () => {
-			var s = new Ambition.Plugin.PluginManifest();
-			assert( s != null );
+		Test.add_func("/ambition/app/init", () => {
+			var a = new Ambition.App();
+			assert( a != null );
 		});
-		Test.add_func("/ambition/pluginmanifest/check_version", () => {
-			var s = new Ambition.Plugin.PluginManifest();
-			assert( s != null );
-			s.minimum_target_version = "0.1";
-			s.maximum_target_version = "1.0";
-			assert( s.check_version("0.1") == true );
-			assert( s.check_version("0.1.1") == true );
-			assert( s.check_version("1.0") == true );
-			assert( s.check_version("2.0") == false );
+		Test.add_func("/ambition/app/VERSION", () => {
+			assert( Ambition.VERSION != null );
+		});
+		Test.add_func("/ambition/app/parse_version", () => {
+			int ver = Ambition.parse_version("0.1");
+			assert( ver == 1000100 );
+			ver = Ambition.parse_version("0.1.1");
+			assert( ver == 1000101 );
+			ver = Ambition.parse_version("2.0.1");
+			assert( ver == 1020001 );
 		});
 	}
 }

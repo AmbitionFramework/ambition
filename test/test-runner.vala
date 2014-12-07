@@ -26,6 +26,7 @@
 void main ( string[] args ) {
 	Test.init( ref args );
 
+	AppTest.add_tests();
 	CookieTest.add_tests();
 	EngineTest.add_tests();
 	SessionTest.add_tests();

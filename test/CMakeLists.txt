@@ -11,6 +11,7 @@ SET( TA_VALA_PACKAGES
 vala_precompile(TA_VALA_C 
 	test-runner.vala
 	actionbuilder.vala
+	app.vala
 	config.vala
 	cookie.vala
 	dispatcher.vala

@@ -60,22 +60,10 @@ namespace Ambition.Plugin {
 		}
 
 		public bool check_version( string target_version ) {
-			int min_version = parse_version(minimum_target_version);
-			int max_version = parse_version(maximum_target_version);
-			int tar_version = parse_version(target_version);
+			int min_version = Ambition.parse_version(minimum_target_version);
+			int max_version = Ambition.parse_version(maximum_target_version);
+			int tar_version = Ambition.parse_version(target_version);
 			return ( tar_version >= min_version && tar_version <= max_version );
-		}
-
-		internal int parse_version( string version ) {
-			string[] components = version.split(".");
-			if ( components.length == 2 ) {
-				components += "0";
-			}
-			string new_version = "1";
-			foreach ( var component in components ) {
-				new_version = new_version + "%02d".printf( int.parse(component) );
-			}
-			return int.parse(new_version);
 		}
 	}
 }
