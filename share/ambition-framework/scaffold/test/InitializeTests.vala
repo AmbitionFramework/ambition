@@ -4,7 +4,8 @@
 void main ( string[] args ) {
 	Test.init( ref args );
 
-	ApplicationTest.add_tests();
+	var test_root = TestSuite.get_root();
+	test_root.add_suite( new ApplicationTest().get_suite() );
 
 	Test.run();
 }

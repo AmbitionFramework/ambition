@@ -70,6 +70,7 @@ SET( LAM_VALA_FILES
 	Session/SessionPlugin.vala
 	Session/StorableFile.vala
 	Session/StorableMemory.vala
+	Testing/AbstractTestCase.vala
 	Testing/Helper.vala
 	Testing/TestResponse.vala
 	Utility/Clean.vala

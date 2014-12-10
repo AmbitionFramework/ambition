@@ -1,8 +1,10 @@
-public class ApplicationTest {
-	public static void add_tests() {
-		Test.add_func("/application/init", () => {
-			var application = new %%namespace%%.Application();
-			assert( application != null );
-		});
+public class ApplicationTest : Ambition.Testing.AbstractTestCase {
+	public ApplicationTest() {
+		base("Application");
+		add_test( "init", init );
+	}
+	public void init() {
+		var application = new %%namespace%%.Application();
+		assert( application != null );
 	}
 }
