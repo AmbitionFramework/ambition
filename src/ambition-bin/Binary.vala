@@ -230,7 +230,7 @@ public static int execute_command( bool as_interactive, string? command, string[
 
 public static bool in_application() {
 	var src_dir = File.new_for_path("src");
-	var ambition = File.new_for_path(".ambition");
+	var ambition = File.new_for_path("src/Application.vala");
 	if ( src_dir.query_exists() && ambition.query_exists() ) {
 		var application_file = File.new_for_path("src/Application.vala");
 

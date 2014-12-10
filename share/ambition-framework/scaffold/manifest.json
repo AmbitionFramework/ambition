@@ -15,10 +15,6 @@
 		"# Display the Powered-By HTTP header",
 		"app.show_powered_by = yes",
 		"",
-		"# Uncomment to define where to store the log file when your application is",
-		"# daemonized.",
-		"# app.log_file = %%namespace%%.application.log",
-		"",
 		"# Uncomment to define a session.",
 		"# session.store = StorableFile",
 		"# session.expires = 3600",
@@ -30,7 +26,6 @@
 		"scgi.threads = 10"
 	],
 	"creates": [
-		".ambition",
 		"CMakeLists.txt",
 		"build",
 		"cmake",
@@ -46,6 +41,7 @@
 		"cmake/Translations.cmake",
 		"config",
 		"config/actions.conf",
+		"config/build.conf",
 		"config/log4vala.conf",
 		"config/plugins.conf",
 		"src",

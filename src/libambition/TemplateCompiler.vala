@@ -147,7 +147,7 @@ namespace Ambition {
 
 			// Close out file
 			builder.append("      return b.str;\n");
-			builder.append("    }\n  }\n|\n");
+			builder.append("    }\n  }\n}\n");
 
 			var param_builder = new StringBuilder();
 			var param_set_builder = new StringBuilder();
@@ -168,7 +168,7 @@ namespace Ambition {
 				.replace( "%%%PARAMS_PARSED_SET%%%", param_set_builder.str );
 		}
 
-		internal void parse_line( StringBuilder builder, TemplateState state, string line, ref string parameters ) {
+		internal void parse_line( StringBuilder builder, TemplateState state, string line, ref string parameters ) throws TemplateCompileError {
 			string verbatim = "\"\"\"";
 			string left_line = line.chug();
 			if ( left_line.has_prefix("@") && !left_line.has_prefix("@{") ) {
