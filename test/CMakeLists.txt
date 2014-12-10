@@ -12,6 +12,7 @@ vala_precompile(TA_VALA_C
 	test-runner.vala
 	actionbuilder.vala
 	app.vala
+	build.vala
 	config.vala
 	cookie.vala
 	dispatcher.vala
@@ -65,4 +66,5 @@ add_test_executable(${BINNAME})
 file(COPY ${CMAKE_SOURCE_DIR}/test/assets/htpasswd DESTINATION ${CMAKE_BINARY_DIR}/test/assets)
 file(COPY ${CMAKE_SOURCE_DIR}/test/assets/flat_file DESTINATION ${CMAKE_BINARY_DIR}/test/assets)
 file(COPY ${CMAKE_SOURCE_DIR}/test/assets/example.conf DESTINATION ${CMAKE_BINARY_DIR}/test/assets)
+file(COPY ${CMAKE_SOURCE_DIR}/test/assets/build.conf DESTINATION ${CMAKE_BINARY_DIR}/test/assets)
 set(ENV{LD_LIBRARY_PATH} "${CMAKE_BINARY_DIR}/libambition:$ENV{LD_LIBRARY_PATH}")

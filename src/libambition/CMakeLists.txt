@@ -5,6 +5,7 @@ SET( LAM_VALA_FILES
 	ActionMethod.vala
 	App.vala
 	Application.vala
+	Build.vala
 	Component.vala
 	Config.vala
 	Cookie.vala

@@ -26,6 +26,9 @@
 void main ( string[] args ) {
 	Test.init( ref args );
 
+	var test_root = TestSuite.get_root();
+	test_root.add_suite( new BuildTest().get_suite() );
+
 	AppTest.add_tests();
 	CookieTest.add_tests();
 	EngineTest.add_tests();

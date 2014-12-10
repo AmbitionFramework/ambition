@@ -116,37 +116,6 @@ namespace Ambition {
 
 	}
 
-	public class BuildConfig : Object {
-		private static ConfigInstance _config = null;
-
-		/**
-		 * Look up a config element by key name
-		 * @param key Key name
-		 * @return string
-		 */
-		public static string? lookup( string key ) {
-			return get_instance().lookup(key);
-		}
-
-		public static ConfigInstance get_instance() {
-			if ( _config == null ) {
-				_config = new ConfigInstance();
-
-				var file = File.new_for_path("config/build.conf");
-				if ( !file.query_exists() ) {
-					file = null;
-				}
-				_config.parse_config_file(file);
-			}
-
-			return _config;
-		}
-
-		public static void reset() {
-			_config = null;
-		}
-	}
-
 	public class ConfigInstance : Object {
 		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.ConfigInstance");
 		public HashMap<string,string> config_hash = new HashMap<string,string>();
