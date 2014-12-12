@@ -33,15 +33,15 @@ namespace Ambition.Utility {
 	public class Run : Object {
 		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Utility.Run");
 		private string application_name;
+		private Build build;
 		internal static bool interrupted { get; set; default = false; }
 
+		construct {
+			build = new Build();
+		}
+
 		public int run( bool daemonize = false, string[]? new_args = null ) {
-			var app_name = get_application_name();
-			if ( app_name == null ) {
-				logger.error("Somehow, we are not in a project directory.");
-				return -1;
-			}
-			application_name = app_name;
+			application_name = build.application_name;
 			build_and_run( daemonize, new_args );
 			if ( Environment.get_current_dir().has_suffix("build") ) {
 				Environment.set_current_dir("..");
@@ -50,13 +50,8 @@ namespace Ambition.Utility {
 		}
 
 		public int run_build() {
-			var app_name = get_application_name();
-			if ( app_name == null ) {
-				logger.error("Somehow, we are not in a project directory.");
-				return -1;
-			}
-			application_name = app_name;
-			build();
+			application_name = build.application_name;
+			build.build();
 			if ( Environment.get_current_dir().has_suffix("build") ) {
 				Environment.set_current_dir("..");
 			}
@@ -64,12 +59,7 @@ namespace Ambition.Utility {
 		}
 
 		public int test( string[] args ) {
-			var app_name = get_application_name();
-			if ( app_name == null ) {
-				logger.error("Somehow, we are not in a project directory.");
-				return -1;
-			}
-			application_name = app_name;
+			application_name = build.application_name;
 			run_tests(args);
 			if ( Environment.get_current_dir().has_suffix("build") ) {
 				Environment.set_current_dir("..");
@@ -80,18 +70,9 @@ namespace Ambition.Utility {
 		internal int run_tests( string[] args ) {
 			int exit_status;
 
-			var plugin = new Plugin();
-			if ( plugin.resolve_plugins() == false ) {
-				return -1;
-			}
-			if ( setup_build_directory() != 0 ) {
-				return -1;
-			}
-			if ( cmake_project() != 0 ) {
-				return -1;
-			}
-			if ( build_project() != 0 ) {
-				return -1;
+			int result = build.build();
+			if ( result != 0 ) {
+				return result;
 			}
 
 			logger.info( "Running tests..." );
@@ -132,26 +113,6 @@ namespace Ambition.Utility {
 				return -1;
 			}
 
-			return 0;
-		}
-
-		/**
-		 * Build current project.
-		 */
-		internal int build() {
-			var plugin = new Plugin();
-			if ( plugin.resolve_plugins() == false ) {
-				return -1;
-			}
-			if ( setup_build_directory() != 0 ) {
-				return -1;
-			}
-			if ( cmake_project() != 0 ) {
-				return -1;
-			}
-			if ( build_project() != 0 ) {
-				return -1;
-			}
 			return 0;
 		}
 
@@ -209,7 +170,7 @@ namespace Ambition.Utility {
 			}
 #endif
 
-			int response = build();
+			int response = build.build();
 			if ( response < 0 ) {
 				return response;
 			}
@@ -247,90 +208,6 @@ namespace Ambition.Utility {
 			interrupted = false;
 
 			return 0;
-		}
-
-		/**
-		 * Prepare/create build directory
-		 */
-		internal int setup_build_directory() {
-			try {
-				var build_directory = File.new_for_path("build");
-				if ( ! build_directory.query_exists() ) {
-					build_directory.make_directory();
-				}
-			} catch (Error e) {
-				logger.error( "Unable to create or query build directory: %s".printf( e.message ) );
-				return -1;
-			}
-			if ( Environment.set_current_dir("build") == -1 ) {
-				logger.error( "Unable to change to build directory" );
-				return -1;
-			}
-			return 0;
-		}
-
-		/**
-		 * Run cmake on current application.
-		 */
-		internal int cmake_project() {
-			string standard_output, standard_error;
-			int exit_status;
-
-			logger.info( "Running cmake..." );
-			try {
-				Process.spawn_command_line_sync(
-					"cmake ..",
-					out standard_output,
-					out standard_error,
-					out exit_status
-				);
-			} catch (SpawnError se) {
-				logger.error( "Unable to run make: %s".printf( se.message ) );
-				return_home();
-				return -1;
-			}
-			if ( exit_status != 0 ) {
-				logger.error( "Error building project files via cmake:\n%s".printf(standard_error) );
-				return_home();
-				return -1;
-			}
-
-			return 0;
-		}
-
-		/**
-		 * Make the current application.
-		 */
-		internal int build_project() {
-			string standard_output, standard_error;
-			int exit_status;
-
-			logger.info( "Building project..." );
-			try {
-				Process.spawn_command_line_sync(
-					"make",
-					out standard_output,
-					out standard_error,
-					out exit_status
-				);
-			} catch (SpawnError se) {
-				logger.error( "Unable to run make: %s".printf( se.message ) );
-				return_home();
-				return -1;
-			}
-			if ( exit_status != 0 ) {
-				logger.error( "Error building current application:\n%s".printf(standard_error) );
-				return_home();
-				return -1;
-			}
-
-			return 0;
-		}
-
-		private void return_home() {
-			if ( Environment.get_current_dir().has_suffix("build") ) {
-				Environment.set_current_dir("..");
-			}
 		}
 
 		private void parse_exit_status( int exit_status ) {

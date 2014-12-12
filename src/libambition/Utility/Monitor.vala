@@ -141,16 +141,16 @@ namespace Ambition.Utility {
 				}
 			}
 
-			var runner = new Run();
-			if ( runner.setup_build_directory() != 0 ) {
+			var build = new Build();
+			if ( build.setup_build_directory() != 0 ) {
 				re_monitor();
 				return -1;
 			}
-			if ( runner.cmake_project() != 0 ) {
+			if ( build.cmake_project() != 0 ) {
 				re_monitor();
 				return -1;
 			}
-			if ( runner.build_project() != 0 ) {
+			if ( build.build_project() != 0 ) {
 				re_monitor();
 				return -1;
 			}
