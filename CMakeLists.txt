@@ -27,6 +27,10 @@ IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 	set (WIN32 1)
 	set (FLAGS --define=WIN32)
 ENDIF()
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+	set (LINUX 1)
+	set (FLAGS --define=LINUX --pkg=linux)
+ENDIF()
 
 set (BINSOURCE ${CMAKE_BINARY_DIR}/src/libambition)
 set (VAPIDIRS 

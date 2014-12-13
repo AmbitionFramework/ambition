@@ -24,6 +24,9 @@ namespace Ambition {
 	 * Base class for an Application.
 	 */
 	public abstract class Application : Object {
+#if LINUX
+		private static unowned void* backtrace_buffer[1024];
+#endif
 		public Dispatcher dispatcher;
 
 		public abstract Actions get_actions();
@@ -56,6 +59,13 @@ namespace Ambition {
 				return;
 			}
 
+			// Install signal handlers
+			install_signal_handlers();
+
+			int num = 1;
+			num--;
+			int n = 12 / num;
+
 			// Start the application
 			dispatcher.run();
 		}
@@ -71,5 +81,26 @@ namespace Ambition {
 		 * @param state State
 		 */
 		public virtual void on_request_end( State state ) {}
+
+		private void install_signal_handlers() {
+#if LINUX
+			Posix.signal( Posix.SIGSEGV, linux_backtrace_handler );
+			Posix.signal( Posix.SIGFPE, linux_backtrace_handler );
+#endif
+#if !LINUX
+			// Message user regarding no signal handling?
+#endif
+		}
+
+#if LINUX
+		private static void linux_backtrace_handler() {
+			int num = Linux.backtrace( backtrace_buffer, 1024 );
+			stdout.printf( "Got %d frames\n", num );
+			Linux.backtrace_symbols_fd( backtrace_buffer, 1024, Posix.STDOUT_FILENO );
+			// for ( int index = 0; index < num, index++ ) {
+			// 	stdout.printf( "%d: %s\n", index, )
+			// }
+		}
+#endif
 	}
 }
