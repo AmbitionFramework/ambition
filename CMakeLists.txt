@@ -10,6 +10,8 @@ include(ValaPrecompile)
 ensure_vala_version("0.18.0" MINIMUM)
 
 set (FOUND_OS "Unknown")
+set (FBSD 0)
+set (WIN32 0)
 
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 	set (WIN32 1)
