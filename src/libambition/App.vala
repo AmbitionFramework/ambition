@@ -4,7 +4,7 @@
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2013 Sensical, Inc.
+ * Copyright 2012-2015 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,30 @@ using Gee;
 using Ambition.Authorization;
 
 namespace Ambition {
+	enum OSType {
+		LINUX,
+		WINDOWS,
+		FREEBSD,
+		MACOSX,
+		OTHER
+	}
+
 	public static const string VERSION = "0.1";
+
+/**
+ * Operating System type
+ */
+#if OS_LINUX
+	public static const OSType OS_TYPE = OSType.LINUX;
+#elif OS_FREEBSD
+	public static const OSType OS_TYPE = OSType.FREEBSD;
+#elif OS_WINDOWS
+	public static const OSType OS_TYPE = OSType.WINDOWS;
+#elif OS_MACOSX
+	public static const OSType OS_TYPE = OSType.MACOSX;
+#else
+	public static const OSType OS_TYPE = OSType.OTHER;
+#endif
 
 	/**
 	 * Retrieve framework version as an int.

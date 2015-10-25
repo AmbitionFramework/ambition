@@ -4,7 +4,7 @@
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2013 Sensical, Inc.
+ * Copyright 2012-2015 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,11 @@
  */
 
 namespace Ambition {
+	/**
+	 * Function to respond to an error condition
+	 */
+	public delegate void ErrorHandler( State state, ParsedBacktrace backtrace );
+		
 	/**
 	 * Base class for an Application.
 	 */
@@ -67,9 +72,13 @@ namespace Ambition {
 		public virtual void on_request_dispatch( State state ) {}
 
 		/**
-		 * Block of code tor un when a request is completed.
+		 * Block of code to run when a request is completed.
 		 * @param state State
 		 */
 		public virtual void on_request_end( State state ) {}
+
+		public void add_error_handler(ErrorHandler handler) {
+			dispatcher.enable_reporter(handler);
+		}
 	}
 }

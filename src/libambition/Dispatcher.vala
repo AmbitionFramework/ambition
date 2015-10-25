@@ -4,7 +4,7 @@
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2014 Sensical, Inc.
+ * Copyright 2012-2015 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ namespace Ambition {
 	 */
 	public class Dispatcher : Object {
 		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Dispatcher");
+		private BacktraceReporter reporter;
 		private Engine.Base _engine = null;
 		private Ambition.Application application = null;
 		private bool show_powered_by = false;
@@ -179,7 +180,7 @@ namespace Ambition {
 
 		/**
 		 * AFTER a State has been initialized by an engine with request headers,
-		 * cookies and a session prepared, THEN nrun a request through the
+		 * cookies and a session prepared, THEN run a request through the
 		 * dispatcher. Iterate through each path to determine if the request
 		 * matches, run through those actions, and set up the response.
 		 * @param state Current engine state
@@ -188,6 +189,11 @@ namespace Ambition {
 			// Throw away invalid requests
 			if ( state.request.ip == null && state.request.method == HttpMethod.NONE ) {
 				return;
+			}
+
+			// Check with BacktraceReporter, if enabled
+			if ( reporter != null ) {
+				reporter.state = state;
 			}
 
 			logger.info("");
@@ -310,6 +316,11 @@ namespace Ambition {
 				}
 			}
 			return injected;
+		}
+
+		public void enable_reporter( ErrorHandler handler ) {
+			reporter = new BacktraceReporter(handler, this  );
+			reporter.install_signals();
 		}
 
 		/**

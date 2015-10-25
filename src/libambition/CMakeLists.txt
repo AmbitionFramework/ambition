@@ -5,6 +5,7 @@ SET( LAM_VALA_FILES
 	ActionMethod.vala
 	App.vala
 	Application.vala
+	BacktraceReporter.vala
 	Build.vala
 	Component.vala
 	Config.vala
