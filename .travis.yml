@@ -9,7 +9,7 @@ before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq build-essential cmake libglib2.0-dev libgee-0.8
          libjson-glib-dev libreadline-dev libsoup2.4-dev libgda-5.0-dev
-         valac-0.18 libcouchdb-glib-dev
+         valac-0.20 libcouchdb-glib-dev
 
 before_script:
   - git clone https://github.com/nmelnick/Log4Vala.git log4vala
