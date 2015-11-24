@@ -95,7 +95,7 @@ using Ambition;
 
 				var input_stream = new DataInputStream( file.read() );
 				while ( ( line = input_stream.read_line(null) ) != null ) {
-					if ( line.length == 0 || line.has_prefix("#") ) {
+					if ( line.chomp().length == 0 || line.has_prefix("#") ) {
 						continue;
 					}
 
