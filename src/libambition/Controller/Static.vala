@@ -35,7 +35,6 @@ namespace Ambition.Controller {
 		public static ArrayList<Ambition.Action?> add_actions() {
 			var actions = new ArrayList<Ambition.Action?>();
 			string[] directories = Config.lookup_with_default( "static.directories", "" ).split(",");
-			string file_404_exists = Config.lookup_with_default( "static.file_404_exists", "" );
 			var s = new Static();
 
 			// Add favicon.ico
@@ -72,6 +71,8 @@ namespace Ambition.Controller {
 		 */
 		public Result show_static_file( State state ) {
 			string path = state.request.path;
+			string file_404_exists = Config.lookup_with_default( "static.file_404_exists", "" );
+
 			Response response = state.response;
 			if ( path.length > 7 && path.substring( 0, 7 ) == "/static" ) {
 				path = path.substring(7);
