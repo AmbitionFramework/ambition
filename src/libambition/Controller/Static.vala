@@ -82,12 +82,12 @@ namespace Ambition.Controller {
 				response.status = 404;
 
 				// Show a sane 404. For SEO and other reasons - This must exist.
-				if(file_404_exists == "") {
-					response.body = "404";
-					return new CoreView.None();
-				} else {
+				if(file_404_exists == "yes") {
 					var file_404 = File.new_for_path( Config.lookup_with_default( "static.root", "static" ) + "/404.html" );
 					return new CoreView.File(file_404);
+				} else {
+					response.body = "404";
+					return new CoreView.None();
 				}
 			}
 			return new CoreView.File(file);
