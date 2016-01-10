@@ -72,6 +72,7 @@ namespace Ambition.Controller {
 		public Result show_static_file( State state ) {
 			string path = state.request.path;
 			string file_404_exists = Config.lookup_with_default( "static.file_404_exists", "" );
+			string file_404_path = Config.lookup_with_default( "static.file_404_exists", "" );
 
 			Response response = state.response;
 			if ( path.length > 7 && path.substring( 0, 7 ) == "/static" ) {
@@ -83,7 +84,7 @@ namespace Ambition.Controller {
 
 				// Show a sane 404. For SEO and other reasons - This must exist.
 				if(file_404_exists == "yes") {
-					var file_404 = File.new_for_path( Config.lookup_with_default( "static.root", "static" ) + "/404.html" );
+					var file_404 = File.new_for_path( Config.lookup_with_default( "static.root", "static" ) + file_404_path );
 					return new CoreView.File(file_404);
 				} else {
 					response.body = "404";
