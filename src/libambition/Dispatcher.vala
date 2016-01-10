@@ -353,8 +353,6 @@ namespace Ambition {
 					}
 
 					return action.targets;
-				} else {
-					logger.info( "404 Route Not Found '%s'.".printf(action_pattern) );
 				}
 			}
 			return null;

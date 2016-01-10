@@ -1,6 +1,6 @@
 /*
  * Static.vala
- * 
+ *
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
@@ -35,6 +35,7 @@ namespace Ambition.Controller {
 		public static ArrayList<Ambition.Action?> add_actions() {
 			var actions = new ArrayList<Ambition.Action?>();
 			string[] directories = Config.lookup_with_default( "static.directories", "" ).split(",");
+			string file_404_exists = Config.lookup_with_default( "static.file_404_exists", "" );
 			var s = new Static();
 
 			// Add favicon.ico
@@ -78,8 +79,15 @@ namespace Ambition.Controller {
 			var file = File.new_for_path( Config.lookup_with_default( "static.root", "static" ) + path );
 			if ( !file.query_exists() ) {
 				response.status = 404;
-				response.body = "";
-				return new CoreView.None();
+
+				// Show a sane 404. For SEO and other reasons - This must exist.
+				if(file_404_exists == "") {
+					response.body = "404";
+					return new CoreView.None();
+				} else {
+					var file_404 = File.new_for_path( Config.lookup_with_default( "static.root", "static" ) + "/404.html" );
+					return new CoreView.File(file_404);
+				}
 			}
 			return new CoreView.File(file);
 		}
