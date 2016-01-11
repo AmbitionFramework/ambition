@@ -70,7 +70,7 @@ namespace Ambition {
 			Config.set_value( "ambition.app_name", executable_path.substring( last_index + 1 ) );
 			Config.set_value( "ambition.app_path", executable_path.substring( 0, last_index ) );
 		}
-		
+
 		public bool run() {
 			if ( actions == null ) {
 				logger.error("No actions specified, nothing to do!");
@@ -161,8 +161,8 @@ namespace Ambition {
 			this.engine.execute();
 			return true;
 		}
-		
-		/** 
+
+		/**
 		 * Initialize our State with new Response and Request objects,
 		 * etc. To be called immediately upon request acceptance by an
 		 * Engine.
