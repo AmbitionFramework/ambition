@@ -421,7 +421,6 @@ namespace Ambition.Utility {
 					if ( file_info.get_file_type() != FileType.DIRECTORY ) {
 						current_file = file_info.get_name();
 						File to_copy = temp_dir.resolve_relative_path( file_info.get_name() );
-						logger.debug(to_copy.get_path());
 						File dest = File.new_for_path( "%s/%s".printf( destination_dir.get_path(), file_info.get_name() ) );
 						if ( file_info.get_name().has_suffix(".vapi") ) {
 							// If this is a vapi, let's make sure the init_plugin() function doesn't exist.

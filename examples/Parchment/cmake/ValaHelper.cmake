@@ -1,3 +1,7 @@
+macro(add_test_executable EXE_NAME)
+    add_test(${EXE_NAME} gtester ${CMAKE_CURRENT_BINARY_DIR}/${EXE_NAME})
+endmacro(add_test_executable)
+
 ##
 # Copyright 2009-2010 Jakob Westhoff. All rights reserved.
 # 
@@ -26,33 +30,8 @@
 # of the authors and should not be interpreted as representing official policies,
 # either expressed or implied, of Jakob Westhoff
 ##
-
-include(ParseArguments)
-find_package(Vala REQUIRED)
-
-##
-# Ensure a certain valac version is available
-#
-# The initial argument is the version to check for
-# 
-# It may be followed by a optional parameter to specifiy a version range. The
-# following options are valid:
-# 
-# EXACT
-#   Vala needs to be available in the exact version given
-# 
-# MINIMUM
-#   The provided version is the minimum version. Therefore Vala needs to be
-#   available in the given version or any higher version
-#
-# MAXIMUM
-#   The provided version is the maximum. Therefore Vala needs to be available
-#   in the given version or any version older than this
-#
-# If no option is specified the version will be treated as a minimal version.
-##
 macro(ensure_vala_version version)
-    parse_arguments(ARGS "" "MINIMUM;MAXIMUM;EXACT" ${ARGN})
+    cmake_parse_arguments(ARGS "" "MINIMUM;MAXIMUM;EXACT" ${ARGN})
 	set(compare_message "")
 	set(error_message "")
 	if(ARGS_MINIMUM)
