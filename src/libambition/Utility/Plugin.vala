@@ -405,6 +405,7 @@ namespace Ambition.Utility {
 		 * @param temp_dir File object representing the temp directory of the plugin to copy
 		 */
 		private void add_plugin_to_directory( string plugin_name, File temp_dir ) {
+			string current_file = null;
 			try {
 				var destination_dir = File.new_for_path( "plugins/%s".printf(plugin_name) );
 				if ( !destination_dir.query_exists() ) {
@@ -418,7 +419,9 @@ namespace Ambition.Utility {
 				FileInfo file_info;
 				while ( ( file_info = enumerator.next_file() ) != null ) {
 					if ( file_info.get_file_type() != FileType.DIRECTORY ) {
+						current_file = file_info.get_name();
 						File to_copy = temp_dir.resolve_relative_path( file_info.get_name() );
+						logger.debug(to_copy.get_path());
 						File dest = File.new_for_path( "%s/%s".printf( destination_dir.get_path(), file_info.get_name() ) );
 						if ( file_info.get_name().has_suffix(".vapi") ) {
 							// If this is a vapi, let's make sure the init_plugin() function doesn't exist.
@@ -429,12 +432,12 @@ namespace Ambition.Utility {
 							string newcontent = re.replace( (string) contents, -1, 0, "" );
 							dest.create( FileCreateFlags.REPLACE_DESTINATION ).write( newcontent.data );
 						} else {
-							to_copy.copy( dest, FileCopyFlags.NONE );
+							to_copy.copy( dest, FileCopyFlags.OVERWRITE );
 						}
 					}
 				}
 			} catch (Error e) {
-				stderr.printf( "Unable to copy file for plugin '%s': %s\n", plugin_name, e.message );
+				stderr.printf( "Unable to copy file '%s' for plugin '%s': %s\n", current_file, plugin_name, e.message );
 				return;
 			}
 		}

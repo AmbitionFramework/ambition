@@ -266,11 +266,11 @@ namespace Ambition.Plugin {
 			try {
 				deploy_dir = File.new_for_path(temp_name);
 				if ( deploy_dir.make_directory() == false ) {
-					logger.error( "Unable to create deploy directory: %s".printf( deploy_dir.get_path() ) );
+					logger.error( "Unable to create temporary deploy directory: %s".printf( deploy_dir.get_path() ) );
 					return null;
 				}
 			} catch (Error e) {
-				logger.error( "Unable to create deploy directory" );
+				logger.error( "Unable to create temporary deploy directory: %s".printf(e.message) );
 				return null;
 			}
 
@@ -283,7 +283,7 @@ namespace Ambition.Plugin {
 					return null;
 				}
 			} catch (Error e) {
-				logger.error( "Unable to create build directory" );
+				logger.error( "Unable to create build directory: %s".printf(e.message) );
 				cleanup(deploy_dir);
 				return null;
 			}

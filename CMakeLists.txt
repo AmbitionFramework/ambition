@@ -4,29 +4,19 @@ project(Ambition)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
 enable_testing()
 
-find_package(Vala REQUIRED)
-include(ValaVersion)
-include(ValaPrecompile)
+include(FindVala)
+include(ValaHelper)
+include(OSFlags)
+include(AddCompilerFlags)
 ensure_vala_version("0.18.0" MINIMUM)
 
-set (FOUND_OS "Unknown")
-set (FBSD 0)
-set (WIN32 0)
+global_add_compiler_flags(-Wno-incompatible-pointer-types)
 
-IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-	set (WIN32 1)
-	set (FLAGS --define=WIN32)
-	set (FOUND_OS "Windows")
-ENDIF()
-IF(${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
-	set (FBSD 1)
-	set (FLAGS --define=FBSD)
-	set (FOUND_OS "FreeBSD")
-ENDIF()
+SET( CMAKE_BUILD_TYPE Debug)
 
 IF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 	SET(TEMP_PREFIX "/usr")
-	IF(${FBSD} EQUAL 1)
+	IF(${OS_FBSD} EQUAL 1)
 		SET(TEMP_PREFIX "/usr/local")
 	ENDIF()
 	SET(CMAKE_INSTALL_PREFIX ${TEMP_PREFIX} CACHE PATH "install prefix" FORCE)
@@ -43,26 +33,32 @@ ELSE()
 	STRING(REGEX REPLACE ":.*" "" PKGCONFIG_INSTALL_DIR ${PKGCONFIG_INSTALL_DIR_RAW})
 ENDIF()
 
-set (PKGNAME ambition)
-set (PKGVERSION 0.1)
-set (PREFIX ${CMAKE_INSTALL_PREFIX})
-set (DOLLAR "$")
+SET( PKGNAME ambition)
+SET( PKGVERSION 0.1)
+SET( PREFIX ${CMAKE_INSTALL_PREFIX})
+SET( DOLLAR "$")
 
-set (BINSOURCE ${CMAKE_BINARY_DIR}/src/libambition)
-set (VAPIDIRS 
+SET( BINSOURCE ${CMAKE_BINARY_DIR}/src/libambition)
+SET( VAPIDIRS 
 	--vapidir='${CMAKE_SOURCE_DIR}'
 	--vapidir='${CMAKE_SOURCE_DIR}/vapi'
 	--vapidir='${BINSOURCE}'
 )
-set (DEFAULT_VALA_OPTIONS
+SET( DEFAULT_VALA_OPTIONS
 	${VAPIDIRS}
 	--thread
 	--enable-experimental
 	--target-glib=2.32
 	--debug
 	-g
-	${FLAGS}
 )
+IF(${CMAKE_BUILD_TYPE} EQUAL "Debug")
+	SET( DEFAULT_VALA_OPTIONS
+		${DEFAULT_VALA_OPTIONS}
+		--debug
+		-g
+	)
+ENDIF()
 
 SET( CORE_DEPS_PACKAGES
 	glib-2.0
@@ -75,7 +71,6 @@ SET( CORE_DEPS_PACKAGES
 )
 find_package(PkgConfig)
 pkg_check_modules(CORE_DEPS REQUIRED ${CORE_DEPS_PACKAGES} glib-2.0>=2.32)
-SET( CMAKE_BUILD_TYPE Debug )
 SET( CORE_DEPS_CFLAGS_ALL
 	${CORE_DEPS_CFLAGS}
 	${CORE_DEPS_CFLAGS_OTHER}

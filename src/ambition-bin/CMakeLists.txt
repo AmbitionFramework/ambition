@@ -23,14 +23,14 @@ SET( AB_VALA_PACKAGES
 	posix
 )
 
-vala_precompile(AB_VALA_C
+vala_precompile_target(
+	"${BINNAME}-bin-vala"
+	AB_VALA_C
 	Binary.vala
 	Shell.vala
-PACKAGES
-	${AB_VALA_PACKAGES}
-	${PKGNAME}-${PKGVERSION}
-OPTIONS
-	${DEFAULT_VALA_OPTIONS}
+	FLAGS ${DEFAULT_VALA_OPTIONS}
+	PACKAGES ${AB_VALA_PACKAGES}
+	         ${PKGNAME}-${PKGVERSION}
 )
 
 set(AB_CFLAGS
@@ -47,6 +47,7 @@ add_definitions(${AB_CFLAGS})
 
 link_directories(${AB_LIB_PATHS})
 add_executable(${BINNAME} ${AB_VALA_C})
+add_dependencies(${BINNAME} "${PKGNAME}-vala")
 include_directories(${CMAKE_BINARY_DIR}/src/libambition ${READLINE_INCLUDE_DIR})
 add_dependencies(${BINNAME} ${PKGNAME}-${PKGVERSION})
 target_link_libraries(${BINNAME} ${CORE_DEPS_LIBRARIES} readline gthread-2.0 ambition-0.1)

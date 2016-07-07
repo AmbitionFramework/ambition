@@ -1,14 +1,12 @@
 set (BINNAME test-ambition)
 
-include(ValaPrecompile)
-
 SET( TA_VALA_PACKAGES
 	${CORE_DEPS_PACKAGES}
 	ambition-0.1
 	posix
 )
 
-vala_precompile(TA_VALA_C 
+SET( TA_VALA_FILES
 	test-runner.vala
 	actionbuilder.vala
 	app.vala
@@ -36,14 +34,20 @@ vala_precompile(TA_VALA_C
 	coreview_json.vala
 	pluginloader.vala
 	assets/formsubclass.vala
-PACKAGES
-	${TA_VALA_PACKAGES}
-	${PKGNAME}-${PKGVERSION}
-OPTIONS
-	-g
-	--thread
-	--vapidir ../src/libambition
-	--enable-experimental)
+)
+
+vala_precompile_target(
+	"${PKGNAME}-test-vala"
+	TA_VALA_C
+	${TA_VALA_FILES}
+	FLAGS
+		-g
+		--thread
+		--vapidir "../src/libambition/${PKGNAME}-${PKGVERSION}-vala/sources"
+		--enable-experimental
+	PACKAGES ${TA_VALA_PACKAGES}
+	         ${PKGNAME}-${PKGVERSION}
+)
 
 set(TA_CFLAGS
 	${CORE_DEPS_CFLAGS_ALL}
@@ -59,9 +63,8 @@ link_directories(${TA_LIB_PATHS})
 
 add_executable(${BINNAME} ${TA_VALA_C})
 include_directories(${CMAKE_BINARY_DIR}/src/libambition)
-add_dependencies(${BINNAME} ${PKGNAME}-${PKGVERSION})
+add_dependencies(${BINNAME} "${PKGNAME}-${PKGVERSION}-vala")
 target_link_libraries(${BINNAME} ${CORE_DEPS_LIBRARIES} gthread-2.0 ambition-0.1)
-include(Tests)
 add_test_executable(${BINNAME})
 file(COPY ${CMAKE_SOURCE_DIR}/test/assets/htpasswd DESTINATION ${CMAKE_BINARY_DIR}/test/assets)
 file(COPY ${CMAKE_SOURCE_DIR}/test/assets/flat_file DESTINATION ${CMAKE_BINARY_DIR}/test/assets)

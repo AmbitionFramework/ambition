@@ -85,7 +85,7 @@ public static int execute_command( bool as_interactive, string? command, string[
 				tc.compile_all( args[1], args[2] );
 			} catch ( Ambition.TemplateCompileError e ) {
 				stdout.printf( "Fatal Error compiling templates:\n\t%s\n", e.message );
-				exit(2); // not zero
+				Process.exit(2); // not zero
 			}
 			
 			break;
@@ -101,7 +101,7 @@ public static int execute_command( bool as_interactive, string? command, string[
 				ab.run( args[0], args[1], args[2] );
 			} catch ( Ambition.ActionBuilderError e ) {
 				stdout.printf( "Fatal Error building actions:\n\t%s\n", e.message );
-				exit(2); // not zero
+				Process.exit(2); // not zero
 			}
 			
 			break;
