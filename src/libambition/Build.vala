@@ -78,7 +78,7 @@ namespace Ambition {
 			return true;
 		}
 
-		internal void parse_line( string line ) {
+		public void parse_line( string line ) {
 			// Skip potential comments
 			if ( line.has_prefix("#") || line.has_prefix("//") || line.length == 0 ) {
 				return;

@@ -168,7 +168,7 @@ namespace Ambition {
 				.replace( "%%%PARAMS_PARSED_SET%%%", param_set_builder.str );
 		}
 
-		internal void parse_line( StringBuilder builder, TemplateState state, string line, ref string parameters ) throws TemplateCompileError {
+		public void parse_line( StringBuilder builder, TemplateState state, string line, ref string parameters ) throws TemplateCompileError {
 			string verbatim = "\"\"\"";
 			string left_line = line.chug();
 			if ( left_line.has_prefix("@") && !left_line.has_prefix("@{") ) {

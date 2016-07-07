@@ -110,7 +110,7 @@ namespace Ambition.Engine {
 		 * or provides file handles to uploads.
 		 * @param state State
 		 */
-		internal virtual void hook_parse_request_body( State state, int content_length, DataInputStream stream ) {
+		public virtual void hook_parse_request_body( State state, int content_length, DataInputStream stream ) {
 			if ( state.request.content_type != null && "multipart/form-data" in state.request.content_type ) {
 				mime_decode( state, stream );
 			} else {
@@ -281,7 +281,7 @@ namespace Ambition.Engine {
 		 * object.
 		 * @param state State
 		 */
-		internal virtual void hook_parse_request_cookies( State state ) {
+		public virtual void hook_parse_request_cookies( State state ) {
 			string raw_cookie_list = state.request.header("HTTP_COOKIE");
 			if ( raw_cookie_list == null ) {
 				raw_cookie_list = state.request.header("Cookie");
@@ -304,7 +304,7 @@ namespace Ambition.Engine {
 		 * headers.
 		 * @param state State
 		 */
-		internal virtual void hook_set_cookies( State state ) {
+		public virtual void hook_set_cookies( State state ) {
 			var sb = new StringBuilder();
 			foreach ( Cookie cookie in state.response.cookies.values ) {
 				if ( sb.len > 0 ) {

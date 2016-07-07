@@ -44,6 +44,7 @@ vala_precompile_target(
 		-g
 		--thread
 		--vapidir "../src/libambition/${PKGNAME}-${PKGVERSION}-vala/sources"
+		--vapidir "../src/libambition"
 		--enable-experimental
 	PACKAGES ${TA_VALA_PACKAGES}
 	         ${PKGNAME}-${PKGVERSION}
