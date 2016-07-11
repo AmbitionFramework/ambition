@@ -2,7 +2,7 @@ set (BINNAME test-ambition)
 
 SET( TA_VALA_PACKAGES
 	${CORE_DEPS_PACKAGES}
-	ambition-0.1
+	${LIBRARY_NAME}
 	posix
 )
 
@@ -64,8 +64,8 @@ link_directories(${TA_LIB_PATHS})
 
 add_executable(${BINNAME} ${TA_VALA_C})
 include_directories(${CMAKE_BINARY_DIR}/src/libambition)
-add_dependencies(${BINNAME} "${PKGNAME}-${PKGVERSION}-vala")
-target_link_libraries(${BINNAME} ${CORE_DEPS_LIBRARIES} gthread-2.0 ambition-0.1)
+add_dependencies(${BINNAME} "${PKGNAME}-vala" "${PKGNAME}-test-vala")
+target_link_libraries(${BINNAME} ${CORE_DEPS_LIBRARIES} gthread-2.0 ${LIBRARY_NAME})
 add_test_executable(${BINNAME})
 file(COPY ${CMAKE_SOURCE_DIR}/test/assets/htpasswd DESTINATION ${CMAKE_BINARY_DIR}/test/assets)
 file(COPY ${CMAKE_SOURCE_DIR}/test/assets/flat_file DESTINATION ${CMAKE_BINARY_DIR}/test/assets)

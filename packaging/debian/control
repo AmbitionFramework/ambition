@@ -8,7 +8,7 @@ Homepage: http://www.abstractwankery.com
 #Vcs-Git: git://git.debian.org/collab-maint/ambition.git
 #Vcs-Browser: http://git.debian.org/?p=collab-maint/ambition.git;a=summary
 
-Package: ambition-0.1
+Package: ambition-0.2
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Ambition Framework, a full MVC framework for GObject/Vala.

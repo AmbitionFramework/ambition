@@ -20,7 +20,7 @@ INCLUDE(plugins/plugins.cmake)
 
 SET(APP_DEPS_PACKAGES
     gee-0.8
-    ambition-0.1
+    ambition-0.2
     log4vala-0.1
     ${APP_PLUGIN_PKGCONFIG}
 )

@@ -11,20 +11,14 @@ before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq build-essential cmake libglib2.0-dev libgee-0.8
          libjson-glib-dev libreadline-dev libsoup2.4-dev libgda-5.0-dev
-         valac-0.18
+         valac-0.22 gobject-introspection libgirepository1.0-dev
 
 before_script:
   - git clone https://github.com/nmelnick/Log4Vala.git log4vala
-  - cd log4vala
-  - mkdir build
-  - cd build
-  - cmake ..
-  - make -j2
-  - sudo make install
-  - cd ../..
+  - cd log4vala && mkdir build && cd build && cmake .. && make -j2 && sudo make install && cd ../..
   - mkdir build
   - cd build
   - cmake ..
 
-script: make -j2 && cd test && ./test-ambition
+script: make && cd test && ./test-ambition
 

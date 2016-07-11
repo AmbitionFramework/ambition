@@ -9,6 +9,7 @@ libraries for its functionality. To build, you will need:
 * Vala 0.18.0 or higher
 * CMake 2.8 or higher
 * The GCC 4.x toolchain
+* GObject Introspection
 
 At minimum, the following libraries are required:
 

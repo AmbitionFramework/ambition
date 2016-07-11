@@ -34,9 +34,10 @@ ELSE()
 ENDIF()
 
 SET( PKGNAME ambition)
-SET( PKGVERSION 0.1)
+SET( PKGVERSION 0.2)
 SET( PREFIX ${CMAKE_INSTALL_PREFIX})
 SET( DOLLAR "$")
+SET( LIBRARY_NAME "${PKGNAME}-${PKGVERSION}")
 
 SET( BINSOURCE ${CMAKE_BINARY_DIR}/src/libambition)
 SET( VAPIDIRS 
@@ -76,6 +77,7 @@ SET( CORE_DEPS_CFLAGS_ALL
 	${CORE_DEPS_CFLAGS_OTHER}
 	-DGETTEXT_PACKAGE=ambition
 )
+find_package(GObjectIntrospection REQUIRED)
 
 add_subdirectory (share)
 add_subdirectory (src/libambition)
@@ -87,5 +89,7 @@ message( STATUS "        OS: " ${FOUND_OS} )
 message( STATUS "      Vala: " ${VALA_VERSION} )
 message( STATUS "    Prefix: " ${PREFIX} )
 message( STATUS " Pkgconfig: " ${PKGCONFIG_INSTALL_DIR} )
+message( STATUS "GI Typelib: " ${GI_TYPELIB_DIR} )
+message( STATUS "   GI Repo: " ${GI_REPOSITORY_DIR} )
 message( STATUS "Build type: " ${CMAKE_BUILD_TYPE} )
 message( STATUS "----------------------------------------------------------------" )
