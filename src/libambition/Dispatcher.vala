@@ -112,35 +112,35 @@ namespace Ambition {
 			// Show actions
 			this.actions.add_all( Controller.Static.add_actions() );
 			logger.debug("Actions:");
-			foreach ( var action in actions ) {
-				Regex re = action._regex;
-				if ( action.methods.size == 0 ) {
-					action.methods.add( HttpMethod.ALL );
-				}
+			// foreach ( var action in actions ) {
+			// 	Regex re = action._regex;
+			// 	if ( action.methods.size == 0 ) {
+			// 		action.methods.add( HttpMethod.ALL );
+			// 	}
 
-				// Normally, we rely on logger to determine whether to output
-				// anything, but in this case, let's save some minor ops if we
-				// are not in debug mode.
-				if ( logger.log_level == Log4Vala.Level.DEBUG ) {
-					var methods = new ArrayList<string>();
-					foreach ( HttpMethod hm in action.methods ) {
-						methods.add( hm.to_string().substring( 0, 1 ) );
-					}
+			// 	// Normally, we rely on logger to determine whether to output
+			// 	// anything, but in this case, let's save some minor ops if we
+			// 	// are not in debug mode.
+			// 	if ( logger.log_level == Log4Vala.Level.DEBUG ) {
+			// 		var methods = new ArrayList<string>();
+			// 		foreach ( HttpMethod hm in action.methods ) {
+			// 			methods.add( hm.to_string().substring( 0, 1 ) );
+			// 		}
 
-					var targets = new ArrayList<string>();
-					foreach ( ActionMethod am in action.targets ) {
-						targets.add( am.path );
-					}
+			// 		var targets = new ArrayList<string>();
+			// 		foreach ( ActionMethod am in action.targets ) {
+			// 			targets.add( am.path );
+			// 		}
 
-					logger.debug(
-						" %-4s %-32s %s".printf(
-							arraylist_joinv( "", methods ),
-							( re.get_pattern().length > 32 ? ( re.get_pattern().substring( 0, 31 ) + "…" ) : re.get_pattern() ),
-							arraylist_joinv( " > ", targets )
-						)
-					);
-				}
-			}
+			// 		logger.debug(
+			// 			" %-4s %-32s %s".printf(
+			// 				arraylist_joinv( "", methods ),
+			// 				( re.get_pattern().length > 32 ? ( re.get_pattern().substring( 0, 31 ) + "…" ) : re.get_pattern() ),
+			// 				arraylist_joinv( " > ", targets )
+			// 			)
+			// 		);
+			// 	}
+			// }
 
 			// Create authorizers
 			Authorization.Builder.build_authorizers();
@@ -320,41 +320,41 @@ namespace Ambition {
 		private ArrayList<ActionMethod?>? find_actions_for( State state ) {
 			string decoded_path = Uri.unescape_string( state.request.path );
 			decoded_path = decoded_path.replace( "//", "/" );
-			foreach ( var action in actions ) {
-				string action_pattern = action._regex.get_pattern();
-				MatchInfo info = null;
-				if ( action.responds_to_request( decoded_path, state.request.method, out info ) ) {
-					logger.debug( "Matched pattern %s".printf(action_pattern) );
-					state.request.captures = info.fetch_all();
+			// foreach ( var action in actions ) {
+			// 	string action_pattern = action._regex.get_pattern();
+			// 	MatchInfo info = null;
+			// 	if ( action.responds_to_request( decoded_path, state.request.method, out info ) ) {
+			// 		logger.debug( "Matched pattern %s".printf(action_pattern) );
+			// 		state.request.captures = info.fetch_all();
 
-					// Determine named captures
-					var re_named = /\(\?<([^>]+)>/;
-					MatchInfo named_info = null;
-					if ( re_named.match( action_pattern, 0, out named_info ) ) {
-						while ( named_info.matches() ) {
-							string name = named_info.fetch(1);
-							state.request.named_captures[name] = info.fetch_named(name);
-							try {
-								named_info.next();
-							} catch ( RegexError e ) {
-								logger.error( "Error matching next capture in URL", e );
-								break;
-							}
-						}
-					}
+			// 		// Determine named captures
+			// 		var re_named = /\(\?<([^>]+)>/;
+			// 		MatchInfo named_info = null;
+			// 		if ( re_named.match( action_pattern, 0, out named_info ) ) {
+			// 			while ( named_info.matches() ) {
+			// 				string name = named_info.fetch(1);
+			// 				state.request.named_captures[name] = info.fetch_named(name);
+			// 				try {
+			// 					named_info.next();
+			// 				} catch ( RegexError e ) {
+			// 					logger.error( "Error matching next capture in URL", e );
+			// 					break;
+			// 				}
+			// 			}
+			// 		}
 
-					// Determine arguments
-					if ( !action._regex.get_pattern().has_suffix("$/") ) {
-						try {
-							state.request._arguments = action._regex.replace( decoded_path, -1, 0, "" );
-						} catch ( RegexError e ) {
-							logger.error("Invalid regex for arguments");
-						}
-					}
+			// 		// Determine arguments
+			// 		if ( !action._regex.get_pattern().has_suffix("$/") ) {
+			// 			try {
+			// 				state.request._arguments = action._regex.replace( decoded_path, -1, 0, "" );
+			// 			} catch ( RegexError e ) {
+			// 				logger.error("Invalid regex for arguments");
+			// 			}
+			// 		}
 
-					return action.targets;
-				}
-			}
+			// 		return action.targets;
+			// 	}
+			// }
 			return null;
 		}
 

@@ -40,24 +40,18 @@ namespace Ambition.Controller {
 			// Add favicon.ico
 			actions.add(
 				new Action()
-					.regex( /^\/favicon.ico$/ )
-					.allow_method( HttpMethod.GET )
-					.add_target_method( new ActionMethod( s.show_static_file, "/static" ) )
+					.path("/favicon.ico")
+					.method( HttpMethod.GET )
+					.target("Ambition.Static.show_static_file")
 			);
 
 			// Add any directories in config
 			foreach ( string directory in directories ) {
-				Regex re;
-				try {
-					re = new Regex( "^/" + directory.replace( "/", "\\/" ) );
-				} catch (Error e) {
-					continue;
-				}
 				actions.add(
 					new Action()
-						.regex(re)
-						.allow_method( HttpMethod.GET )
-						.add_target( s.show_static_file )
+						.path( "/" + directory )
+						.method( HttpMethod.GET )
+						.target("Ambition.Static.show_static_file")
 				);
 			}
 			return actions;

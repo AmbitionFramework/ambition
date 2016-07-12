@@ -33,7 +33,9 @@ SET( TA_VALA_FILES
 	coreview_redirect.vala
 	coreview_json.vala
 	pluginloader.vala
+	serializer_json.vala
 	assets/formsubclass.vala
+	assets/serializer-test-classes.vala
 )
 
 vala_precompile_target(
