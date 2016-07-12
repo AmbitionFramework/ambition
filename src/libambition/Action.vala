@@ -31,7 +31,9 @@ namespace Ambition {
 	 * and a target. The method can be any available HttpMethod. The path can
 	 * be as simple as "/", or more complex. The target is a string representing
 	 * the namespace and method of the target block of code to execute. Each of
-	 * the three requirements can also have multiple values. For example:
+	 * the three requirements can also have multiple values.
+	 * 
+	 * For example:
 	 * An action can be made to respond to GET, POST, and PUT.
 	 * An action can respond to both "/", and "/example".
 	 * An action can start with "Main.check_eligibility" and then "Main.index".
@@ -43,6 +45,7 @@ namespace Ambition {
 		public ArrayList<string> paths = new ArrayList<string>();
 		public Marshaller? request_marshaller = null;
 		public Marshaller? response_marshaller = null;
+		public ArrayList<Regex?> _regexes = new ArrayList<Regex?>();
 
 		/**
 		 * Add an HTTP method to respond to
@@ -53,24 +56,13 @@ namespace Ambition {
 		}
 
 		/**
-		 * Marshal response object from type to format
-		 * @param content_type Content type to marshal
-		 * @param object_type Object type to expect
-		 * @param serializer Serializer to use to serialize
+		 * Add a target to this method.
+		 *
+		 * 
 		 */
-		public Action marshal_response( Type object_type, ISerializer serializer ) {
-			request_marshaller = new Marshaller( serializer, object_type );
-			return this;
-		}
-
-		/**
-		 * Marshal request body from format to type
-		 * @param content_type Content type to marshal
-		 * @param serializer Serializer to use to deserialize
-		 * @param object_type Object type to provide
-		 */
-		public Action marshal_request( ISerializer serializer, Type object_type ) {
-			response_marshaller = new Marshaller( serializer, object_type );
+		public Action target( string target ) {
+			// Should probably validate the target here instead of at compile
+			targets.add(target);
 			return this;
 		}
 
@@ -91,18 +83,75 @@ namespace Ambition {
 		public Action path( string path ) {
 			// Should probably validate the path here instead of at compile
 			paths.add(path);
+
+			var re_named = /\[([^\]]+)\]/;
+			string new_path;
+			try {
+				new_path = re_named.replace( path, -1, 0, "(?<\\1>.+?)" );
+			} catch (RegexError e) {
+				logger.error( "Unable to create matches from placeholders in path '" + path + "'.", e );
+				return this;
+			}
+			var regex = "^" + new_path.replace( "/", "\\/" );
+			if ( regex.has_suffix("*") ) {
+				regex = regex.substring( 0, regex.length - 1 ) + ".*";
+			} else if ( ! regex.has_suffix("/") ) {
+				regex = regex + "\\/?";
+			}
+			regex = regex + "$";
+			try {
+				_regexes.add( new Regex(regex) );
+			} catch (RegexError e) {
+				logger.error( "Unable to create regex '" + regex + "'.", e );
+				return this;
+			}
+
 			return this;
 		}
 
 		/**
-		 * Add a target to this method.
-		 *
-		 * 
+		 * Marshal request body from format to type
+		 * @param content_type Content type to marshal
+		 * @param serializer Serializer to use to deserialize
+		 * @param object_type Object type to provide
 		 */
-		public Action target( string target ) {
-			// Should probably validate the target here instead of at compile
-			targets.add(target);
+		public Action marshal_request( ISerializer serializer, Type object_type ) {
+			request_marshaller = new Marshaller( serializer, object_type );
 			return this;
+		}
+
+		/**
+		 * Marshal response object from type to format
+		 * @param content_type Content type to marshal
+		 * @param object_type Object type to expect
+		 * @param serializer Serializer to use to serialize
+		 */
+		public Action marshal_response( Type object_type, ISerializer serializer ) {
+			response_marshaller = new Marshaller( serializer, object_type );
+			return this;
+		}
+
+		/**
+		 * Given a path and a method, return true if this action can respond to
+		 * the request.
+		 * @param decoded_path Dispatcher-decoded path
+		 * @param method HttpMethod of given request
+		 * @param info MatchInfo output variable for matches
+		 * @param found Regex output variable for the found regex
+		 */
+		public bool responds_to_request( string decoded_path, HttpMethod method, out MatchInfo info = null, out Regex found = null ) {
+			foreach ( var re in _regexes ) {
+				if ( re.match( decoded_path, 0, out info ) ) {
+					foreach ( var supported_method in this.methods ) {
+						if ( supported_method == method ) {
+							found = re;
+							return true;
+						}
+					}
+					
+				}
+			}
+			return false;
 		}
 
 		public class Marshaller : Object {

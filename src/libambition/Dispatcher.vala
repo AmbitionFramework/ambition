@@ -249,23 +249,23 @@ namespace Ambition {
 		 * @param action_list List of ActionMethods
 		 * @param state State object
 		 */
-		public ArrayList<string> execute_action_list( ArrayList<ActionMethod?> action_list, State state ) {
+		public ArrayList<string> execute_action_list( ArrayList<string> action_list, State state ) {
 			var al = new ArrayList<string>();
-			foreach ( ActionMethod a in action_list ) {
-				Result? r = a.execute(state);
-				if ( r != null && ! (r is CoreView.None) ) {
-					r.state = state;
-					InputStream? eis = r.render();
-					if ( eis != null ) {
-						state.response.body_stream = eis;
-						state.response.body_stream_length = r.size;
-					}
-				}
-				al.add( "|> %s".printf( a.path != null ? a.path : "/generic/action" ) );
-				if ( state.response.is_done() ) {
-					break;
-				}
-			}
+			// foreach ( ActionMethod a in action_list ) {
+			// 	Result? r = a.execute(state);
+			// 	if ( r != null && ! (r is CoreView.None) ) {
+			// 		r.state = state;
+			// 		InputStream? eis = r.render();
+			// 		if ( eis != null ) {
+			// 			state.response.body_stream = eis;
+			// 			state.response.body_stream_length = r.size;
+			// 		}
+			// 	}
+			// 	al.add( "|> %s".printf( a.path != null ? a.path : "/generic/action" ) );
+			// 	if ( state.response.is_done() ) {
+			// 		break;
+			// 	}
+			// }
 			return al;
 		}
 
@@ -297,44 +297,39 @@ namespace Ambition {
 		 * a given request.
 		 * @param state Current engine state
 		 */
-		private ArrayList<ActionMethod?>? find_actions_for( State state ) {
+		private ArrayList<string>? find_actions_for( State state ) {
 			string decoded_path = Uri.unescape_string( state.request.path );
 			decoded_path = decoded_path.replace( "//", "/" );
-			// foreach ( var action in actions ) {
-			// 	string action_pattern = action._regex.get_pattern();
-			// 	MatchInfo info = null;
-			// 	if ( action.responds_to_request( decoded_path, state.request.method, out info ) ) {
-			// 		logger.debug( "Matched pattern %s".printf(action_pattern) );
-			// 		state.request.captures = info.fetch_all();
+			foreach ( var action in actions ) {
+				MatchInfo info = null;
+				Regex re = null;
+				if ( action.responds_to_request( decoded_path, state.request.method, out info, out re ) ) {
+					state.request.captures = info.fetch_all();
 
-			// 		// Determine named captures
-			// 		var re_named = /\(\?<([^>]+)>/;
-			// 		MatchInfo named_info = null;
-			// 		if ( re_named.match( action_pattern, 0, out named_info ) ) {
-			// 			while ( named_info.matches() ) {
-			// 				string name = named_info.fetch(1);
-			// 				state.request.named_captures[name] = info.fetch_named(name);
-			// 				try {
-			// 					named_info.next();
-			// 				} catch ( RegexError e ) {
-			// 					logger.error( "Error matching next capture in URL", e );
-			// 					break;
-			// 				}
-			// 			}
-			// 		}
+					// Determine named captures
+					while ( info.matches() ) {
+						string name = info.fetch(1);
+						state.request.named_captures[name] = info.fetch_named(name);
+						try {
+							info.next();
+						} catch ( RegexError e ) {
+							logger.error( "Error matching next capture in URL", e );
+							break;
+						}
+					}
 
-			// 		// Determine arguments
-			// 		if ( !action._regex.get_pattern().has_suffix("$/") ) {
-			// 			try {
-			// 				state.request._arguments = action._regex.replace( decoded_path, -1, 0, "" );
-			// 			} catch ( RegexError e ) {
-			// 				logger.error("Invalid regex for arguments");
-			// 			}
-			// 		}
+					// Determine arguments
+					if ( !re.get_pattern().has_suffix("$/") ) {
+						try {
+							state.request._arguments = re.replace( decoded_path, -1, 0, "" );
+						} catch ( RegexError e ) {
+							logger.error("Invalid regex for arguments");
+						}
+					}
 
-			// 		return action.targets;
-			// 	}
-			// }
+					return action.targets;
+				}
+			}
 			return null;
 		}
 

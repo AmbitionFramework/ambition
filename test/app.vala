@@ -4,7 +4,7 @@
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2014 Sensical, Inc.
+ * Copyright 2012-2016 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,22 +19,29 @@
  * limitations under the License.
  */
 
-public class AppTest {
-	public static void add_tests() {
-		Test.add_func("/ambition/app/init", () => {
-			var a = new Ambition.App();
-			assert( a != null );
-		});
-		Test.add_func("/ambition/app/VERSION", () => {
-			assert( Ambition.VERSION != null );
-		});
-		Test.add_func("/ambition/app/parse_version", () => {
-			int ver = Ambition.parse_version("0.1");
-			assert( ver == 1000100 );
-			ver = Ambition.parse_version("0.1.1");
-			assert( ver == 1000101 );
-			ver = Ambition.parse_version("2.0.1");
-			assert( ver == 1020001 );
-		});
+public class AppTest : Ambition.Testing.AbstractTestCase {
+	public AppTest() {
+		base("Ambition.App");
+		add_test( "init", init );
+		add_test( "VERSION", version );
+		add_test( "parse_version", parse_version );
+	}
+
+	public void init() {
+		var a = new Ambition.App();
+		assert( a != null );
+	}
+
+	public void version() {
+		assert( Ambition.VERSION != null );
+	}
+
+	public void parse_version() {
+		int ver = Ambition.parse_version("0.1");
+		assert( ver == 1000100 );
+		ver = Ambition.parse_version("0.1.1");
+		assert( ver == 1000101 );
+		ver = Ambition.parse_version("2.0.1");
+		assert( ver == 1020001 );
 	}
 }
