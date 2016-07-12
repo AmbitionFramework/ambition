@@ -57,7 +57,6 @@ void main ( string[] args ) {
 	CoreViewRawStringTest.add_tests();
 
 	PluginLoaderTest.add_tests();
-	ActionBuilderTest.add_tests();
 
 	Test.run();
 }

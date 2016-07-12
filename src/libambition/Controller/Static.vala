@@ -4,7 +4,7 @@
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2013 Sensical, Inc.
+ * Copyright 2012-2016 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,6 @@ namespace Ambition.Controller {
 		public static ArrayList<Ambition.Action?> add_actions() {
 			var actions = new ArrayList<Ambition.Action?>();
 			string[] directories = Config.lookup_with_default( "static.directories", "" ).split(",");
-			var s = new Static();
 
 			// Add favicon.ico
 			actions.add(

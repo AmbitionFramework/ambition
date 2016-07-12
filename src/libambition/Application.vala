@@ -26,7 +26,9 @@ namespace Ambition {
 	public abstract class Application : Object {
 		public Dispatcher dispatcher;
 
-		public abstract Actions get_actions();
+		public Action[] actions = new Action[1];
+
+		public abstract void create_actions();
 
 		/**
 		 * Optional function, called from the entry point, to allow code to be
@@ -48,8 +50,7 @@ namespace Ambition {
 			// Initialize the application's dispatcher
 			this.dispatcher = new Dispatcher( this, args );
 
-			// Import actions
-			dispatcher.add_actions_class( get_actions() );
+			create_actions();
 
 			// Run local init
 			if ( !init(args) ) {

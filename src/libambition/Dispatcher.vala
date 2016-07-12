@@ -4,7 +4,7 @@
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2014 Sensical, Inc.
+ * Copyright 2012-2016 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -112,35 +112,31 @@ namespace Ambition {
 			// Show actions
 			this.actions.add_all( Controller.Static.add_actions() );
 			logger.debug("Actions:");
-			// foreach ( var action in actions ) {
-			// 	Regex re = action._regex;
-			// 	if ( action.methods.size == 0 ) {
-			// 		action.methods.add( HttpMethod.ALL );
-			// 	}
+			foreach ( var action in actions ) {
+				if ( action.methods.size == 0 ) {
+					action.methods.add( HttpMethod.ALL );
+				}
 
-			// 	// Normally, we rely on logger to determine whether to output
-			// 	// anything, but in this case, let's save some minor ops if we
-			// 	// are not in debug mode.
-			// 	if ( logger.log_level == Log4Vala.Level.DEBUG ) {
-			// 		var methods = new ArrayList<string>();
-			// 		foreach ( HttpMethod hm in action.methods ) {
-			// 			methods.add( hm.to_string().substring( 0, 1 ) );
-			// 		}
+				// Normally, we rely on logger to determine whether to output
+				// anything, but in this case, let's save some minor ops if we
+				// are not in debug mode.
+				if ( logger.log_level == Log4Vala.Level.DEBUG ) {
+					var methods = new ArrayList<string>();
+					foreach ( HttpMethod hm in action.methods ) {
+						methods.add( hm.to_string().substring( 0, 1 ) );
+					}
 
-			// 		var targets = new ArrayList<string>();
-			// 		foreach ( ActionMethod am in action.targets ) {
-			// 			targets.add( am.path );
-			// 		}
-
-			// 		logger.debug(
-			// 			" %-4s %-32s %s".printf(
-			// 				arraylist_joinv( "", methods ),
-			// 				( re.get_pattern().length > 32 ? ( re.get_pattern().substring( 0, 31 ) + "…" ) : re.get_pattern() ),
-			// 				arraylist_joinv( " > ", targets )
-			// 			)
-			// 		);
-			// 	}
-			// }
+					foreach ( var path in action.paths ) {
+						logger.debug(
+							" %-4s %-32s %s".printf(
+								arraylist_joinv( "", methods ),
+								( path.length > 32 ? ( path.substring( 0, 31 ) + "…" ) : path ),
+								arraylist_joinv( " > ", action.targets )
+							)
+						);
+					}
+				}
+			}
 
 			// Create authorizers
 			Authorization.Builder.build_authorizers();
@@ -236,22 +232,6 @@ namespace Ambition {
 					state.elapsed_ms()
 				)
 			);
-		}
-
-		/**
-		 * Add actions from an Actions subclass.
-		 * @param actions Actions subclass
-		 */
-		public void add_actions_class( Actions actions ) {
-			var action_array = actions.actions();
-			if ( action_array.length > 0 ) {
-				if ( this.actions == null ) {
-					this.actions = new ArrayList<Action?>();
-				}
-				foreach( var action in action_array ) {
-					this.actions.add(action);
-				}
-			}
 		}
 
 		/**

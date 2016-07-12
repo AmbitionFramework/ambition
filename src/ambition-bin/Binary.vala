@@ -90,22 +90,6 @@ public static int execute_command( bool as_interactive, string? command, string[
 			
 			break;
 
-		case "build-actions":
-			var ab = new Ambition.ActionBuilder();
-			if ( args.length != 3 ) {
-				usage( "build-actions", as_interactive );
-				return 1;
-			}
-
-			try {
-				ab.run( args[0], args[1], args[2] );
-			} catch ( Ambition.ActionBuilderError e ) {
-				stdout.printf( "Fatal Error building actions:\n\t%s\n", e.message );
-				Process.exit(2); // not zero
-			}
-			
-			break;
-
 		case "new":
 			if (as_interactive) {
 				return no_interactive();
@@ -397,15 +381,6 @@ public static void usage( string? method = null, bool as_interactive = false ) {
 			+ "the given input directory, creates corresponding vala "
 			+ "classes, and then provides the files for building into the "
 			+ "current project.\n"
-		);
-	}
-
-	if ( method == null || method == "build-actions" ) {
-		stdout.printf("build-actions <namespace> <input_directory> <output_directory>\n");
-		wrap(
-			"Should only be used within the makefile. Parses actions.conf "
-			+ "in the given input directory, creates corresponding vala "
-			+ "class.\n"
 		);
 	}
 

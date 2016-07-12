@@ -1,8 +1,6 @@
 SET( GIR_NAME "Ambition-${PKGVERSION}")
 SET( LAM_VALA_FILES
 	Action.vala
-	Actions.vala
-	ActionBuilder.vala
 	ActionMethod.vala
 	App.vala
 	Application.vala

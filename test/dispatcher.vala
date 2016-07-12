@@ -40,7 +40,5 @@ public class InjectTestApplication : Ambition.Application {
 	public string inject_string { get; set; }
 	public string inject_string_default { get; set; default = "foo"; }
 	public Object inject_obj { get; set; }
-	public override Ambition.Actions get_actions() {
-		return null;
-	}
+	public override void create_actions() {}
 }

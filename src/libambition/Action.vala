@@ -38,11 +38,11 @@ namespace Ambition {
 	 */
 	public class Action : Object {
 		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Action");
-		private ArrayList<HttpMethod?> methods = new ArrayList<HttpMethod?>();
-		private ArrayList<string> targets = new ArrayList<string>();
-		private ArrayList<string> paths = new ArrayList<string>();
-		private Marshaller? request_marshaller = null;
-		private Marshaller? response_marshaller = null;
+		public ArrayList<HttpMethod?> methods = new ArrayList<HttpMethod?>();
+		public ArrayList<string> targets = new ArrayList<string>();
+		public ArrayList<string> paths = new ArrayList<string>();
+		public Marshaller? request_marshaller = null;
+		public Marshaller? response_marshaller = null;
 
 		/**
 		 * Add an HTTP method to respond to
@@ -105,7 +105,7 @@ namespace Ambition {
 			return this;
 		}
 
-		internal class Marshaller : Object {
+		public class Marshaller : Object {
 			public ISerializer serializer { get; set; }
 			public Type? obj_type { get; set; }
 

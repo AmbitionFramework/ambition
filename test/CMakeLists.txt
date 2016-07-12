@@ -8,7 +8,6 @@ SET( TA_VALA_PACKAGES
 
 SET( TA_VALA_FILES
 	test-runner.vala
-	actionbuilder.vala
 	app.vala
 	build.vala
 	config.vala
