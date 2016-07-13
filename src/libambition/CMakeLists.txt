@@ -63,10 +63,12 @@ SET( LAM_VALA_FILES
 	Plugin/PluginResult.vala
 	PluginSupport/IPlugin.vala
 	PluginSupport/PluginLoader.vala
+	Serializer/ErrorMessage.vala
 	Serializer/ISerializer.vala
 	Serializer/HTML.vala
 	Serializer/JSON.vala
 	Serializer/JSONNode.vala
+	Serializer/ResponseHelper.vala
 	Session/Interface.vala
 	Session/IStorable.vala
 	Session/SessionPlugin.vala

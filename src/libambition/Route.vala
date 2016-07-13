@@ -47,8 +47,8 @@ namespace Ambition {
 		public ArrayList<HttpMethod?> methods = new ArrayList<HttpMethod?>();
 		public ArrayList<ControllerMethod> targets = new ArrayList<ControllerMethod>();
 		public ArrayList<string> paths = new ArrayList<string>();
-		public Marshaller? request_marshaller = null;
-		public Marshaller? response_marshaller = null;
+		public HashMap<string,Marshaller?> request_marshallers = new HashMap<string,Marshaller?>();
+		public HashMap<string,Marshaller?> response_marshallers = new HashMap<string,Marshaller?>();
 		public ArrayList<Regex?> _regexes = new ArrayList<Regex?>();
 
 		/**
@@ -139,8 +139,8 @@ namespace Ambition {
 		 * @param serializer Serializer to use to deserialize
 		 * @param object_type Object type to provide
 		 */
-		public Route marshal_request( ISerializer serializer, Type object_type ) {
-			request_marshaller = new Marshaller( serializer, object_type );
+		public Route marshal_request( string content_type, ISerializer serializer, Type object_type ) {
+			request_marshallers[content_type] = new Marshaller( serializer, object_type );
 			return this;
 		}
 
@@ -150,8 +150,22 @@ namespace Ambition {
 		 * @param object_type Object type to expect
 		 * @param serializer Serializer to use to serialize
 		 */
-		public Route marshal_response( Type object_type, ISerializer serializer ) {
-			response_marshaller = new Marshaller( serializer, object_type );
+		public Route marshal_response( string content_type, ISerializer serializer ) {
+			response_marshallers[content_type] = new Marshaller( serializer, null );
+			return this;
+		}
+
+		/**
+		 * Set up request and response marshallers to provide JSON for the
+		 * application/json and text/json content types on the given object
+		 * type.
+		 */
+		public Route marshal_json( Type object_type ) {
+			var json = new Serializer.JSON();
+			request_marshallers["application/json"] = new Marshaller( json, object_type );
+			request_marshallers["text/json"] = request_marshallers["application/json"];
+			response_marshallers["application/json"] = new Marshaller( json, null );
+			response_marshallers["text/json"] = response_marshallers["application/json"];
 			return this;
 		}
 
@@ -209,7 +223,7 @@ namespace Ambition {
 			public ISerializer serializer { get; set; }
 			public Type? obj_type { get; set; }
 
-			public Marshaller( ISerializer serializer, Type obj_type ) {
+			public Marshaller( ISerializer serializer, Type? obj_type ) {
 				this.serializer = serializer;
 				this.obj_type = obj_type;
 			}

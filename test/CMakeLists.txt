@@ -35,6 +35,7 @@ SET( TA_VALA_FILES
 	coreview_json.vala
 	pluginloader.vala
 	serializer_json.vala
+	serializer_responsehelper.vala
 	assets/formsubclass.vala
 	assets/serializer-test-classes.vala
 )
@@ -54,13 +55,13 @@ vala_precompile_target(
 )
 
 set(TA_CFLAGS
-	${CORE_DEPS_CFLAGS_ALL}
 	-I${CMAKE_BINARY_DIR}/src/libambition
+	${CORE_DEPS_CFLAGS_ALL}
 	-w
 )
 set(TA_LIB_PATHS
-	${CORE_DEPS_LIBRARY_DIRS}
 	${CMAKE_BINARY_DIR}/src/libambition
+	${CORE_DEPS_LIBRARY_DIRS}
 )
 add_definitions(${TA_CFLAGS})
 link_directories(${TA_LIB_PATHS})

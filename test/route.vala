@@ -30,7 +30,8 @@ public class RouteTest : Ambition.Testing.AbstractTestCase {
 		add_test( "path", path );
 		add_test( "marshal_request", marshal_request );
 		add_test( "marshal_response", marshal_response );
-		add_test( "action_info", action_info );
+		add_test( "marshal_json", marshal_json );
+		add_test( "route_info", route_info );
 	}
 
 	public void init() {
@@ -95,23 +96,41 @@ public class RouteTest : Ambition.Testing.AbstractTestCase {
 
 	public void marshal_request() {
 		var a = new Ambition.Route();
-		var b = a.marshal_request( new Ambition.Serializer.HTML(), a.get_type() );
-		var c = a.request_marshaller;
+		var b = a.marshal_request( "text/html", new Ambition.Serializer.HTML(), a.get_type() );
+		var c = a.request_marshallers;
 		assert( c != null );
-		assert( c.serializer is Ambition.Serializer.HTML );
+		assert( c.size == 1 );
+		assert( c["text/html"].serializer is Ambition.Serializer.HTML );
 		assert( a == b );
 	}
 
 	public void marshal_response() {
 		var a = new Ambition.Route();
-		var b = a.marshal_response( a.get_type(), new Ambition.Serializer.HTML() );
-		var c = a.response_marshaller;
+		var b = a.marshal_response( "text/html", new Ambition.Serializer.HTML() );
+		var c = a.response_marshallers;
 		assert( c != null );
-		assert( c.serializer is Ambition.Serializer.HTML );
+		assert( c.size == 1 );
+		assert( c["text/html"].serializer is Ambition.Serializer.HTML );
 		assert( a == b );
 	}
 
-	public void action_info() {
+	public void marshal_json() {
+		var a = new Ambition.Route();
+		var b = a.marshal_json( a.get_type() );
+		var reqm = a.request_marshallers;
+		assert( reqm != null );
+		assert( reqm.size == 2 );
+		assert( reqm["application/json"].serializer is Ambition.Serializer.JSON );
+		assert( reqm["text/json"].serializer is Ambition.Serializer.JSON );
+		var resm = a.response_marshallers;
+		assert( resm != null );
+		assert( resm.size == 2 );
+		assert( resm["application/json"].serializer is Ambition.Serializer.JSON );
+		assert( resm["text/json"].serializer is Ambition.Serializer.JSON );
+		assert( a == b );
+	}
+
+	public void route_info() {
 		var a = new Ambition.Route()
 					.path("/foo/[baz]/bar")
 					.method( Ambition.HttpMethod.GET )

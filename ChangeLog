@@ -1,0 +1,13 @@
+# Change Log
+
+## [0.2.0] - 2016-07
+- Incremented library version from 0.1 to 0.2
+- Renamed Actions to Routes
+- Removed actions.conf and the parsing of actions.conf
+- Restructured Application subclasses to now call create_routes, and the content
+  of that method will now add application routes via code instead of config
+- Support marshalling of requests and responses in a route
+- Allow routes to call multiple targets with multiple marshallers
+- Deprecate ServiceThing, as the functionality is now merged with Ambition
+- Remove IActionFilter
+- Alter scaffold to support new Routes
