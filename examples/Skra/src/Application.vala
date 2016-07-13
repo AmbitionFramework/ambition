@@ -4,13 +4,13 @@
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2013 Sensical, Inc.
+ * Copyright 2012-2016 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *	 http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,9 +23,62 @@ using Ambition;
 
 namespace Skra {
 	public class Application : Ambition.Application {
+		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Skra.Application");
 
-		public override Ambition.Actions get_actions() {
-			return new Actions();
+		public override void create_routes() {
+			add_route()
+					.path("/")
+					.method( HttpMethod.GET )
+					.target( Controller.Root.index );
+			add_route()
+					.path("/session")
+					.method( HttpMethod.GET )
+					.target( Controller.Root.begin )
+					.target( Controller.Root.session );
+			add_route()
+					.path("/auth/login")
+					.method( HttpMethod.GET )
+					.method( HttpMethod.POST )
+					.target( Controller.Root.begin )
+					.target( Controller.Auth.login );
+			add_route()
+					.path("/auth/logout")
+					.method( HttpMethod.GET )
+					.method( HttpMethod.POST )
+					.target( Controller.Root.begin )
+					.target( Controller.Auth.logout );
+			add_route()
+					.path("/wiki.*/history")
+					.method( HttpMethod.GET )
+					.target( Controller.Root.begin )
+					.target( Controller.Wiki.begin )
+					.target( Controller.Wiki.history );
+			add_route()
+					.path("/wiki.*/edit")
+					.method( HttpMethod.GET )
+					.method( HttpMethod.POST )
+					.target( Controller.Root.begin )
+					.target( Controller.Wiki.begin )
+					.target( Controller.Wiki.edit );
+			add_route()
+					.path("/wiki.*/preview")
+					.method( HttpMethod.GET )
+					.method( HttpMethod.POST )
+					.target( Controller.Root.begin )
+					.target( Controller.Wiki.begin )
+					.target( Controller.Wiki.preview );
+			add_route()
+					.path("/wiki/[node]")
+					.method( HttpMethod.GET )
+					.target( Controller.Root.begin )
+					.target( Controller.Wiki.begin )
+					.target( Controller.Wiki.index );
+			add_route()
+					.path("/wiki")
+					.method( HttpMethod.GET )
+					.target( Controller.Root.begin )
+					.target( Controller.Wiki.begin )
+					.target( Controller.Wiki.index );
 		}
 
 		public override bool init( string[] args ) {
@@ -45,7 +98,7 @@ namespace Skra {
 				destination_dir.make_directory();
 				directory_enumerate( "default", destination_dir );
 			} catch (Error e) {
-				Logger.error( "Unable to initialize: %s".printf(e.message) );
+				logger.error( "Unable to initialize: %s".printf(e.message) );
 				return false;
 			}
 

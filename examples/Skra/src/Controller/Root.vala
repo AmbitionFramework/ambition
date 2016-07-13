@@ -4,7 +4,7 @@
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2013 Sensical, Inc.
+ * Copyright 2012-2016 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,18 +25,18 @@ using Skra.Model;
 namespace Skra.Controller {
 	public class Root : Object {
 
-		public Result begin( State state ) {
+		public static Result begin( State state ) {
 			state.stash.set_string( "head_markdown", WikiNode.retrieve_latest("_component/head") );
 			state.stash.set_string( "header_markdown", WikiNode.retrieve_latest("_component/header") );
 			state.stash.set_string( "footer_markdown", WikiNode.retrieve_latest("_component/footer") );
 			return new CoreView.None();
 		}
 
-		public Result index( State state ) {
+		public static Result index( State state ) {
 			return new CoreView.Redirect("/wiki");
 		}
 
-		public Result session( State state ) {
+		public static Result session( State state ) {
 			return new Template.Root.session();
 		}
 

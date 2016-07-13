@@ -6,7 +6,7 @@ enable_testing()
 
 include(FindVala)
 include(ValaHelper)
-ensure_vala_version("0.18.0" MINIMUM)
+ensure_vala_version("0.22.0" MINIMUM)
 
 IF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   SET(CMAKE_INSTALL_PREFIX "/usr" CACHE PATH "install prefix" FORCE)
@@ -20,7 +20,7 @@ INCLUDE(plugins/plugins.cmake)
 
 SET( APP_DEPS_PACKAGES
     gee-0.8
-    ambition-0.1
+    ambition-0.2
     log4vala-0.1
     ${APP_PLUGIN_PKGCONFIG}
 )
@@ -36,12 +36,6 @@ pkg_check_modules(APP_DEPS REQUIRED ${APP_DEPS_PACKAGES})
 
 execute_process(
 	COMMAND mkdir -p "${CMAKE_SOURCE_DIR}/src/.generated" )
-execute_process(
-	COMMAND ambition build-actions ${APPNAME} "${CMAKE_SOURCE_DIR}/config" "${CMAKE_SOURCE_DIR}/src/.generated"
-	OUTPUT_VARIABLE ACTION_RESULT )
-IF( ACTION_RESULT MATCHES "Fatal Error" )
-	message( FATAL_ERROR ${ACTION_RESULT} )
-ENDIF()
 execute_process( 
 	COMMAND ambition template-compile ${APPNAME} "${CMAKE_SOURCE_DIR}/src/View/Template" "${CMAKE_SOURCE_DIR}/src/.generated"
 	OUTPUT_VARIABLE TEMPLATE_FILES )

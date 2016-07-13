@@ -4,7 +4,7 @@
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2013 Sensical, Inc.
+ * Copyright 2012-2016 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@ namespace Skra.Model {
 	 * Interface to the markdown library, with customizations for Skra.
 	 */
 	public class WikiMarkdown : Object {
+		private static Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Skra.Model.WikiMarkdown");
+
 		/**
 		 * Given content in a string, parse into HTML and return
 		 * @param markdown_content Source content
@@ -40,7 +42,7 @@ namespace Skra.Model {
 				Regex link = new Regex("\\[\\[([^\\[]+)\\]\\]");
 				result = link.replace_eval( result, -1, 0, 0, linkify );
 			} catch (RegexError e) {
-				Logger.error( "Bad regex on [[link]]: %s".printf( e.message ) );
+				logger.error( "Bad regex on [[link]]: %s".printf( e.message ) );
 			}
 
 			/*
@@ -52,7 +54,7 @@ namespace Skra.Model {
 				Regex include = new Regex( "\\{include ([^\\}]+)\\}", RegexCompileFlags.CASELESS );
 				result = include.replace_eval( result, -1, 0, 0, includify );
 			} catch (RegexError e) {
-				Logger.error( "Bad regex on {include}: %s".printf( e.message ) );
+				logger.error( "Bad regex on {include}: %s".printf( e.message ) );
 			}
 
 			return result;

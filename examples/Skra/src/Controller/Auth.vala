@@ -4,7 +4,7 @@
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2013 Sensical, Inc.
+ * Copyright 2012-2016 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ using Skra.View;
 namespace Skra.Controller {
 	public class Auth : Object {
 
-		public Result login( State state ) {
+		public static Result login( State state ) {
 			var login_form = new Form.Login();
 			login_form.bind_state(state);
 
@@ -39,7 +39,7 @@ namespace Skra.Controller {
 			return new Template.Auth.login(login_form);
 		}
 
-		public Result logout( State state ) {
+		public static Result logout( State state ) {
 			state.logout();
 			return new CoreView.Redirect("/wiki");
 		}

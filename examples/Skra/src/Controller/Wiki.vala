@@ -4,7 +4,7 @@
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2013 Sensical, Inc.
+ * Copyright 2012-2016 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ using Skra.Model;
 namespace Skra.Controller {
 	public class Wiki : Object {
 
-		public Result begin( State state ) {
+		public static Result begin( State state ) {
 			string node_path = state.request.path.substring(1);
 			string[] nodes = node_path.split("/");
 			if ( nodes[0] == "wiki" ) {
@@ -55,7 +55,7 @@ namespace Skra.Controller {
 			return new CoreView.None();
 		}
 
-		public Result history( State state ) {
+		public static Result history( State state ) {
 			string path = state.stash.get_string("path");
 			return new Template.Wiki.history(
 				state.stash.get_string("node_path"),
@@ -63,7 +63,7 @@ namespace Skra.Controller {
 			);
 		}
 
-		public Result edit( State state ) {
+		public static Result edit( State state ) {
 			if ( !check_authorization(state) ) {
 				return new CoreView.None();
 			}
@@ -89,13 +89,13 @@ namespace Skra.Controller {
 			);
 		}
 
-		public Result preview( State state ) {
+		public static Result preview( State state ) {
 			return new Template.Wiki.preview(
 				WikiMarkdown.process( state.stash.get_string("edit") )
 			);
 		}
 
-		public Result index( State state ) {
+		public static Result index( State state ) {
 			string node_path = state.stash.get_string("node_path");
 			string path = state.stash.get_string("path");
 
@@ -115,7 +115,7 @@ namespace Skra.Controller {
 			);
 		}
 
-		public Result show_404( State state, string node_path ) {
+		public static Result show_404( State state, string node_path ) {
 			state.response.status = 404;
 			state.response.done();
 			return new Template.Wiki.node(
@@ -125,7 +125,7 @@ namespace Skra.Controller {
 			);
 		}
 
-		public string? get_path( string args ) {
+		public static string? get_path( string args ) {
 			string path = "";
 
 			if ( args != null && args.length > 0 ) {
@@ -141,7 +141,7 @@ namespace Skra.Controller {
 			return path;
 		}
 
-		public bool check_authorization( State state ) {
+		public static bool check_authorization( State state ) {
 			if ( !state.has_user ) {
 				state.response.redirect( "/wiki/" + state.stash.get_string("node_path") );
 				return false;
