@@ -13,7 +13,6 @@ vala_precompile_target(
     VAPI "${CMAKE_CURRENT_BINARY_DIR}/${APPNAME}.vapi"
     HEADER "${CMAKE_CURRENT_BINARY_DIR}/${APPNAME}.h"
     Application.vala
-    .generated/Actions.vala
     ${TEMPLATE_FILE_LIST}
     ${APP_VALA_FILES}
 )

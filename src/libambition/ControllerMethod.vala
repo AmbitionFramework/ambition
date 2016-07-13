@@ -51,23 +51,52 @@ namespace Ambition {
 		public ControllerMethodStateResult cmsr;
 		public ControllerMethodObjectResult cmor;
 		public ControllerMethodObjectObject cmoo;
+		public Action action;
 
-		public ControllerMethod.with_state_result( ControllerMethodStateResult m ) {
+		public ControllerMethod.with_state_result( Action a, ControllerMethodStateResult m ) {
 			this.controller_method_type = MethodType.CMSR;
 			this.cmsr = m;
+			this.action = a;
 		}
 
-		public ControllerMethod.with_object_result( ControllerMethodObjectResult m ) {
+		public ControllerMethod.with_object_result( Action a, ControllerMethodObjectResult m ) {
 			this.controller_method_type = MethodType.CMOR;
 			this.cmor = m;
+			this.action = a;
 		}
 
-		public ControllerMethod.with_object_object( ControllerMethodObjectObject m ) {
+		public ControllerMethod.with_object_object( Action a, ControllerMethodObjectObject m ) {
 			this.controller_method_type = MethodType.CMOO;
 			this.cmoo = m;
+			this.action = a;
 		}
 
-		public Result execute( State state ) {
+		public Result? execute( State state ) {
+			switch(controller_method_type) {
+				case MethodType.CMSR:
+					return execute_cmsr(state);
+
+				case MethodType.CMOR:
+					return execute_cmor(state);
+
+				case MethodType.CMOO:
+					return execute_cmoo(state);
+			}
+
+			// If this is constructed normally, this won't happen. If it is not,
+			// well.
+			return null;
+		}
+
+		private Result execute_cmsr( State state ) {
+			return cmsr(state);
+		}
+
+		private Result execute_cmor( State state ) {
+			return null;
+		}
+
+		private Result execute_cmoo( State state ) {
 			return null;
 		}
 	}

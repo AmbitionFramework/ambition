@@ -64,7 +64,7 @@ namespace Ambition {
 		 * public static Result example_method( State state ) {}
 		 */
 		public Action target( ControllerMethodStateResult method ) {
-			targets.add( new ControllerMethod.with_state_result(method) );
+			targets.add( new ControllerMethod.with_state_result( this, method ) );
 			return this;
 		}
 
@@ -74,7 +74,7 @@ namespace Ambition {
 		 * public static Result example_method( State state, Object? o ) {}
 		 */
 		public Action target_object_result( ControllerMethodObjectResult method ) {
-			targets.add( new ControllerMethod.with_object_result(method) );
+			targets.add( new ControllerMethod.with_object_result( this, method ) );
 			return this;
 		}
 
@@ -85,7 +85,7 @@ namespace Ambition {
 		 * public static Object? example_method( State state, Object? o ) {}
 		 */
 		public Action target_object_object( ControllerMethodObjectObject method ) {
-			targets.add( new ControllerMethod.with_object_object(method) );
+			targets.add( new ControllerMethod.with_object_object( this, method ) );
 			return this;
 		}
 
@@ -175,14 +175,6 @@ namespace Ambition {
 				}
 			}
 			return false;
-		}
-
-		/**
-		 * Execute a given target with a given state, and return a result
-		 * object.
-		 */
-		public Result execute_target( ControllerMethod wrapper, State state ) {
-			return wrapper.execute(state);
 		}
 
 		/**
