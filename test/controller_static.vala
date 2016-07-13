@@ -4,7 +4,7 @@
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2013 Sensical, Inc.
+ * Copyright 2012-2016 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,14 +24,14 @@ public class ControllerStaticTest {
 		Test.add_func("/ambition/controller/static/init", () => {
 			Ambition.Config.set_value( "static.directories", "static" );
 
-			var al = Ambition.Controller.Static.add_actions();
+			var al = Ambition.Controller.Static.add_routes();
 			assert( al != null );
 			assert( al.size == 2 );
 		});
 		Test.add_func("/ambition/controller/static/render", () => {
 			Ambition.Config.set_value( "static.directories", "static" );
 
-			Ambition.Controller.Static.add_actions();
+			Ambition.Controller.Static.add_routes();
 
 			var state = new Ambition.State("1");
 			var request = new Ambition.Request();

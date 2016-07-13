@@ -4,7 +4,7 @@
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2013 Sensical, Inc.
+ * Copyright 2012-2016 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,16 @@
  * limitations under the License.
  */
 
+using Gee;
 namespace Ambition {
 	/**
 	 * Base class for an Application.
 	 */
 	public abstract class Application : Object {
 		public Dispatcher dispatcher;
+		public ArrayList<Route> routes = new ArrayList<Route>();
 
-		public abstract Actions get_actions();
+		public abstract void create_routes();
 
 		/**
 		 * Optional function, called from the entry point, to allow code to be
@@ -48,8 +50,7 @@ namespace Ambition {
 			// Initialize the application's dispatcher
 			this.dispatcher = new Dispatcher( this, args );
 
-			// Import actions
-			dispatcher.add_actions_class( get_actions() );
+			create_routes();
 
 			// Run local init
 			if ( !init(args) ) {
@@ -71,5 +72,22 @@ namespace Ambition {
 		 * @param state State
 		 */
 		public virtual void on_request_end( State state ) {}
+
+		/**
+		 * Create a route, register it, and return the instance for
+		 * configuration.
+		 *
+		 * Example, in Application.vala:
+		 * public void create_routes() {
+		 *     add_route()
+		 *                .method( HttpMethod.GET )
+		 *                .target( Controller.Foo.index );
+		 * }
+		 */
+		public virtual Route add_route() {
+			var route = new Route();
+			routes.add(route);
+			return route;
+		}
 	}
 }

@@ -4,7 +4,7 @@
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2013 Sensical, Inc.
+ * Copyright 2012-2016 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,22 +85,6 @@ public static int execute_command( bool as_interactive, string? command, string[
 				tc.compile_all( args[1], args[2] );
 			} catch ( Ambition.TemplateCompileError e ) {
 				stdout.printf( "Fatal Error compiling templates:\n\t%s\n", e.message );
-				Process.exit(2); // not zero
-			}
-			
-			break;
-
-		case "build-actions":
-			var ab = new Ambition.ActionBuilder();
-			if ( args.length != 3 ) {
-				usage( "build-actions", as_interactive );
-				return 1;
-			}
-
-			try {
-				ab.run( args[0], args[1], args[2] );
-			} catch ( Ambition.ActionBuilderError e ) {
-				stdout.printf( "Fatal Error building actions:\n\t%s\n", e.message );
 				Process.exit(2); // not zero
 			}
 			
@@ -400,19 +384,10 @@ public static void usage( string? method = null, bool as_interactive = false ) {
 		);
 	}
 
-	if ( method == null || method == "build-actions" ) {
-		stdout.printf("build-actions <namespace> <input_directory> <output_directory>\n");
-		wrap(
-			"Should only be used within the makefile. Parses actions.conf "
-			+ "in the given input directory, creates corresponding vala "
-			+ "class.\n"
-		);
-	}
-
 	if ( method == null || method == "dependencies" ) {
 		stdout.printf("dependencies\n");
 		wrap(
-			"Parses actions.conf and resolves plugin dependencies.\n"
+			"Resolves plugin dependencies.\n"
 		);
 	}
 

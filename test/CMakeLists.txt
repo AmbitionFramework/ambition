@@ -2,16 +2,16 @@ set (BINNAME test-ambition)
 
 SET( TA_VALA_PACKAGES
 	${CORE_DEPS_PACKAGES}
-	ambition-0.1
+	${LIBRARY_NAME}
 	posix
 )
 
 SET( TA_VALA_FILES
 	test-runner.vala
-	actionbuilder.vala
 	app.vala
 	build.vala
 	config.vala
+	controllermethod.vala
 	cookie.vala
 	dispatcher.vala
 	engine.vala
@@ -22,6 +22,7 @@ SET( TA_VALA_FILES
 	authorizer.vala
 	password_type.vala
 	request.vala
+	route.vala
 	form.vala
 	formfield.vala
 	formvalidator.vala
@@ -33,7 +34,10 @@ SET( TA_VALA_FILES
 	coreview_redirect.vala
 	coreview_json.vala
 	pluginloader.vala
+	serializer_json.vala
+	serializer_responsehelper.vala
 	assets/formsubclass.vala
+	assets/serializer-test-classes.vala
 )
 
 vala_precompile_target(
@@ -51,21 +55,21 @@ vala_precompile_target(
 )
 
 set(TA_CFLAGS
-	${CORE_DEPS_CFLAGS_ALL}
 	-I${CMAKE_BINARY_DIR}/src/libambition
+	${CORE_DEPS_CFLAGS_ALL}
 	-w
 )
 set(TA_LIB_PATHS
-	${CORE_DEPS_LIBRARY_DIRS}
 	${CMAKE_BINARY_DIR}/src/libambition
+	${CORE_DEPS_LIBRARY_DIRS}
 )
 add_definitions(${TA_CFLAGS})
 link_directories(${TA_LIB_PATHS})
 
 add_executable(${BINNAME} ${TA_VALA_C})
 include_directories(${CMAKE_BINARY_DIR}/src/libambition)
-add_dependencies(${BINNAME} "${PKGNAME}-${PKGVERSION}-vala")
-target_link_libraries(${BINNAME} ${CORE_DEPS_LIBRARIES} gthread-2.0 ambition-0.1)
+add_dependencies(${BINNAME} "${PKGNAME}-vala" "${PKGNAME}-test-vala")
+target_link_libraries(${BINNAME} ${CORE_DEPS_LIBRARIES} gthread-2.0 ${LIBRARY_NAME})
 add_test_executable(${BINNAME})
 file(COPY ${CMAKE_SOURCE_DIR}/test/assets/htpasswd DESTINATION ${CMAKE_BINARY_DIR}/test/assets)
 file(COPY ${CMAKE_SOURCE_DIR}/test/assets/flat_file DESTINATION ${CMAKE_BINARY_DIR}/test/assets)

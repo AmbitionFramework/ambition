@@ -1,24 +1,20 @@
-SET( LIBRARY_NAME "${PKGNAME}-${PKGVERSION}")
 SET( LAM_VALA_FILES
-	Action.vala
-	Actions.vala
-	ActionBuilder.vala
-	ActionMethod.vala
 	App.vala
 	Application.vala
 	Build.vala
 	Component.vala
 	Config.vala
+	ControllerMethod.vala
 	Cookie.vala
 	Dispatcher.vala
 	DispatcherUtils.vala
 	HttpMethod.vala
-	IActionFilter.vala
 	Logger.vala
 	Request.vala
 	RequestFile.vala
 	Response.vala
 	Result.vala
+	Route.vala
 	Stash.vala
 	State.vala
 	TemplateCompiler.vala
@@ -67,6 +63,12 @@ SET( LAM_VALA_FILES
 	Plugin/PluginResult.vala
 	PluginSupport/IPlugin.vala
 	PluginSupport/PluginLoader.vala
+	Serializer/ErrorMessage.vala
+	Serializer/ISerializer.vala
+	Serializer/HTML.vala
+	Serializer/JSON.vala
+	Serializer/JSONNode.vala
+	Serializer/ResponseHelper.vala
 	Session/Interface.vala
 	Session/IStorable.vala
 	Session/SessionPlugin.vala

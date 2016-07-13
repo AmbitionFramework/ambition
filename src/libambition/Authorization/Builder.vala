@@ -4,7 +4,7 @@
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2013 Sensical, Inc.
+ * Copyright 2012-2016 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ namespace Ambition.Authorization {
 	 * Build authenticators.
 	 */
 	public class Builder : Object {
-		private static Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.ActionBuilder");
+		private static Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Authorization.Builder");
 
 		public static void build_authorizers() {
 

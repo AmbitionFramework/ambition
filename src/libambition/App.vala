@@ -4,7 +4,7 @@
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2013 Sensical, Inc.
+ * Copyright 2012-2016 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ using Gee;
 using Ambition.Authorization;
 
 namespace Ambition {
-	public static const string VERSION = "0.1";
+	public static const string VERSION = "0.2";
 
 	/**
 	 * Retrieve framework version as an int.

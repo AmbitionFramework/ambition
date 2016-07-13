@@ -212,8 +212,8 @@ macro(vala_precompile_target TARGET GENERATED_SOURCES)
     list(APPEND non_source_out_files "${VALAC_GIR}")
     list(APPEND non_source_valac_args
       "--gir" "${VALAC_GIR}"
-      "--library" "${TARGET}"
-      "--shared-library" "${CMAKE_SHARED_LIBRARY_PREFIX}${TARGET}${CMAKE_SHARED_LIBRARY_SUFFIX}")
+      "--verbose"
+      "--library" "${TARGET}")
   endif()
 
   if(VALAC_HEADER)

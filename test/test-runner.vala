@@ -4,7 +4,7 @@
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2013 Sensical, Inc.
+ * Copyright 2012-2016 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,12 @@ void main ( string[] args ) {
 	Test.init( ref args );
 
 	var test_root = TestSuite.get_root();
+	test_root.add_suite( new AppTest().get_suite() );
 	test_root.add_suite( new BuildTest().get_suite() );
+	test_root.add_suite( new ControllerMethodTest().get_suite() );
+	test_root.add_suite( new RouteTest().get_suite() );
+	test_root.add_suite( new SerializerResponseHelperTest().get_suite() );
 
-	AppTest.add_tests();
 	CookieTest.add_tests();
 	EngineTest.add_tests();
 	SessionTest.add_tests();
@@ -57,7 +60,6 @@ void main ( string[] args ) {
 	CoreViewRawStringTest.add_tests();
 
 	PluginLoaderTest.add_tests();
-	ActionBuilderTest.add_tests();
 
 	Test.run();
 }

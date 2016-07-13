@@ -5,8 +5,16 @@ namespace %%namespace%% {
 	 * Class containing bootstrap code for this application.
 	 */
 	public class Application : Ambition.Application {
-		public override Ambition.Actions get_actions() {
-			return new Actions();
+		/**
+		 * Configure the routes for this web application.
+		 */
+		public override void create_routes() {
+			// Add a new route which responds to a GET request on /, and
+			// sends it to the index method of Controller.Root.
+			add_route()
+					.method( HttpMethod.GET )
+					.path("/")
+					.target( Controller.Root.index );
 		}
 
 		/**

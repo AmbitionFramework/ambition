@@ -8,7 +8,7 @@ include(FindVala)
 include(ValaHelper)
 include(OSFlags)
 include(AddCompilerFlags)
-ensure_vala_version("0.18.0" MINIMUM)
+ensure_vala_version("0.22.0" MINIMUM)
 
 global_add_compiler_flags(-Wno-incompatible-pointer-types)
 
@@ -34,9 +34,10 @@ ELSE()
 ENDIF()
 
 SET( PKGNAME ambition)
-SET( PKGVERSION 0.1)
+SET( PKGVERSION 0.2)
 SET( PREFIX ${CMAKE_INSTALL_PREFIX})
 SET( DOLLAR "$")
+SET( LIBRARY_NAME "${PKGNAME}-${PKGVERSION}")
 
 SET( BINSOURCE ${CMAKE_BINARY_DIR}/src/libambition)
 SET( VAPIDIRS 

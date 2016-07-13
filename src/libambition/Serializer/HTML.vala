@@ -1,5 +1,5 @@
 /*
- * app.vala
+ * HTML.vala
  *
  * The Ambition Web Framework
  * http://www.ambitionframework.org
@@ -19,29 +19,19 @@
  * limitations under the License.
  */
 
-public class AppTest : Ambition.Testing.AbstractTestCase {
-	public AppTest() {
-		base("Ambition.App");
-		add_test( "init", init );
-		add_test( "VERSION", version );
-		add_test( "parse_version", parse_version );
-	}
+using Gee;
+namespace Ambition.Serializer {
+	/**
+	 * "Serialize" Service data to HTML.
+	 */
+	public class HTML : Object,ISerializer {
 
-	public void init() {
-		var a = new Ambition.App();
-		assert( a != null );
-	}
+		public string? serialize( Object? o ) {
+			return "";
+		}
 
-	public void version() {
-		assert( Ambition.VERSION != null );
-	}
-
-	public void parse_version() {
-		int ver = Ambition.parse_version("0.1");
-		assert( ver == 1000100 );
-		ver = Ambition.parse_version("0.1.1");
-		assert( ver == 1000101 );
-		ver = Ambition.parse_version("2.0.1");
-		assert( ver == 1020001 );
+		public Object? deserialize( string? serialized, Type object_type ) {
+			throw new SerializerError.UNSUPPORTED("HTML deserialize not supported");
+		}
 	}
 }

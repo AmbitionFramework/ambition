@@ -4,7 +4,7 @@
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2014 Sensical, Inc.
+ * Copyright 2012-2016 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ namespace Ambition {
 			}
 		}
 
-		public ArrayList<Action?> actions { get; set; }
+		public ArrayList<Route?> routes { get; set; }
 		public ArrayList<IPlugin?> plugins { get; private set; default = new ArrayList<IPlugin?>(); }
 
 		public Dispatcher( Ambition.Application application, string[] args ) {
@@ -72,8 +72,9 @@ namespace Ambition {
 		}
 
 		public bool run() {
-			if ( actions == null ) {
-				logger.error("No actions specified, nothing to do!");
+			routes = this.application.routes;
+			if ( routes == null || routes.size == 0 ) {
+				logger.error("No routes specified, nothing to do!");
 				return false;
 			}
 
@@ -109,36 +110,16 @@ namespace Ambition {
 				engine = new Engine.Raw();
 			}
 
-			// Show actions
-			this.actions.add_all( Controller.Static.add_actions() );
-			logger.debug("Actions:");
-			foreach ( var action in actions ) {
-				Regex re = action._regex;
-				if ( action.methods.size == 0 ) {
-					action.methods.add( HttpMethod.ALL );
+			// Show routes
+			this.routes.add_all( Controller.Static.add_routes() );
+			logger.debug("Routes:");
+			foreach ( var route in routes ) {
+				if ( route.methods.size == 0 ) {
+					route.methods.add( HttpMethod.ALL );
 				}
 
-				// Normally, we rely on logger to determine whether to output
-				// anything, but in this case, let's save some minor ops if we
-				// are not in debug mode.
 				if ( logger.log_level == Log4Vala.Level.DEBUG ) {
-					var methods = new ArrayList<string>();
-					foreach ( HttpMethod hm in action.methods ) {
-						methods.add( hm.to_string().substring( 0, 1 ) );
-					}
-
-					var targets = new ArrayList<string>();
-					foreach ( ActionMethod am in action.targets ) {
-						targets.add( am.path );
-					}
-
-					logger.debug(
-						" %-4s %-32s %s".printf(
-							arraylist_joinv( "", methods ),
-							( re.get_pattern().length > 32 ? ( re.get_pattern().substring( 0, 31 ) + "…" ) : re.get_pattern() ),
-							arraylist_joinv( " > ", targets )
-						)
-					);
+					logger.debug( route.route_info() );
 				}
 			}
 
@@ -181,7 +162,7 @@ namespace Ambition {
 		 * AFTER a State has been initialized by an engine with request headers,
 		 * cookies and a session prepared, THEN nrun a request through the
 		 * dispatcher. Iterate through each path to determine if the request
-		 * matches, run through those actions, and set up the response.
+		 * matches, run through those routes, and set up the response.
 		 * @param state Current engine state
 		 */
 		public void handle_request( State state ) {
@@ -207,13 +188,14 @@ namespace Ambition {
 				p.on_request_dispatch(state);
 			}
 
-			// Get action list for request
-			var action_list = find_actions_for(state);
+			// Get route for request
+			var route = find_route_for(state);
 
-			if ( action_list != null && action_list.size > 0 ) {
-				var action_response = execute_action_list( action_list, state );
-				display_action_response( action_response, state );
+			if ( route != null ) {
+				var route_response = execute_route_targets( route, state );
+				display_route_response( route_response, state );
 			}
+
 			// Call on_request_end hook in application.
 			application.on_request_end(state);
 
@@ -222,7 +204,7 @@ namespace Ambition {
 				p.on_request_end(state);
 			}
 
-			// Set powered by if required
+			// Set powered by if configured
 			if (show_powered_by) {
 				state.response.set_header( "X-Powered-By", "Ambition" );
 			}
@@ -239,40 +221,24 @@ namespace Ambition {
 		}
 
 		/**
-		 * Add actions from an Actions subclass.
-		 * @param actions Actions subclass
+		 * Output the calculated route list
+		 * @param route_result Calculated route list
 		 */
-		public void add_actions_class( Actions actions ) {
-			var action_array = actions.actions();
-			if ( action_array.length > 0 ) {
-				if ( this.actions == null ) {
-					this.actions = new ArrayList<Action?>();
-				}
-				foreach( var action in action_array ) {
-					this.actions.add(action);
-				}
-			}
-		}
-
-		/**
-		 * Output the calculated action list
-		 * @param action_result Calculated action list
-		 */
-		public void display_action_response( ArrayList<string> action_result, State state ) {
-			foreach ( string a in action_result ) {
+		public void display_route_response( ArrayList<string> route_result, State state ) {
+			foreach ( string a in route_result ) {
 				logger.debug(a);
 			}
 		}
 
 		/**
-		 * Execute the calculated action list
-		 * @param action_list List of ActionMethods
+		 * Execute the calculated route list
+		 * @param route Route to execute
 		 * @param state State object
 		 */
-		public ArrayList<string> execute_action_list( ArrayList<ActionMethod?> action_list, State state ) {
+		public ArrayList<string> execute_route_targets( Route route, State state ) {
 			var al = new ArrayList<string>();
-			foreach ( ActionMethod a in action_list ) {
-				Result? r = a.execute(state);
+			foreach ( ControllerMethod m in route.targets ) {
+				Result? r = m.execute(state);
 				if ( r != null && ! (r is CoreView.None) ) {
 					r.state = state;
 					InputStream? eis = r.render();
@@ -281,7 +247,6 @@ namespace Ambition {
 						state.response.body_stream_length = r.size;
 					}
 				}
-				al.add( "|> %s".printf( a.path != null ? a.path : "/generic/action" ) );
 				if ( state.response.is_done() ) {
 					break;
 				}
@@ -293,7 +258,7 @@ namespace Ambition {
 		 * Inject a value into null properties corresponding to the given type.
 		 * @param search_type Type to inject
 		 * @param v Value to inject into property
-		 * @returns true if a value was injected
+		 * @return true if a value was injected
 		 */
 		public bool inject_to_application( Type search_type, Value v ) {
 			bool injected = false;
@@ -313,46 +278,43 @@ namespace Ambition {
 		}
 
 		/**
-		 * Iterate through action list and determine the list of actions for
+		 * Iterate through route list and determine the list of routes for
 		 * a given request.
 		 * @param state Current engine state
 		 */
-		private ArrayList<ActionMethod?>? find_actions_for( State state ) {
+		private Route? find_route_for( State state ) {
 			string decoded_path = Uri.unescape_string( state.request.path );
 			decoded_path = decoded_path.replace( "//", "/" );
-			foreach ( var action in actions ) {
-				string action_pattern = action._regex.get_pattern();
+			foreach ( var route in routes ) {
 				MatchInfo info = null;
-				if ( action.responds_to_request( decoded_path, state.request.method, out info ) ) {
-					logger.debug( "Matched pattern %s".printf(action_pattern) );
+				Regex re = null;
+				if ( route.responds_to_request( decoded_path, state.request.method, out info, out re ) ) {
 					state.request.captures = info.fetch_all();
 
 					// Determine named captures
-					var re_named = /\(\?<([^>]+)>/;
-					MatchInfo named_info = null;
-					if ( re_named.match( action_pattern, 0, out named_info ) ) {
-						while ( named_info.matches() ) {
-							string name = named_info.fetch(1);
+					while ( info.matches() ) {
+						string name = info.fetch(1);
+						if ( name != null ) {
 							state.request.named_captures[name] = info.fetch_named(name);
-							try {
-								named_info.next();
-							} catch ( RegexError e ) {
-								logger.error( "Error matching next capture in URL", e );
-								break;
-							}
+						}
+						try {
+							info.next();
+						} catch ( RegexError e ) {
+							logger.error( "Error matching next capture in URL", e );
+							break;
 						}
 					}
 
 					// Determine arguments
-					if ( !action._regex.get_pattern().has_suffix("$/") ) {
+					if ( !re.get_pattern().has_suffix("$/") ) {
 						try {
-							state.request._arguments = action._regex.replace( decoded_path, -1, 0, "" );
+							state.request._arguments = re.replace( decoded_path, -1, 0, "" );
 						} catch ( RegexError e ) {
 							logger.error("Invalid regex for arguments");
 						}
 					}
 
-					return action.targets;
+					return route;
 				}
 			}
 			return null;

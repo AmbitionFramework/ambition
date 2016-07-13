@@ -1,10 +1,10 @@
 /*
- * Actions.vala
+ * ISerializer.vala
  *
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2013 Sensical, Inc.
+ * Copyright 2012-2016 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,20 +19,16 @@
  * limitations under the License.
  */
 
-namespace Ambition {
+namespace Ambition.Serializer {
 	/**
-	 * Base class for the auto-generated Actions class, derived from the
-	 * application's actions.conf.
+	 * Represents a serializer error.
 	 */
-	public class Actions : Object {
+	public errordomain SerializerError {
+		UNSUPPORTED
+	}
 
-		/**
-		 * Return an array of Action objects to add to the dispatcher.
-		 * Override this method.
-		 */
-		public virtual Action[] actions() {
-			return new Action[0];
-		}
-
+	public interface ISerializer : Object {
+		public abstract string? serialize( Object? o );
+		public abstract Object? deserialize( string? serialized, Type object_type );
 	}
 }

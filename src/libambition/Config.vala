@@ -4,7 +4,7 @@
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2013 Sensical, Inc.
+ * Copyright 2012-2016 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -141,6 +141,9 @@ namespace Ambition {
 
 		public void parse_config() {
 			string app_name = this.config_hash["ambition.app_name"];
+			if ( app_name == null ) {
+				app_name = "app";
+			}
 
 			// Find config file
 			string file_path = Environment.get_variable( app_name.up() + "_CONFIG" );
