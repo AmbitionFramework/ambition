@@ -181,7 +181,7 @@ namespace Ambition {
 			foreach ( var re in _regexes ) {
 				if ( re.match( decoded_path, 0, out info ) ) {
 					foreach ( var supported_method in this.methods ) {
-						if ( supported_method == method ) {
+						if ( supported_method == method || supported_method == HttpMethod.ALL ) {
 							found = re;
 							return true;
 						}

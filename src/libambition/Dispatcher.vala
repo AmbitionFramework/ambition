@@ -247,7 +247,6 @@ namespace Ambition {
 						state.response.body_stream_length = r.size;
 					}
 				}
-				// al.add( "|> %s".printf( a.path != null ? a.path : "/generic/route" ) );
 				if ( state.response.is_done() ) {
 					break;
 				}
