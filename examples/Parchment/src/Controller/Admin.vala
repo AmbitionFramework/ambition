@@ -14,7 +14,7 @@ namespace Parchment.Controller {
 		 * Check if a user is authenticated.
 		 * @param state State object.
 		 */
-		public Result check_user( State state ) {
+		public static Result check_user( State state ) {
 			if ( ! state.has_user ) {
 				state.response.done(); // Stop processing after this method
 				return new CoreView.Redirect("/admin/login");
@@ -26,7 +26,7 @@ namespace Parchment.Controller {
 		 * Admin dashboard to list recent entries.
 		 * @param state State object.
 		 */
-		public Result dashboard( State state ) {
+		public static Result dashboard( State state ) {
 			var entries = new Almanna.Search<Implementation.Entry>()
 							.eq( "publisher_id", (int) state.user.id )
 							.order_by( "date_created", true )
@@ -40,7 +40,7 @@ namespace Parchment.Controller {
 		 * Admin page to create/edit entries.
 		 * @param state State object.
 		 */
-		public Result entry( State state ) {
+		public static Result entry( State state ) {
 			var form = new Form.Entry();
 
 			// Bind from Entry object, if it exists
@@ -82,7 +82,7 @@ namespace Parchment.Controller {
 		 * Admin page to edit your account profile.
 		 * @param state State object.
 		 */
-		public Result profile( State state ) {
+		public static Result profile( State state ) {
 			var form = new Form.Profile( state.authorization );
 
 			// Bind data from the logged in user
@@ -106,7 +106,7 @@ namespace Parchment.Controller {
 		 * Log in to admin section.
 		 * @param state State object.
 		 */
-		public Result login( State state ) {
+		public static Result login( State state ) {
 			var form = new Form.Login();
 			if ( state.request.method == HttpMethod.POST ) {
 				form.bind_state( state );
@@ -127,7 +127,7 @@ namespace Parchment.Controller {
 		 * Log out.
 		 * @param state State object.
 		 */
-		public Result logout( State state ) {
+		public static Result logout( State state ) {
 			state.logout();
 			return new CoreView.Redirect("/");
 		}

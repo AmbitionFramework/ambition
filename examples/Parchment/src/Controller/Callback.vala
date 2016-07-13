@@ -13,7 +13,7 @@ namespace Parchment.Controller {
 		 * Grab reply html.
 		 * @param state State object.
 		 */
-		public Result reply( State state ) {
+		public static Result reply( State state ) {
 			if ( Ambition.Config.lookup_bool("allow_replies") == false ) {
 				return null;
 			}

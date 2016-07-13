@@ -13,7 +13,7 @@ namespace Parchment.Controller {
 		 * List entries page for Entries.
 		 * @param state State object.
 		 */
-		public Result list( State state ) {
+		public static Result list( State state ) {
 			int page = get_page(state);
 			int pages = 1 + (int) ( (double) Entry.entry_count() / 10 - 0.1 );
 			var entries = Entry.paged_entries(page).list();
@@ -25,7 +25,7 @@ namespace Parchment.Controller {
 		 * List entries page for Entries.
 		 * @param state State object.
 		 */
-		public Result list_tag( State state ) {
+		public static Result list_tag( State state ) {
 			int page = get_page(state);
 			var tag_pack = Entry.paged_tag_entries( state.request.get_capture("tag"), page );
 			int pages = 1 + (int) ( (double) tag_pack.count / 10 - 0.1 );
@@ -34,7 +34,7 @@ namespace Parchment.Controller {
 			return new Template.Entries.list( entries, page, pages );
 		}
 
-		private int get_page( State state ) {
+		private static int get_page( State state ) {
 			int page = 1;
 
 			var page_string = state.request.get_capture("page");
@@ -48,7 +48,7 @@ namespace Parchment.Controller {
 		 * View entry page for Entries.
 		 * @param state State object.
 		 */
-		public Result view( State state ) {
+		public static Result view( State state ) {
 			int entry_id = int.parse( state.request.get_capture("entry_id") );
 			var entry = Entry.joined_search()
 							.eq( "entry_id", entry_id )
@@ -60,7 +60,7 @@ namespace Parchment.Controller {
 		 * Post a reply to a comment in an entry.
 		 * @param state State object.
 		 */
-		public Result reply( State state ) {
+		public static Result reply( State state ) {
 			if ( Config.lookup_bool("allow_replies") == false ) {
 				return null;
 			}
@@ -98,7 +98,7 @@ namespace Parchment.Controller {
 		 * Render an Atom-based RSS feed.
 		 * @param state State object.
 		 */
-		public Result atom( State state ) {
+		public static Result atom( State state ) {
 			var entries = Entry.paged_entries(1).list();
 			state.response.content_type = "application/atom+xml";
 			return new Template.Entries.atom(entries);
