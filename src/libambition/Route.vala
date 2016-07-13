@@ -1,5 +1,5 @@
 /*
- * Action.vala
+ * Route.vala
  *
  * The Ambition Web Framework
  * http://www.ambitionframework.org
@@ -24,25 +24,26 @@ using Ambition.Serializer;
 namespace Ambition {
 
 	/**
-	 * Represents an action, linking an incoming HTTP request with code.
+	 * Represents a route (formerly an Action), linking an incoming HTTP request
+	 * with code.
 	 * 
-	 * The actions configuration determines how requests are processed through
-	 * the application. At the core, an action must have an HTTP method, a path,
-	 * and a target. The method can be any available HttpMethod. The path can
-	 * be as simple as "/", or more complex. The target can be one of three
-	 * different delegate types representing a controller method. Each of
-	 * the three requirements can also have multiple values.
+	 * Routes determine how requests are processed through the application. At
+	 * the core, a route must have an HTTP method, a path, and a target. The
+	 * method can be any available HttpMethod. The path can be as simple as "/",
+	 * or more complex. The target can be one of three different delegate types
+	 * representing a controller method. Each of the three requirements can also
+	 * have multiple values.
 	 * 
 	 * For example:
-	 * An action can be made to respond to GET, POST, and PUT.
-	 * An action can respond to both "/", and "/example".
-	 * An action can start with "Main.check_eligibility" and then "Main.index".
+	 * A route can be made to respond to GET, POST, and PUT.
+	 * A route can respond to both "/", and "/example".
+	 * A route can start with "Main.check_eligibility" and then "Main.index".
 	 *
 	 * Targets are executed in the order they are supplied, no matter what
 	 * method type they are.
 	 */
-	public class Action : Object {
-		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Action");
+	public class Route : Object {
+		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Route");
 		public ArrayList<HttpMethod?> methods = new ArrayList<HttpMethod?>();
 		public ArrayList<ControllerMethod> targets = new ArrayList<ControllerMethod>();
 		public ArrayList<string> paths = new ArrayList<string>();
@@ -53,7 +54,7 @@ namespace Ambition {
 		/**
 		 * Add an HTTP method to respond to
 		 */
-		public Action method( HttpMethod method ) {
+		public Route method( HttpMethod method ) {
 			methods.add(method);
 			return this;
 		}
@@ -63,7 +64,7 @@ namespace Ambition {
 		 * The method will look like:
 		 * public static Result example_method( State state ) {}
 		 */
-		public Action target( ControllerMethodStateResult method ) {
+		public Route target( ControllerMethodStateResult method ) {
 			targets.add( new ControllerMethod.with_state_result( this, method ) );
 			return this;
 		}
@@ -73,7 +74,7 @@ namespace Ambition {
 		 * The method will look like:
 		 * public static Result example_method( State state, Object? o ) {}
 		 */
-		public Action target_object_result( ControllerMethodObjectResult method ) {
+		public Route target_object_result( ControllerMethodObjectResult method ) {
 			targets.add( new ControllerMethod.with_object_result( this, method ) );
 			return this;
 		}
@@ -84,7 +85,7 @@ namespace Ambition {
 		 * The method will look like:
 		 * public static Object? example_method( State state, Object? o ) {}
 		 */
-		public Action target_object_object( ControllerMethodObjectObject method ) {
+		public Route target_object_object( ControllerMethodObjectObject method ) {
 			targets.add( new ControllerMethod.with_object_object( this, method ) );
 			return this;
 		}
@@ -103,7 +104,7 @@ namespace Ambition {
 		 *
 		 * @param path String representation of the HTTP path
 		 */
-		public Action path( string path ) {
+		public Route path( string path ) {
 			// Should probably validate the path here instead of at compile
 			paths.add(path);
 
@@ -138,7 +139,7 @@ namespace Ambition {
 		 * @param serializer Serializer to use to deserialize
 		 * @param object_type Object type to provide
 		 */
-		public Action marshal_request( ISerializer serializer, Type object_type ) {
+		public Route marshal_request( ISerializer serializer, Type object_type ) {
 			request_marshaller = new Marshaller( serializer, object_type );
 			return this;
 		}
@@ -149,13 +150,13 @@ namespace Ambition {
 		 * @param object_type Object type to expect
 		 * @param serializer Serializer to use to serialize
 		 */
-		public Action marshal_response( Type object_type, ISerializer serializer ) {
+		public Route marshal_response( Type object_type, ISerializer serializer ) {
 			response_marshaller = new Marshaller( serializer, object_type );
 			return this;
 		}
 
 		/**
-		 * Given a path and a method, return true if this action can respond to
+		 * Given a path and a method, return true if this Route can respond to
 		 * the request.
 		 * @param decoded_path Dispatcher-decoded path
 		 * @param method HttpMethod of given request
@@ -178,10 +179,10 @@ namespace Ambition {
 		}
 
 		/**
-		 * Return string describing the current action, suitable for output on
+		 * Return string describing the current Route, suitable for output on
 		 * application startup or debugging.
 		 */
-		public string action_info() {
+		public string route_info() {
 			var output = new StringBuilder();
 
 			var method_strings = new ArrayList<string>();

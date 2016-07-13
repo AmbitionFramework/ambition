@@ -20,7 +20,7 @@
  */
 
 public class ControllerMethodTest : Ambition.Testing.AbstractTestCase {
-	private Ambition.Action a = new Ambition.Action();
+	private Ambition.Route r = new Ambition.Route();
 
 	public ControllerMethodTest() {
 		base("Ambition.ControllerMethod");
@@ -30,7 +30,7 @@ public class ControllerMethodTest : Ambition.Testing.AbstractTestCase {
 	}
 
 	public void init_with_state_result() {
-		var obj = new Ambition.ControllerMethod.with_state_result( a, example_state_result_method );
+		var obj = new Ambition.ControllerMethod.with_state_result( r, example_state_result_method );
 		assert( obj != null );
 		assert( obj.controller_method_type == Ambition.ControllerMethod.MethodType.CMSR );
 		assert( obj.cmsr != null );
@@ -39,7 +39,7 @@ public class ControllerMethodTest : Ambition.Testing.AbstractTestCase {
 	}
 
 	public void init_with_object_result() {
-		var obj = new Ambition.ControllerMethod.with_object_result( a, example_state_object_result_method );
+		var obj = new Ambition.ControllerMethod.with_object_result( r, example_state_object_result_method );
 		assert( obj != null );
 		assert( obj.controller_method_type == Ambition.ControllerMethod.MethodType.CMOR );
 		assert( obj.cmsr == null );
@@ -48,7 +48,7 @@ public class ControllerMethodTest : Ambition.Testing.AbstractTestCase {
 	}
 
 	public void init_with_object_object() {
-		var obj = new Ambition.ControllerMethod.with_object_object( a, example_state_object_object_method );
+		var obj = new Ambition.ControllerMethod.with_object_object( r, example_state_object_object_method );
 		assert( obj != null );
 		assert( obj.controller_method_type == Ambition.ControllerMethod.MethodType.CMOO );
 		assert( obj.cmsr == null );

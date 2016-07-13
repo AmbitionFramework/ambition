@@ -1,5 +1,4 @@
 SET( LAM_VALA_FILES
-	Action.vala
 	App.vala
 	Application.vala
 	Build.vala
@@ -10,12 +9,12 @@ SET( LAM_VALA_FILES
 	Dispatcher.vala
 	DispatcherUtils.vala
 	HttpMethod.vala
-	IActionFilter.vala
 	Logger.vala
 	Request.vala
 	RequestFile.vala
 	Response.vala
 	Result.vala
+	Route.vala
 	Stash.vala
 	State.vala
 	TemplateCompiler.vala

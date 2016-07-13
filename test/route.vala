@@ -1,5 +1,5 @@
 /*
- * action.vala
+ * route.vala
  *
  * The Ambition Web Framework
  * http://www.ambitionframework.org
@@ -19,9 +19,9 @@
  * limitations under the License.
  */
 
-public class ActionTest : Ambition.Testing.AbstractTestCase {
-	public ActionTest() {
-		base("Ambition.Action");
+public class RouteTest : Ambition.Testing.AbstractTestCase {
+	public RouteTest() {
+		base("Ambition.Route");
 		add_test( "init", init );
 		add_test( "method", method );
 		add_test( "target", target );
@@ -34,12 +34,12 @@ public class ActionTest : Ambition.Testing.AbstractTestCase {
 	}
 
 	public void init() {
-		var obj = new Ambition.Action();
+		var obj = new Ambition.Route();
 		assert( obj != null );
 	}
 
 	public void method() {
-		var a = new Ambition.Action();
+		var a = new Ambition.Route();
 		var b = a.method( Ambition.HttpMethod.POST );
 		assert( a.methods.size == 1 );
 		assert( a.methods[0] == Ambition.HttpMethod.POST );
@@ -47,7 +47,7 @@ public class ActionTest : Ambition.Testing.AbstractTestCase {
 	}
 
 	public void target() {
-		var a = new Ambition.Action();
+		var a = new Ambition.Route();
 		var b = a.target( example_state_result_method );
 		assert( a.targets.size == 1 );
 		assert( a.targets[0] is Ambition.ControllerMethod );
@@ -56,7 +56,7 @@ public class ActionTest : Ambition.Testing.AbstractTestCase {
 	}
 
 	public void target_or() {
-		var a = new Ambition.Action();
+		var a = new Ambition.Route();
 		var b = a.target_object_result( example_state_object_result_method );
 		assert( a.targets.size == 1 );
 		assert( a.targets[0] is Ambition.ControllerMethod );
@@ -65,7 +65,7 @@ public class ActionTest : Ambition.Testing.AbstractTestCase {
 	}
 
 	public void target_oo() {
-		var a = new Ambition.Action();
+		var a = new Ambition.Route();
 		var b = a.target_object_object( example_state_object_object_method );
 		assert( a.targets.size == 1 );
 		assert( a.targets[0] is Ambition.ControllerMethod );
@@ -74,7 +74,7 @@ public class ActionTest : Ambition.Testing.AbstractTestCase {
 	}
 
 	public void path() {
-		var a = new Ambition.Action();
+		var a = new Ambition.Route();
 		var b = a.path("/foo/bar");
 		assert( a.paths.size == 1 );
 		assert( a.paths[0] == "/foo/bar" );
@@ -82,7 +82,7 @@ public class ActionTest : Ambition.Testing.AbstractTestCase {
 	}
 
 	public void path_respond() {
-		var a = new Ambition.Action()
+		var a = new Ambition.Route()
 					.path("/foo/[baz]/bar")
 					.method( Ambition.HttpMethod.GET );
 
@@ -94,7 +94,7 @@ public class ActionTest : Ambition.Testing.AbstractTestCase {
 	}
 
 	public void marshal_request() {
-		var a = new Ambition.Action();
+		var a = new Ambition.Route();
 		var b = a.marshal_request( new Ambition.Serializer.HTML(), a.get_type() );
 		var c = a.request_marshaller;
 		assert( c != null );
@@ -103,7 +103,7 @@ public class ActionTest : Ambition.Testing.AbstractTestCase {
 	}
 
 	public void marshal_response() {
-		var a = new Ambition.Action();
+		var a = new Ambition.Route();
 		var b = a.marshal_response( a.get_type(), new Ambition.Serializer.HTML() );
 		var c = a.response_marshaller;
 		assert( c != null );
@@ -112,16 +112,16 @@ public class ActionTest : Ambition.Testing.AbstractTestCase {
 	}
 
 	public void action_info() {
-		var a = new Ambition.Action()
+		var a = new Ambition.Route()
 					.path("/foo/[baz]/bar")
 					.method( Ambition.HttpMethod.GET )
 					.target(example_state_result_method);
 		assert( a != null );
-		var info = a.action_info();
+		var info = a.route_info();
 		assert( info == "                           GET /foo/[baz]/bar --> 1 target" );
 		a.method( Ambition.HttpMethod.POST );
 		a.target_object_result(example_state_object_result_method);
-		info = a.action_info();
+		info = a.route_info();
 		assert( info == "                     GET, POST /foo/[baz]/bar --> 2 targets" );
 	}
 

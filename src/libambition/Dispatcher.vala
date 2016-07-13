@@ -44,7 +44,7 @@ namespace Ambition {
 			}
 		}
 
-		public ArrayList<Action?> actions { get; set; }
+		public ArrayList<Route?> routes { get; set; }
 		public ArrayList<IPlugin?> plugins { get; private set; default = new ArrayList<IPlugin?>(); }
 
 		public Dispatcher( Ambition.Application application, string[] args ) {
@@ -72,8 +72,9 @@ namespace Ambition {
 		}
 
 		public bool run() {
-			if ( actions == null ) {
-				logger.error("No actions specified, nothing to do!");
+			routes = this.application.routes;
+			if ( routes == null || routes.size == 0 ) {
+				logger.error("No routes specified, nothing to do!");
 				return false;
 			}
 
@@ -109,16 +110,16 @@ namespace Ambition {
 				engine = new Engine.Raw();
 			}
 
-			// Show actions
-			this.actions.add_all( Controller.Static.add_actions() );
-			logger.debug("Actions:");
-			foreach ( var action in actions ) {
-				if ( action.methods.size == 0 ) {
-					action.methods.add( HttpMethod.ALL );
+			// Show routes
+			this.routes.add_all( Controller.Static.add_routes() );
+			logger.debug("Routes:");
+			foreach ( var route in routes ) {
+				if ( route.methods.size == 0 ) {
+					route.methods.add( HttpMethod.ALL );
 				}
 
 				if ( logger.log_level == Log4Vala.Level.DEBUG ) {
-					logger.debug( action.action_info() );
+					logger.debug( route.route_info() );
 				}
 			}
 
@@ -161,7 +162,7 @@ namespace Ambition {
 		 * AFTER a State has been initialized by an engine with request headers,
 		 * cookies and a session prepared, THEN nrun a request through the
 		 * dispatcher. Iterate through each path to determine if the request
-		 * matches, run through those actions, and set up the response.
+		 * matches, run through those routes, and set up the response.
 		 * @param state Current engine state
 		 */
 		public void handle_request( State state ) {
@@ -187,12 +188,12 @@ namespace Ambition {
 				p.on_request_dispatch(state);
 			}
 
-			// Get action for request
-			var action = find_action_for(state);
+			// Get route for request
+			var route = find_route_for(state);
 
-			if ( action != null ) {
-				var action_response = execute_action_targets( action, state );
-				display_action_response( action_response, state );
+			if ( route != null ) {
+				var route_response = execute_route_targets( route, state );
+				display_route_response( route_response, state );
 			}
 
 			// Call on_request_end hook in application.
@@ -220,23 +221,23 @@ namespace Ambition {
 		}
 
 		/**
-		 * Output the calculated action list
-		 * @param action_result Calculated action list
+		 * Output the calculated route list
+		 * @param route_result Calculated route list
 		 */
-		public void display_action_response( ArrayList<string> action_result, State state ) {
-			foreach ( string a in action_result ) {
+		public void display_route_response( ArrayList<string> route_result, State state ) {
+			foreach ( string a in route_result ) {
 				logger.debug(a);
 			}
 		}
 
 		/**
-		 * Execute the calculated action list
-		 * @param action_list List of ActionMethods
+		 * Execute the calculated route list
+		 * @param route Route to execute
 		 * @param state State object
 		 */
-		public ArrayList<string> execute_action_targets( Action action, State state ) {
+		public ArrayList<string> execute_route_targets( Route route, State state ) {
 			var al = new ArrayList<string>();
-			foreach ( ControllerMethod m in action.targets ) {
+			foreach ( ControllerMethod m in route.targets ) {
 				Result? r = m.execute(state);
 				if ( r != null && ! (r is CoreView.None) ) {
 					r.state = state;
@@ -246,7 +247,7 @@ namespace Ambition {
 						state.response.body_stream_length = r.size;
 					}
 				}
-				// al.add( "|> %s".printf( a.path != null ? a.path : "/generic/action" ) );
+				// al.add( "|> %s".printf( a.path != null ? a.path : "/generic/route" ) );
 				if ( state.response.is_done() ) {
 					break;
 				}
@@ -278,23 +279,25 @@ namespace Ambition {
 		}
 
 		/**
-		 * Iterate through action list and determine the list of actions for
+		 * Iterate through route list and determine the list of routes for
 		 * a given request.
 		 * @param state Current engine state
 		 */
-		private Action? find_action_for( State state ) {
+		private Route? find_route_for( State state ) {
 			string decoded_path = Uri.unescape_string( state.request.path );
 			decoded_path = decoded_path.replace( "//", "/" );
-			foreach ( var action in actions ) {
+			foreach ( var route in routes ) {
 				MatchInfo info = null;
 				Regex re = null;
-				if ( action.responds_to_request( decoded_path, state.request.method, out info, out re ) ) {
+				if ( route.responds_to_request( decoded_path, state.request.method, out info, out re ) ) {
 					state.request.captures = info.fetch_all();
 
 					// Determine named captures
 					while ( info.matches() ) {
 						string name = info.fetch(1);
-						state.request.named_captures[name] = info.fetch_named(name);
+						if ( name != null ) {
+							state.request.named_captures[name] = info.fetch_named(name);
+						}
 						try {
 							info.next();
 						} catch ( RegexError e ) {
@@ -312,7 +315,7 @@ namespace Ambition {
 						}
 					}
 
-					return action;
+					return route;
 				}
 			}
 			return null;

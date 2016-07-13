@@ -4,7 +4,7 @@
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2013 Sensical, Inc.
+ * Copyright 2012-2016 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 
 namespace Ambition {
 	/**
-	 * Represents the result of a controller action.
+	 * Represents the result of a controller method.
 	 */
 	public abstract class Result : Object {
 		/**

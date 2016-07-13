@@ -6,15 +6,15 @@ namespace %%namespace%% {
 	 */
 	public class Application : Ambition.Application {
 		/**
-		 * Configure the actions for this web application.
+		 * Configure the routes for this web application.
 		 */
-		public override void create_actions() {
-			// Add a new action which responds to a GET request on /, and
+		public override void create_routes() {
+			// Add a new route which responds to a GET request on /, and
 			// sends it to the index method of Controller.Root.
-			actions += new Action()
-							.method( HttpMethod.GET )
-							.path("/")
-							.target( Controller.Root.index );
+			add_route()
+					.method( HttpMethod.GET )
+					.path("/")
+					.target( Controller.Root.index );
 		}
 
 		/**

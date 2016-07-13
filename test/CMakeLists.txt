@@ -8,7 +8,6 @@ SET( TA_VALA_PACKAGES
 
 SET( TA_VALA_FILES
 	test-runner.vala
-	action.vala
 	app.vala
 	build.vala
 	config.vala
@@ -23,6 +22,7 @@ SET( TA_VALA_FILES
 	authorizer.vala
 	password_type.vala
 	request.vala
+	route.vala
 	form.vala
 	formfield.vala
 	formvalidator.vala

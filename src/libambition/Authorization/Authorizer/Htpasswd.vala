@@ -4,7 +4,7 @@
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2013 Sensical, Inc.
+ * Copyright 2012-2016 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ namespace Ambition.Authorization.Authorizer {
 	 * Authorize users using a standard Apache htpasswd file.
 	 */
 	public class Htpasswd : Object,IAuthorizer {
-		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.ActionBuilder");
+		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Authorization.Authorizer.Htpasswd");
 		protected HashMap<string,string> config { get; set; }
 		private HashMap<string,string> cache { get; set; default = new HashMap<string,string>(); }
 		private string file_path { get; set; }

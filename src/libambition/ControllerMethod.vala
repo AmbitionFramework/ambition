@@ -51,24 +51,24 @@ namespace Ambition {
 		public ControllerMethodStateResult cmsr;
 		public ControllerMethodObjectResult cmor;
 		public ControllerMethodObjectObject cmoo;
-		public Action action;
+		public Route route;
 
-		public ControllerMethod.with_state_result( Action a, ControllerMethodStateResult m ) {
+		public ControllerMethod.with_state_result( Route r, ControllerMethodStateResult m ) {
 			this.controller_method_type = MethodType.CMSR;
 			this.cmsr = m;
-			this.action = a;
+			this.route = r;
 		}
 
-		public ControllerMethod.with_object_result( Action a, ControllerMethodObjectResult m ) {
+		public ControllerMethod.with_object_result( Route r, ControllerMethodObjectResult m ) {
 			this.controller_method_type = MethodType.CMOR;
 			this.cmor = m;
-			this.action = a;
+			this.route = r;
 		}
 
-		public ControllerMethod.with_object_object( Action a, ControllerMethodObjectObject m ) {
+		public ControllerMethod.with_object_object( Route r, ControllerMethodObjectObject m ) {
 			this.controller_method_type = MethodType.CMOO;
 			this.cmoo = m;
-			this.action = a;
+			this.route = r;
 		}
 
 		public Result? execute( State state ) {

@@ -29,16 +29,16 @@ namespace Ambition.Controller {
 	public class Static : Object {
 
 		/**
-		 * Add actions based on static directories defined in the configuration.
-		 * @return ArrayList<Ambition.Action?> of the completed action list.
+		 * Add routes based on static directories defined in the configuration.
+		 * @return ArrayList<Route?> of the completed route list.
 		 */
-		public static ArrayList<Ambition.Action?> add_actions() {
-			var actions = new ArrayList<Ambition.Action?>();
+		public static ArrayList<Route?> add_routes() {
+			var routes = new ArrayList<Route?>();
 			string[] directories = Config.lookup_with_default( "static.directories", "" ).split(",");
 
 			// Add favicon.ico
-			actions.add(
-				new Action()
+			routes.add(
+				new Route()
 					.path("/favicon.ico")
 					.method( HttpMethod.GET )
 					.target(show_static_file)
@@ -46,19 +46,19 @@ namespace Ambition.Controller {
 
 			// Add any directories in config
 			foreach ( string directory in directories ) {
-				actions.add(
-					new Action()
+				routes.add(
+					new Route()
 						.path( "/" + directory )
 						.method( HttpMethod.GET )
 						.target(show_static_file)
 				);
 			}
-			return actions;
+			return routes;
 		}
 
 		/**
-		 * Action to display a static file based on the incoming path. This
-		 * works by having an action defined to end up here, because this method
+		 * Method to display a static file based on the incoming path. This
+		 * works by having an route defined to end up here, because this method
 		 * doesn't care about the configuration.
 		 * @param state State object
 		 */
