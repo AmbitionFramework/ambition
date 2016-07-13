@@ -118,9 +118,7 @@ namespace Ambition {
 					route.methods.add( HttpMethod.ALL );
 				}
 
-				if ( logger.log_level == Log4Vala.Level.DEBUG ) {
-					logger.debug( route.route_info() );
-				}
+				logger.debug( route.route_info() );
 			}
 
 			// Create authorizers
@@ -160,7 +158,7 @@ namespace Ambition {
 
 		/**
 		 * AFTER a State has been initialized by an engine with request headers,
-		 * cookies and a session prepared, THEN nrun a request through the
+		 * cookies and a session prepared, THEN run a request through the
 		 * dispatcher. Iterate through each path to determine if the request
 		 * matches, run through those routes, and set up the response.
 		 * @param state Current engine state

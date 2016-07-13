@@ -27,6 +27,7 @@ namespace Ambition.Session {
 	 * Provides Session support to an Ambition application.
 	 */
 	public class SessionPlugin : Object,IPlugin {
+		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Session.SessionPlugin");
 		public string name { get { return "Session"; } }
 		private IStorable session_store { get; set; }
 
@@ -46,7 +47,7 @@ namespace Ambition.Session {
 				if ( t > 0 ) {
 					this.session_store = (IStorable) Object.new(t);
 				} else {
-					Log4Vala.Logger.get_logger("Ambition.Session.SessionPlugin").error( "Invalid session.store specified: %s".printf(store) );
+					logger.error( "Invalid session.store specified: %s".printf(store) );
 					return;
 				}
 			}
@@ -55,7 +56,7 @@ namespace Ambition.Session {
 		public void on_request_dispatch( State state ) {
 			initialize_session(state);
 			if ( state.session != null && state.session.session_id != null ) {
-				Log4Vala.Logger.get_logger("Ambition.Session.SessionPlugin").debug( "Found session %s".printf( state.session.session_id ) );
+				logger.debug( "Found session %s".printf( state.session.session_id ) );
 			}
 		}
 
@@ -129,12 +130,13 @@ namespace Ambition.Session {
 			);
 			int? expires = Config.lookup_int("session.expires");
 			if ( expires == null ) {
-				expires = 0;
+				expires = 3600;
 			}
 			var c = new Cookie();
 			c.name = session_name;
 			c.value = state.session.id;
 			c.max_age = expires;
+			c.render();
 			state.response.set_cookie(c);
 		}
 	}

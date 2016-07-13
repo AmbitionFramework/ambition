@@ -48,7 +48,7 @@ namespace Ambition.Controller {
 			foreach ( string directory in directories ) {
 				routes.add(
 					new Route()
-						.path( "/" + directory )
+						.path( "/" + directory + "/*" )
 						.method( HttpMethod.GET )
 						.target(show_static_file)
 				);
