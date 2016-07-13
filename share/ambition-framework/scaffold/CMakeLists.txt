@@ -37,13 +37,6 @@ pkg_check_modules(APP_DEPS REQUIRED ${APP_DEPS_PACKAGES})
 execute_process(
 	COMMAND mkdir -p "${CMAKE_SOURCE_DIR}/src/.generated" )
 
-execute_process(
-	COMMAND ambition build-actions ${APPNAME} "${CMAKE_SOURCE_DIR}/config" "${CMAKE_SOURCE_DIR}/src/.generated"
-	OUTPUT_VARIABLE ACTION_RESULT )
-IF( ACTION_RESULT MATCHES "Fatal Error" )
-	message( FATAL_ERROR ${ACTION_RESULT} )
-ENDIF()
-
 execute_process( 
 	COMMAND ambition template-compile ${APPNAME} "${CMAKE_SOURCE_DIR}/src/View/Template" "${CMAKE_SOURCE_DIR}/src/.generated"
 	OUTPUT_VARIABLE TEMPLATE_FILES )
