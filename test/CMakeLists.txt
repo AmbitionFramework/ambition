@@ -12,6 +12,7 @@ SET( TA_VALA_FILES
 	app.vala
 	build.vala
 	config.vala
+	controllermethod.vala
 	cookie.vala
 	dispatcher.vala
 	engine.vala

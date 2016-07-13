@@ -41,7 +41,7 @@ namespace Ambition.Controller {
 				new Action()
 					.path("/favicon.ico")
 					.method( HttpMethod.GET )
-					.target("Ambition.Static.show_static_file")
+					.target(show_static_file)
 			);
 
 			// Add any directories in config
@@ -50,7 +50,7 @@ namespace Ambition.Controller {
 					new Action()
 						.path( "/" + directory )
 						.method( HttpMethod.GET )
-						.target("Ambition.Static.show_static_file")
+						.target(show_static_file)
 				);
 			}
 			return actions;
@@ -62,7 +62,7 @@ namespace Ambition.Controller {
 		 * doesn't care about the configuration.
 		 * @param state State object
 		 */
-		public Result show_static_file( State state ) {
+		public static Result show_static_file( State state ) {
 			string path = state.request.path;
 			string file_404_exists = Config.lookup_with_default( "static.file_404_exists", "" );
 			string file_404_path = Config.lookup_with_default( "static.file_404_exists", "" );

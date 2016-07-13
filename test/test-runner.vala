@@ -30,6 +30,7 @@ void main ( string[] args ) {
 	test_root.add_suite( new ActionTest().get_suite() );
 	test_root.add_suite( new AppTest().get_suite() );
 	test_root.add_suite( new BuildTest().get_suite() );
+	test_root.add_suite( new ControllerMethodTest().get_suite() );
 
 	CookieTest.add_tests();
 	EngineTest.add_tests();

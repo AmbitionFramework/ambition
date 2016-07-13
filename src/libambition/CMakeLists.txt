@@ -1,12 +1,11 @@
-SET( GIR_NAME "Ambition-${PKGVERSION}")
 SET( LAM_VALA_FILES
 	Action.vala
-	ActionMethod.vala
 	App.vala
 	Application.vala
 	Build.vala
 	Component.vala
 	Config.vala
+	ControllerMethod.vala
 	Cookie.vala
 	Dispatcher.vala
 	DispatcherUtils.vala
@@ -69,7 +68,6 @@ SET( LAM_VALA_FILES
 	Serializer/HTML.vala
 	Serializer/JSON.vala
 	Serializer/JSONNode.vala
-	Serializer/XML.vala
 	Session/Interface.vala
 	Session/IStorable.vala
 	Session/SessionPlugin.vala
@@ -101,7 +99,6 @@ vala_precompile_target(
 	FLAGS ${DEFAULT_VALA_OPTIONS}
 	PACKAGES ${LAM_VALA_PACKAGES}
 	VAPI "${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}.vapi"
-	GIR "${GIR_NAME}.gir"
 	HEADER "${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}.h"
 	${LAM_VALA_FILES}
 )
@@ -121,19 +118,6 @@ add_dependencies(${LIBRARY_NAME} "${PKGNAME}-vala")
 target_link_libraries(${PKGNAME}-${PKGVERSION} ${CORE_DEPS_LIBRARIES})
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/${LIBRARY_NAME}.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}.pc)
 
-gobject_introspection_compile(
-	"${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}.typelib"
-	"${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}.gir"
-	VERBOSE
-	SHARED_LIBRARY ${GIR_NAME})
-add_custom_target(typelib ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}.typelib")
-
-install(
-	FILES "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}.typelib"
-    DESTINATION "${GI_TYPELIB_DIR}")
-install(
-	FILES "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}.gir"
-    DESTINATION "${GI_REPOSITORY_DIR}")
 install (
 	FILES ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}.vapi
 	      ${LIBRARY_NAME}.deps

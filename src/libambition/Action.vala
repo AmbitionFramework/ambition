@@ -29,19 +29,22 @@ namespace Ambition {
 	 * The actions configuration determines how requests are processed through
 	 * the application. At the core, an action must have an HTTP method, a path,
 	 * and a target. The method can be any available HttpMethod. The path can
-	 * be as simple as "/", or more complex. The target is a string representing
-	 * the namespace and method of the target block of code to execute. Each of
+	 * be as simple as "/", or more complex. The target can be one of three
+	 * different delegate types representing a controller method. Each of
 	 * the three requirements can also have multiple values.
 	 * 
 	 * For example:
 	 * An action can be made to respond to GET, POST, and PUT.
 	 * An action can respond to both "/", and "/example".
 	 * An action can start with "Main.check_eligibility" and then "Main.index".
+	 *
+	 * Targets are executed in the order they are supplied, no matter what
+	 * method type they are.
 	 */
 	public class Action : Object {
 		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Action");
 		public ArrayList<HttpMethod?> methods = new ArrayList<HttpMethod?>();
-		public ArrayList<string> targets = new ArrayList<string>();
+		public ArrayList<ControllerMethod> targets = new ArrayList<ControllerMethod>();
 		public ArrayList<string> paths = new ArrayList<string>();
 		public Marshaller? request_marshaller = null;
 		public Marshaller? response_marshaller = null;
@@ -56,13 +59,33 @@ namespace Ambition {
 		}
 
 		/**
-		 * Add a target to this method.
-		 *
-		 * 
+		 * Add a target that accepts a State and returns a Result.
+		 * The method will look like:
+		 * public static Result example_method( State state ) {}
 		 */
-		public Action target( string target ) {
-			// Should probably validate the target here instead of at compile
-			targets.add(target);
+		public Action target( ControllerMethodStateResult method ) {
+			targets.add( new ControllerMethod.with_state_result(method) );
+			return this;
+		}
+
+		/**
+		 * Add a target that accepts a State and an Object and returns a Result.
+		 * The method will look like:
+		 * public static Result example_method( State state, Object? o ) {}
+		 */
+		public Action target_object_result( ControllerMethodObjectResult method ) {
+			targets.add( new ControllerMethod.with_object_result(method) );
+			return this;
+		}
+
+		/**
+		 * Add a target that accepts a State and an Object and returns an
+		 * Object.
+		 * The method will look like:
+		 * public static Object? example_method( State state, Object? o ) {}
+		 */
+		public Action target_object_object( ControllerMethodObjectObject method ) {
+			targets.add( new ControllerMethod.with_object_object(method) );
 			return this;
 		}
 
@@ -152,6 +175,40 @@ namespace Ambition {
 				}
 			}
 			return false;
+		}
+
+		/**
+		 * Execute a given target with a given state, and return a result
+		 * object.
+		 */
+		public Result execute_target( ControllerMethod wrapper, State state ) {
+			return wrapper.execute(state);
+		}
+
+		/**
+		 * Return string describing the current action, suitable for output on
+		 * application startup or debugging.
+		 */
+		public string action_info() {
+			var output = new StringBuilder();
+
+			var method_strings = new ArrayList<string>();
+			methods.map<string>( v => { return v.to_string(); } ).@foreach( method => {
+				method_strings.add(method);
+				return true;
+			});
+
+			foreach ( var path in paths ) {
+				output.append(
+					"%-30s %s --> %d targets".printf(
+						arraylist_joinv( "", method_strings ),
+						path,
+						targets.size
+					)
+				);
+			}
+
+			return output.str;
 		}
 
 		public class Marshaller : Object {

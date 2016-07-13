@@ -25,6 +25,8 @@ public class ActionTest : Ambition.Testing.AbstractTestCase {
 		add_test( "init", init );
 		add_test( "method", method );
 		add_test( "target", target );
+		add_test( "target_or", target_or );
+		add_test( "target_oo", target_oo );
 		add_test( "path", path );
 		add_test( "marshal_request", marshal_request );
 		add_test( "marshal_response", marshal_response );
@@ -45,9 +47,28 @@ public class ActionTest : Ambition.Testing.AbstractTestCase {
 
 	public void target() {
 		var a = new Ambition.Action();
-		var b = a.target("Controller.example");
+		var b = a.target( example_state_result_method );
 		assert( a.targets.size == 1 );
-		assert( a.targets[0] == "Controller.example" );
+		assert( a.targets[0] is Ambition.ControllerMethod );
+		assert( a.targets[0].controller_method_type == Ambition.ControllerMethod.MethodType.CMSR );
+		assert( a == b );
+	}
+
+	public void target_or() {
+		var a = new Ambition.Action();
+		var b = a.target_object_result( example_state_object_result_method );
+		assert( a.targets.size == 1 );
+		assert( a.targets[0] is Ambition.ControllerMethod );
+		assert( a.targets[0].controller_method_type == Ambition.ControllerMethod.MethodType.CMOR );
+		assert( a == b );
+	}
+
+	public void target_oo() {
+		var a = new Ambition.Action();
+		var b = a.target_object_object( example_state_object_object_method );
+		assert( a.targets.size == 1 );
+		assert( a.targets[0] is Ambition.ControllerMethod );
+		assert( a.targets[0].controller_method_type == Ambition.ControllerMethod.MethodType.CMOO );
 		assert( a == b );
 	}
 
@@ -89,4 +110,15 @@ public class ActionTest : Ambition.Testing.AbstractTestCase {
 		assert( a == b );
 	}
 
+	public static Ambition.Result example_state_result_method( Ambition.State state ) {
+		return new Ambition.CoreView.None();
+	}
+
+	public static Ambition.Result example_state_object_result_method( Ambition.State state, Object? o ) {
+		return new Ambition.CoreView.None();
+	}
+
+	public static Object? example_state_object_object_method( Ambition.State state, Object? o ) {
+		return null;
+	}
 }

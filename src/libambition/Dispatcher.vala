@@ -117,24 +117,8 @@ namespace Ambition {
 					action.methods.add( HttpMethod.ALL );
 				}
 
-				// Normally, we rely on logger to determine whether to output
-				// anything, but in this case, let's save some minor ops if we
-				// are not in debug mode.
 				if ( logger.log_level == Log4Vala.Level.DEBUG ) {
-					var methods = new ArrayList<string>();
-					foreach ( HttpMethod hm in action.methods ) {
-						methods.add( hm.to_string().substring( 0, 1 ) );
-					}
-
-					foreach ( var path in action.paths ) {
-						logger.debug(
-							" %-4s %-32s %s".printf(
-								arraylist_joinv( "", methods ),
-								( path.length > 32 ? ( path.substring( 0, 31 ) + "…" ) : path ),
-								arraylist_joinv( " > ", action.targets )
-							)
-						);
-					}
+					logger.debug( action.action_info() );
 				}
 			}
 
@@ -203,13 +187,14 @@ namespace Ambition {
 				p.on_request_dispatch(state);
 			}
 
-			// Get action list for request
-			var action_list = find_actions_for(state);
+			// Get action for request
+			var action = find_action_for(state);
 
-			if ( action_list != null && action_list.size > 0 ) {
-				var action_response = execute_action_list( action_list, state );
+			if ( action != null ) {
+				var action_response = execute_action_targets( action, state );
 				display_action_response( action_response, state );
 			}
+
 			// Call on_request_end hook in application.
 			application.on_request_end(state);
 
@@ -218,7 +203,7 @@ namespace Ambition {
 				p.on_request_end(state);
 			}
 
-			// Set powered by if required
+			// Set powered by if configured
 			if (show_powered_by) {
 				state.response.set_header( "X-Powered-By", "Ambition" );
 			}
@@ -249,23 +234,23 @@ namespace Ambition {
 		 * @param action_list List of ActionMethods
 		 * @param state State object
 		 */
-		public ArrayList<string> execute_action_list( ArrayList<string> action_list, State state ) {
+		public ArrayList<string> execute_action_targets( Action action, State state ) {
 			var al = new ArrayList<string>();
-			// foreach ( ActionMethod a in action_list ) {
-			// 	Result? r = a.execute(state);
-			// 	if ( r != null && ! (r is CoreView.None) ) {
-			// 		r.state = state;
-			// 		InputStream? eis = r.render();
-			// 		if ( eis != null ) {
-			// 			state.response.body_stream = eis;
-			// 			state.response.body_stream_length = r.size;
-			// 		}
-			// 	}
-			// 	al.add( "|> %s".printf( a.path != null ? a.path : "/generic/action" ) );
-			// 	if ( state.response.is_done() ) {
-			// 		break;
-			// 	}
-			// }
+			foreach ( ControllerMethod m in action.targets ) {
+				Result? r = m.execute(state);
+				if ( r != null && ! (r is CoreView.None) ) {
+					r.state = state;
+					InputStream? eis = r.render();
+					if ( eis != null ) {
+						state.response.body_stream = eis;
+						state.response.body_stream_length = r.size;
+					}
+				}
+				// al.add( "|> %s".printf( a.path != null ? a.path : "/generic/action" ) );
+				if ( state.response.is_done() ) {
+					break;
+				}
+			}
 			return al;
 		}
 
@@ -273,7 +258,7 @@ namespace Ambition {
 		 * Inject a value into null properties corresponding to the given type.
 		 * @param search_type Type to inject
 		 * @param v Value to inject into property
-		 * @returns true if a value was injected
+		 * @return true if a value was injected
 		 */
 		public bool inject_to_application( Type search_type, Value v ) {
 			bool injected = false;
@@ -297,7 +282,7 @@ namespace Ambition {
 		 * a given request.
 		 * @param state Current engine state
 		 */
-		private ArrayList<string>? find_actions_for( State state ) {
+		private Action? find_action_for( State state ) {
 			string decoded_path = Uri.unescape_string( state.request.path );
 			decoded_path = decoded_path.replace( "//", "/" );
 			foreach ( var action in actions ) {
@@ -327,7 +312,7 @@ namespace Ambition {
 						}
 					}
 
-					return action.targets;
+					return action;
 				}
 			}
 			return null;
