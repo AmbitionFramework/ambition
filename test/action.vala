@@ -30,6 +30,7 @@ public class ActionTest : Ambition.Testing.AbstractTestCase {
 		add_test( "path", path );
 		add_test( "marshal_request", marshal_request );
 		add_test( "marshal_response", marshal_response );
+		add_test( "action_info", action_info );
 	}
 
 	public void init() {
@@ -108,6 +109,20 @@ public class ActionTest : Ambition.Testing.AbstractTestCase {
 		assert( c != null );
 		assert( c.serializer is Ambition.Serializer.HTML );
 		assert( a == b );
+	}
+
+	public void action_info() {
+		var a = new Ambition.Action()
+					.path("/foo/[baz]/bar")
+					.method( Ambition.HttpMethod.GET )
+					.target(example_state_result_method);
+		assert( a != null );
+		var info = a.action_info();
+		assert( info == "                           GET /foo/[baz]/bar --> 1 target" );
+		a.method( Ambition.HttpMethod.POST );
+		a.target_object_result(example_state_object_result_method);
+		info = a.action_info();
+		assert( info == "                     GET, POST /foo/[baz]/bar --> 2 targets" );
 	}
 
 	public static Ambition.Result example_state_result_method( Ambition.State state ) {

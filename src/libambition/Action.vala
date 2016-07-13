@@ -200,10 +200,11 @@ namespace Ambition {
 
 			foreach ( var path in paths ) {
 				output.append(
-					"%-30s %s --> %d targets".printf(
-						arraylist_joinv( "", method_strings ),
+					"%30s %s --> %d target%s".printf(
+						arraylist_joinv( ", ", method_strings ),
 						path,
-						targets.size
+						targets.size,
+						( targets.size == 1 ? "" : "s" )
 					)
 				);
 			}
