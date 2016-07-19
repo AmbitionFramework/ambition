@@ -20,5 +20,5 @@ before_script:
   - cd build
   - cmake ..
 
-script: make && cd test && ./test-ambition
+script: make && cd test && gtester --verbose ./test-ambition
 
