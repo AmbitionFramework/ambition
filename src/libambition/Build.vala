@@ -48,14 +48,9 @@ namespace Ambition {
 		 * Read build config from path
 		 */
 		public bool parse_build_config( string file_path ) {
-			File file;
-			try {
-				file = File.new_for_path(file_path);
-				if ( !file.query_exists() ) {
-					file = null;
-				}
-			} catch (IOError e) {
-				logger.error( "Cannot open '%s'".printf(file_path), e );
+			File file = File.new_for_path(file_path);
+			if ( !file.query_exists() ) {
+				file = null;
 			}
 
 			if ( file == null ) {
