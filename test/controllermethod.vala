@@ -25,6 +25,7 @@ public class ControllerMethodTest : Ambition.Testing.AbstractTestCase {
 	public ControllerMethodTest() {
 		base("Ambition.ControllerMethod");
 		add_test( "init_with_state_result", init_with_state_result );
+		add_test( "init_with_state_object", init_with_state_object );
 		add_test( "init_with_object_result", init_with_object_result );
 		add_test( "init_with_object_object", init_with_object_object );
 		add_test( "parse_accept_html", parse_accept_html );
@@ -42,6 +43,17 @@ public class ControllerMethodTest : Ambition.Testing.AbstractTestCase {
 		assert( obj != null );
 		assert( obj.controller_method_type == Ambition.ControllerMethod.MethodType.CMSR );
 		assert( obj.cmsr != null );
+		assert( obj.cmso == null );
+		assert( obj.cmor == null );
+		assert( obj.cmoo == null );
+	}
+
+	public void init_with_state_object() {
+		var obj = new Ambition.ControllerMethod.with_state_object( r, example_state_object_method );
+		assert( obj != null );
+		assert( obj.controller_method_type == Ambition.ControllerMethod.MethodType.CMSO );
+		assert( obj.cmsr == null );
+		assert( obj.cmso != null );
 		assert( obj.cmor == null );
 		assert( obj.cmoo == null );
 	}
@@ -51,6 +63,7 @@ public class ControllerMethodTest : Ambition.Testing.AbstractTestCase {
 		assert( obj != null );
 		assert( obj.controller_method_type == Ambition.ControllerMethod.MethodType.CMOR );
 		assert( obj.cmsr == null );
+		assert( obj.cmso == null );
 		assert( obj.cmor != null );
 		assert( obj.cmoo == null );
 	}
@@ -60,6 +73,7 @@ public class ControllerMethodTest : Ambition.Testing.AbstractTestCase {
 		assert( obj != null );
 		assert( obj.controller_method_type == Ambition.ControllerMethod.MethodType.CMOO );
 		assert( obj.cmsr == null );
+		assert( obj.cmso == null );
 		assert( obj.cmor == null );
 		assert( obj.cmoo != null );
 	}
@@ -134,7 +148,7 @@ public class ControllerMethodTest : Ambition.Testing.AbstractTestCase {
 	public void determine_serialize_bad() {
 		var obj = new Ambition.ControllerMethod.with_object_result( r, example_state_object_result_method );
 		var state = get_state();
-		var result = obj.determine_serialize( state, new Object() );
+		obj.determine_serialize( state, new Object() );
 		assert( state.response.status == 415 );
 	}
 
@@ -157,6 +171,10 @@ public class ControllerMethodTest : Ambition.Testing.AbstractTestCase {
 	}
 
 	public static Ambition.Result example_state_result_method( Ambition.State state ) {
+		return new Ambition.CoreView.None();
+	}
+
+	public static Object? example_state_object_method( Ambition.State state ) {
 		return new Ambition.CoreView.None();
 	}
 

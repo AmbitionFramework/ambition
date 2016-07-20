@@ -25,6 +25,7 @@ public class RouteTest : Ambition.Testing.AbstractTestCase {
 		add_test( "init", init );
 		add_test( "method", method );
 		add_test( "target", target );
+		add_test( "target_o", target_o );
 		add_test( "target_or", target_or );
 		add_test( "target_oo", target_oo );
 		add_test( "path", path );
@@ -53,6 +54,15 @@ public class RouteTest : Ambition.Testing.AbstractTestCase {
 		assert( a.targets.size == 1 );
 		assert( a.targets[0] is Ambition.ControllerMethod );
 		assert( a.targets[0].controller_method_type == Ambition.ControllerMethod.MethodType.CMSR );
+		assert( a == b );
+	}
+
+	public void target_o() {
+		var a = new Ambition.Route();
+		var b = a.target_object( example_state_object_method );
+		assert( a.targets.size == 1 );
+		assert( a.targets[0] is Ambition.ControllerMethod );
+		assert( a.targets[0].controller_method_type == Ambition.ControllerMethod.MethodType.CMSO );
 		assert( a == b );
 	}
 
@@ -145,6 +155,10 @@ public class RouteTest : Ambition.Testing.AbstractTestCase {
 	}
 
 	public static Ambition.Result example_state_result_method( Ambition.State state ) {
+		return new Ambition.CoreView.None();
+	}
+
+	public static Object? example_state_object_method( Ambition.State state ) {
 		return new Ambition.CoreView.None();
 	}
 

@@ -80,6 +80,16 @@ namespace Ambition {
 		}
 
 		/**
+		 * Add a target that accepts a State and returns a Result.
+		 * The method will look like:
+		 * public static Object? example_method( State state ) {}
+		 */
+		public Route target_object( ControllerMethodStateObject method ) {
+			targets.add( new ControllerMethod.with_state_object( this, method ) );
+			return this;
+		}
+
+		/**
 		 * Add a target that accepts a State and an Object and returns an
 		 * Object.
 		 * The method will look like:

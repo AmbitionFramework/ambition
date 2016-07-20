@@ -29,6 +29,12 @@ namespace Ambition {
 	public delegate Result ControllerMethodStateResult( State state );
 
 	/**
+	 * Delegate method for a controller method expecting a State and returning
+	 * an Object.
+	 */
+	public delegate Object? ControllerMethodStateObject( State state );
+
+	/**
 	 * Delegate method for a controller method expecting a State and a marshaled
 	 * object and returning a Result.
 	 */
@@ -43,12 +49,14 @@ namespace Ambition {
 	public class ControllerMethod : Object {
 		public enum MethodType {
 			CMSR,
+			CMSO,
 			CMOR,
 			CMOO
 		}
 
 		public MethodType controller_method_type;
 		public ControllerMethodStateResult cmsr;
+		public ControllerMethodStateObject cmso;
 		public ControllerMethodObjectResult cmor;
 		public ControllerMethodObjectObject cmoo;
 		public Route route;
@@ -56,6 +64,12 @@ namespace Ambition {
 		public ControllerMethod.with_state_result( Route r, ControllerMethodStateResult m ) {
 			this.controller_method_type = MethodType.CMSR;
 			this.cmsr = m;
+			this.route = r;
+		}
+
+		public ControllerMethod.with_state_object( Route r, ControllerMethodStateObject m ) {
+			this.controller_method_type = MethodType.CMSO;
+			this.cmso = m;
 			this.route = r;
 		}
 
@@ -76,6 +90,9 @@ namespace Ambition {
 				case MethodType.CMSR:
 					return execute_cmsr(state);
 
+				case MethodType.CMSO:
+					return execute_cmso(state);
+
 				case MethodType.CMOR:
 					return execute_cmor(state);
 
@@ -90,6 +107,12 @@ namespace Ambition {
 
 		private Result? execute_cmsr( State state ) {
 			return cmsr(state);
+		}
+
+		private Result? execute_cmso( State state ) {
+			Object? result = cmso(state);
+			string? serialized = determine_serialize( state, result );
+			return new Ambition.CoreView.RawString(serialized);
 		}
 
 		private Result? execute_cmor( State state ) {
