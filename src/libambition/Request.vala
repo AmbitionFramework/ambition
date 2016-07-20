@@ -259,10 +259,32 @@ namespace Ambition {
 		}
 
 		/**
+		 * Retrieve a URL capture by name as an int, -1 if unavailable.
+		 */
+		public int get_capture_int( string capture_name ) {
+			var captured = this.named_captures[capture_name];
+			if ( captured == null ) {
+				return -1;
+			}
+			return int.parse(captured);
+		}
+
+		/**
 		 * Retrieve a URL capture by index, null if unavailable.
 		 */
 		public string? get_capture_index( int capture_index ) {
 			return this.captures[capture_index];
+		}
+
+		/**
+		 * Retrieve a URL capture by index as an int, -1 if unavailable.
+		 */
+		public int get_capture_index_int( int capture_index ) {
+			var captured = this.captures[capture_index];
+			if ( captured == null ) {
+				return -1;
+			}
+			return int.parse(captured);
 		}
 
 		/**
