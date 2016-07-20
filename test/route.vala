@@ -32,6 +32,7 @@ public class RouteTest : Ambition.Testing.AbstractTestCase {
 		add_test( "marshal_request", marshal_request );
 		add_test( "marshal_response", marshal_response );
 		add_test( "marshal_json", marshal_json );
+		add_test( "marshal_json_no_type", marshal_json_no_type );
 		add_test( "route_info", route_info );
 	}
 
@@ -132,6 +133,20 @@ public class RouteTest : Ambition.Testing.AbstractTestCase {
 		assert( reqm.size == 2 );
 		assert( reqm["application/json"].serializer is Ambition.Serializer.JSON );
 		assert( reqm["text/json"].serializer is Ambition.Serializer.JSON );
+		var resm = a.response_marshallers;
+		assert( resm != null );
+		assert( resm.size == 2 );
+		assert( resm["application/json"].serializer is Ambition.Serializer.JSON );
+		assert( resm["text/json"].serializer is Ambition.Serializer.JSON );
+		assert( a == b );
+	}
+
+	public void marshal_json_no_type() {
+		var a = new Ambition.Route();
+		var b = a.marshal_json();
+		var reqm = a.request_marshallers;
+		assert( reqm != null );
+		assert( reqm.size == 0 );
 		var resm = a.response_marshallers;
 		assert( resm != null );
 		assert( resm.size == 2 );

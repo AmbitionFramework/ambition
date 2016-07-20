@@ -168,12 +168,16 @@ namespace Ambition {
 		/**
 		 * Set up request and response marshallers to provide JSON for the
 		 * application/json and text/json content types on the given object
-		 * type.
+		 * type. If the method will not receive an object, the object_type can
+		 * remain blank.
+		 * @param object_type Type representing the object to deserialize to
 		 */
-		public Route marshal_json( Type object_type ) {
+		public Route marshal_json( Type? object_type = null ) {
 			var json = new Serializer.JSON();
-			request_marshallers["application/json"] = new Marshaller( json, object_type );
-			request_marshallers["text/json"] = request_marshallers["application/json"];
+			if ( object_type != null ) {
+				request_marshallers["application/json"] = new Marshaller( json, object_type );
+				request_marshallers["text/json"] = request_marshallers["application/json"];
+			}
 			response_marshallers["application/json"] = new Marshaller( json, null );
 			response_marshallers["text/json"] = response_marshallers["application/json"];
 			return this;
