@@ -162,11 +162,11 @@ public class RouteTest : Ambition.Testing.AbstractTestCase {
 					.target(example_state_result_method);
 		assert( a != null );
 		var info = a.route_info();
-		assert( info == "                           GET /foo/[baz]/bar --> 1 target" );
+		assert( info.contains(" GET /foo/[baz]/bar --> 1 target") );
 		a.method( Ambition.HttpMethod.POST );
 		a.target_object_result(example_state_object_result_method);
 		info = a.route_info();
-		assert( info == "                     GET, POST /foo/[baz]/bar --> 2 targets" );
+		assert( info.contains(" GET, POST /foo/[baz]/bar --> 2 targets") );
 	}
 
 	public static Ambition.Result example_state_result_method( Ambition.State state ) {
