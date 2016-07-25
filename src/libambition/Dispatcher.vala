@@ -190,6 +190,7 @@ namespace Ambition {
 			var route = find_route_for(state);
 
 			if ( route != null ) {
+				logger.debug( "Handling with route %s".printf( route.route_id() ) );
 				var route_response = execute_route_targets( route, state );
 				display_route_response( route_response, state );
 			}
@@ -290,16 +291,18 @@ namespace Ambition {
 					state.request.captures = info.fetch_all();
 
 					// Determine named captures
-					while ( info.matches() ) {
-						string name = info.fetch(1);
-						if ( name != null ) {
+					var re_named = /\(\?<([^>]+)>/;
+					MatchInfo named_info = null;
+					if ( re_named.match( re.get_pattern(), 0, out named_info ) ) {
+						while ( named_info.matches() ) {
+							string name = named_info.fetch(1);
 							state.request.named_captures[name] = info.fetch_named(name);
-						}
-						try {
-							info.next();
-						} catch ( RegexError e ) {
-							logger.error( "Error matching next capture in URL", e );
-							break;
+							try {
+								named_info.next();
+							} catch ( RegexError e ) {
+								logger.error( "Error matching next capture in URL", e );
+								break;
+							}
 						}
 					}
 

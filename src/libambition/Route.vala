@@ -44,12 +44,15 @@ namespace Ambition {
 	 */
 	public class Route : Object {
 		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Route");
+		private string _route_id;
+
 		public ArrayList<HttpMethod?> methods = new ArrayList<HttpMethod?>();
 		public ArrayList<ControllerMethod> targets = new ArrayList<ControllerMethod>();
 		public ArrayList<string> paths = new ArrayList<string>();
 		public HashMap<string,Marshaller?> request_marshallers = new HashMap<string,Marshaller?>();
 		public HashMap<string,Marshaller?> response_marshallers = new HashMap<string,Marshaller?>();
 		public ArrayList<Regex?> _regexes = new ArrayList<Regex?>();
+		public ArrayList<string> names = new ArrayList<string>();
 
 		/**
 		 * Add an HTTP method to respond to
@@ -221,7 +224,8 @@ namespace Ambition {
 
 			foreach ( var path in paths ) {
 				output.append(
-					"%30s %s --> %d target%s".printf(
+					"%s %30s %s --> %d target%s".printf(
+						route_id(),
 						arraylist_joinv( ", ", method_strings ),
 						path,
 						targets.size,
@@ -231,6 +235,29 @@ namespace Ambition {
 			}
 
 			return output.str;
+		}
+
+		public string route_id() {
+			if ( _route_id == null ) {
+				var output = new StringBuilder();
+				var method_strings = new ArrayList<string>();
+				methods.map<string>( v => { return v.to_string().substring( 0, 1 ); } ).@foreach( method => {
+					method_strings.add(method);
+					return true;
+				});
+
+				foreach ( var path in paths ) {
+					output.append(
+						"%s%s%d".printf(
+							arraylist_joinv( ", ", method_strings ),
+							path,
+							targets.size
+						)
+					);
+				}
+				_route_id = Checksum.compute_for_string( ChecksumType.SHA1, output.str ).substring(0, 10);
+			}
+			return _route_id;
 		}
 
 		public class Marshaller : Object {
