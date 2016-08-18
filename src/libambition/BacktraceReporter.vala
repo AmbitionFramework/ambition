@@ -63,6 +63,29 @@ namespace Ambition {
 			Process.exit(1);
 		}
 
+		public Result default_error_handler( State state, ParsedBacktrace trace ) {
+			StringBuilder sb = new StringBuilder();
+			foreach ( var f in trace.frames ) {
+				if ( f.function == "??" ) {
+					sb.append( "<div>Library: (%s) [%s]</div>".printf( f.raw, f.address ) );
+				} else {
+					sb.append( "<div>%s (%s:%d) [%s]</div>".printf( f.function, f.filename, f.line, f.address ) );
+				}
+			}
+			return new Ambition.CoreView.RawString("""<html><head><title>Error</title><style type="text/css">
+		body { background-color: #bfbfbc; font-family: verdana; font-size: 12px }
+		h1 { text-align: center; padding: 20px !important; margin: 0; }
+		h2 { margin: 0 0 8px 0; padding: 0;}
+		table { border: 1px solid #ddd; width: 622px; table-layout:fixed; border-collapse: collapse; }
+		td,th { border: 1px solid #ddd; padding: 8px; font-size: 12px; word-wrap:break-word }
+		th { text-align: left; font-weight: bold }
+		.box { margin: 20px auto; width: 640px; padding: 8px; background-color: #fff; border: 2px solid #888; }
+		#param_box { display: none; padding-top: 8px }
+		#footer { font-size: small; color: #333; margin: 0; padding: 5px 10%; border-top: 1px solid #888; text-align: right; }
+	</style></head><body><div class="box"><h1>Error</h1></div>
+	<div class="box"><div><b>%s</b></div>%s</div></body></html>""".printf( trace.readable_signal, sb.str ), 500);
+		}
+
 		protected ParsedBacktrace obtain_trace(int signal_int) {
 	    	void*[] array = new void*[total_count];
 	#if VALA_0_26
@@ -73,7 +96,7 @@ namespace Ambition {
 	    	unowned string[] strings = Linux.backtrace_symbols( array, size );
 	    	strings.length = size;
 	#endif
-			int64[] addresses = (int64[])array;
+			int64[] addresses = (int64[]) array;
 
 			var trace = new ParsedBacktrace();
 

@@ -23,7 +23,7 @@ namespace Ambition {
 	/**
 	 * Function to respond to an error condition
 	 */
-	public delegate void ErrorHandler( State state, ParsedBacktrace backtrace );
+	public delegate Result ErrorHandler( State state, ParsedBacktrace backtrace );
 		
 	/**
 	 * Base class for an Application.

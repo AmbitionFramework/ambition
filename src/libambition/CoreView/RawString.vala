@@ -38,7 +38,7 @@ namespace Ambition.CoreView {
 		 * @param str String to return to the browser.
 		 * @param code Optional status code to provide to the browser.
 		 */
-		public RawString( string str, int code = 0 ) {
+		public RawString( string str, int code = 200 ) {
 			this.renderable = str;
 			this.code = code;
 		}
