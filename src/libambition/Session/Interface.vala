@@ -37,6 +37,9 @@ namespace Ambition.Session {
 		public string id {
 			get { return session_id; }
 		}
+		public bool has_data {
+			get { return string_params.size > 0; }
+		}
 
 		/**
 		 * Create a Interface object 

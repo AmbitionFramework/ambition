@@ -51,5 +51,11 @@ public class SessionTest {
 			string g = s.get_value("foo");
 			assert( g == "bar" );
 		});
+		Test.add_func("/ambition/session/interface/has_data", () => {
+			var s = new Ambition.Session.Interface();
+			assert( s.has_data == false );
+			s.set_value( "foo", "bar" );
+			assert( s.has_data == true );
+		});
 	}
 }
