@@ -55,7 +55,7 @@ namespace Ambition.Session {
 
 		public void on_request_dispatch( State state ) {
 			initialize_session(state);
-			if ( state.session != null && state.session.session_id != null ) {
+			if ( state.session != null && state.session.session_id != null && state.session.has_data ) {
 				logger.debug( "Found session %s".printf( state.session.session_id ) );
 			}
 		}
@@ -110,7 +110,7 @@ namespace Ambition.Session {
 					state.session.set_value( "_user_type", state.user.authorizer_name );
 				}
 
-				if ( state.session.id != null ) {
+				if ( state.session.id != null && state.session.has_data ) {
 					// flush session
 					session_store.store( state.session.id, state.session );
 
