@@ -68,7 +68,7 @@ SET( CORE_DEPS_PACKAGES
 	json-glib-1.0
 	gmodule-2.0
 	libsoup-2.4
-	log4vala-0.1
+	log4vala-0.2
 )
 find_package(PkgConfig)
 pkg_check_modules(CORE_DEPS REQUIRED ${CORE_DEPS_PACKAGES} glib-2.0>=2.32)
