@@ -28,7 +28,7 @@ namespace Ambition.PluginSupport {
 		/**
 		 * Name of the plugin.
 		 */
-		public abstract string name { get { return "Invalid"; } }
+		public abstract string name { get; }
 
 		/**
 		 * Method called before instantiation, to determine the type of the

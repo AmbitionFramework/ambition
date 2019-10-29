@@ -28,7 +28,7 @@ namespace Ambition.Utility {
 		/**
 		 * Name of the plugin.
 		 */
-		public abstract string name { get { return "Invalid"; } }
+		public abstract string name { get; }
 
 		/**
 		 * Method called when a plugin is first created, to allow a plugin
