@@ -26,7 +26,7 @@ vala_precompile(APPLIB_VALA_C
 PACKAGES
     ${APP_VALA_PACKAGES}
 OPTIONS
-	--thread
+    --target-glib=2.32
     ${APP_PLUGIN_VAPI_LIST}
 	--enable-experimental
     -g
@@ -41,7 +41,7 @@ PACKAGES
     ${APP_VALA_PACKAGES}
     ${APPNAME}
 OPTIONS
-    --thread
+    --target-glib=2.32
     --enable-experimental
     --vapidir=.
     ${APP_PLUGIN_VAPI_LIST}
@@ -61,8 +61,8 @@ add_definitions(${APP_CFLAGS})
 link_directories( ${APP_LIB_PATHS} )
 add_library(${APPNAME} SHARED ${APPLIB_VALA_C})
 add_executable(${BINNAME} ${APPBIN_VALA_C})
-target_link_libraries(${APPNAME} ${APP_DEPS_LIBRARIES} ${APP_PLUGIN_PACKAGES} gthread-2.0)
-target_link_libraries(${BINNAME} ${APPNAME} gthread-2.0)
+target_link_libraries(${APPNAME} ${APP_DEPS_LIBRARIES} ${APP_PLUGIN_PACKAGES})
+target_link_libraries(${BINNAME} ${APPNAME})
 
 install (TARGETS ${APPNAME} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin/)
 install (TARGETS ${BINNAME} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin/)

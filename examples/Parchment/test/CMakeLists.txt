@@ -10,7 +10,7 @@ vala_precompile_target(
 	ApplicationTest.vala
     FLAGS
 		-g
-		--thread
+		--target-glib=2.32
 		--vapidir=../src
 	    ${APP_PLUGIN_VAPI_LIST}
 		--enable-experimental
@@ -32,5 +32,5 @@ add_definitions(${APPTEST_CFLAGS})
 link_directories( ${APPTEST_LIB_PATHS} )
 add_executable(${BINNAME} ${APPTEST_VALA_C})
 add_dependencies(${BINNAME} "${PKGNAME}-lib-vala" "${APPNAME}-test-vala")
-target_link_libraries(${BINNAME} ${APP_DEPS_LIBRARIES} ${APP_PLUGIN_PACKAGES} ${APPNAME} gthread-2.0)
+target_link_libraries(${BINNAME} ${APP_DEPS_LIBRARIES} ${APP_PLUGIN_PACKAGES} ${APPNAME})
 add_test_executable(${BINNAME})

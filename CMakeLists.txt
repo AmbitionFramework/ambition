@@ -8,7 +8,7 @@ include(FindVala)
 include(ValaHelper)
 include(OSFlags)
 include(AddCompilerFlags)
-ensure_vala_version("0.22.0" MINIMUM)
+ensure_vala_version("0.36.0" MINIMUM)
 
 global_add_compiler_flags(-Wno-incompatible-pointer-types)
 
@@ -47,7 +47,6 @@ SET( VAPIDIRS
 )
 SET( DEFAULT_VALA_OPTIONS
 	${VAPIDIRS}
-	--thread
 	--enable-experimental
 	--target-glib=2.32
 	--debug
