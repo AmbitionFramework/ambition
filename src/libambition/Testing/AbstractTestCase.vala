@@ -12,7 +12,7 @@ namespace Ambition.Testing {
 	 
 		public delegate void TestMethod();
 	 
-		public AbstractTestCase(string name) {
+		protected AbstractTestCase(string name) {
 			this.suite = new GLib.TestSuite (name);
 		}
 	 

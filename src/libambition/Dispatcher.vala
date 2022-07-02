@@ -309,7 +309,7 @@ namespace Ambition {
 					// Determine arguments
 					if ( !re.get_pattern().has_suffix("$/") ) {
 						try {
-							state.request._arguments = re.replace( decoded_path, -1, 0, "" );
+							state.request.arguments_string = re.replace( decoded_path, -1, 0, "" );
 						} catch ( RegexError e ) {
 							logger.error("Invalid regex for arguments");
 						}

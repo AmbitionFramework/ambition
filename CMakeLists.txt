@@ -8,7 +8,7 @@ include(FindVala)
 include(ValaHelper)
 include(OSFlags)
 include(AddCompilerFlags)
-ensure_vala_version("0.36.0" MINIMUM)
+ensure_vala_version("0.54.0" MINIMUM)
 
 global_add_compiler_flags(-Wno-incompatible-pointer-types)
 

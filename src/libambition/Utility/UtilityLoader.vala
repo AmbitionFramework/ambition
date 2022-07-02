@@ -78,7 +78,7 @@ namespace Ambition.Utility {
 		 * @param filename Filename of module
 		 */
 		public static IUtility? load_plugin( string directory_path, string filename ) {
-			Module module = Module.open( "%s/%s".printf( directory_path, filename), ModuleFlags.BIND_LOCAL );
+			Module module = Module.open( "%s/%s".printf( directory_path, filename), ModuleFlags.LOCAL );
 			if ( module == null ) {
 				Log4Vala.Logger.get_logger("Ambition.Utility.UtilityLoader").error( "Unable to load utility '%s': %s. Skipping.".printf( filename, Module.error() ) );
 				return null;

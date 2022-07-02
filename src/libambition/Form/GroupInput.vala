@@ -26,7 +26,7 @@ namespace Ambition.Form {
 		protected string[] labels;
 		protected string input_type { get; set; }
 
-		public GroupInput.with_options( string[] values, string[] labels ) {
+		protected GroupInput.with_options( string[] values, string[] labels ) {
 			this.values = values;
 			this.labels = labels;
 		}

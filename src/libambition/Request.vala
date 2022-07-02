@@ -27,7 +27,7 @@ namespace Ambition {
 	 * passed to a given controller and method.
 	 */
 	public class Request : Object {
-		private string __arguments;
+		private string _arguments;
 		private string _uri;
 		private string _base_uri;
 
@@ -132,17 +132,17 @@ namespace Ambition {
 		 */
 		public HashMap<string,string> named_captures { get; set; default = new HashMap<string,string>(); }
 
-		public string _arguments {
+		public string arguments_string {
 			get {
-				return __arguments;
+				return _arguments;
 			}
 			set {
-				__arguments = value;
-				if ( __arguments.has_prefix("/") ) {
-					__arguments = __arguments.substring(1);
+				_arguments = value;
+				if ( _arguments.has_prefix("/") ) {
+					_arguments = _arguments.substring(1);
 				}
-				if ( __arguments.has_suffix("/") ) {
-					__arguments = __arguments.substring( 0, __arguments.length - 1 );
+				if ( _arguments.has_suffix("/") ) {
+					_arguments = _arguments.substring( 0, _arguments.length - 1 );
 				}
 			}
 		}
@@ -245,8 +245,8 @@ namespace Ambition {
 		 * Retrieve the list of URL arguments, if supported by dispatch type.
 		 */
 		public string[]? arguments() {
-			if ( this._arguments != null ) {
-				return this._arguments.split("/");
+			if ( this.arguments_string != null ) {
+				return this.arguments_string.split("/");
 			}
 			return null;
 		}

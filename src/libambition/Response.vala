@@ -27,6 +27,8 @@ namespace Ambition {
 	 * Ambition engine and passed to a given controller and method.
 	 */
 	public class Response : Object {
+		private bool _done = false;
+
 		/**
 		 * Additional dynamic headers to be sent in the HTTP response.
 		 */
@@ -70,8 +72,6 @@ namespace Ambition {
 		 * Content type of the response, defaults to "text/html".
 		 */
 		public string? content_type { get; set; default = "text/html"; }
-
-		private bool _done { get; set; default = false; }
 
 		/**
 		 * Get an existing response cookie by name.
