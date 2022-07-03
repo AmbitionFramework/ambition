@@ -28,31 +28,31 @@ namespace Ambition {
 		public const int WARN = 2;
 		public const int ERROR = 3;
 		
-		[Deprecated( since = "0.2", replacement = "Log4Vala.Logger.debug" )]
+		[Version( deprecated = true, deprecated_since = "0.2", replacement = "Log4Vala.Logger.debug" )]
 		public static void debug( string message, ... ) {
 			var l = va_list();
 			Log4Vala.Logger.get_logger("ambition.logger").debug( message.vprintf(l) );
 		}
 
-		[Deprecated( since = "0.2", replacement = "Log4Vala.Logger.info" )]
+		[Version( deprecated = true, deprecated_since = "0.2", replacement = "Log4Vala.Logger.info" )]
 		public static void info( string message, ... ) {
 			var l = va_list();
 			Log4Vala.Logger.get_logger("ambition.logger").info( message.vprintf(l) );
 		}
 
-		[Deprecated( since = "0.2", replacement = "Log4Vala.Logger.warn" )]
+		[Version( deprecated = true, deprecated_since = "0.2", replacement = "Log4Vala.Logger.warn" )]
 		public static void warn( string message, ... ) {
 			var l = va_list();
 			Log4Vala.Logger.get_logger("ambition.logger").warn( message.vprintf(l) );
 		}
 
-		[Deprecated( since = "0.2", replacement = "Log4Vala.Logger.error" )]
+		[Version( deprecated = true, deprecated_since = "0.2", replacement = "Log4Vala.Logger.error" )]
 		public static void error( string message, ... ) {
 			var l = va_list();
 			Log4Vala.Logger.get_logger("ambition.logger").error( message.vprintf(l) );
 		}
 
-		[Deprecated( since = "0.2", replacement = "Log4Vala.Logger.log" )]
+		[Version( deprecated = true, deprecated_since = "0.2", replacement = "Log4Vala.Logger.log" )]
 		private static async void write_log( string log_level, string message ) {
 			Log4Vala.Logger.get_logger("ambition.logger").log(
 				Log4Vala.Level.get_by_name(log_level),

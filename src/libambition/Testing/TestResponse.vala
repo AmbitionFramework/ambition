@@ -169,7 +169,7 @@ namespace Ambition.Testing {
 		 * Assert HTTP response status code matches value.
 		 * @param status HTTP status code
 		 */
-		[Deprecated( since = "0.2", replacement = "status_is" )]
+		[Version( deprecated = true, deprecated_since = "0.2", replacement = "status_is" )]
 		public void assert_status_is( int status ) {
 			assert( status_is(status) );
 		}
@@ -178,7 +178,7 @@ namespace Ambition.Testing {
 		 * Assert HTTP response status code does not match value.
 		 * @param status HTTP status code
 		 */
-		[Deprecated( since = "0.2", replacement = "status_isnt" )]
+		[Version( deprecated = true, deprecated_since = "0.2", replacement = "status_isnt" )]
 		public void assert_status_isnt( int status ) {
 			assert( status_isnt(status) );
 		}
@@ -188,7 +188,7 @@ namespace Ambition.Testing {
 		 * @param header_name Header name (ex: X-Powered-By)
 		 * @param header_value Header value (ex: Ambition)
 		 */
-		[Deprecated( since = "0.2", replacement = "header_is" )]
+		[Version( deprecated = true, deprecated_since = "0.2", replacement = "header_is" )]
 		public void assert_header_is( string header_name, string header_value ) {
 			assert( header_is( header_name, header_value ) );
 		}
@@ -198,7 +198,7 @@ namespace Ambition.Testing {
 		 * @param header_name Header name (ex: X-Powered-By)
 		 * @param header_value Header value (ex: Unicorns)
 		 */
-		[Deprecated( since = "0.2", replacement = "header_isnt" )]
+		[Version( deprecated = true, deprecated_since = "0.2", replacement = "header_isnt" )]
 		public void assert_header_isnt( string header_name, string header_value ) {
 			assert( header_isnt( header_name, header_value ) );
 		}
@@ -207,7 +207,7 @@ namespace Ambition.Testing {
 		 * Assert Content Type matches value.
 		 * @param content_type Content type string.
 		 */
-		[Deprecated( since = "0.2", replacement = "content_type_is" )]
+		[Version( deprecated = true, deprecated_since = "0.2", replacement = "content_type_is" )]
 		public void assert_content_type_is( string content_type ) {
 			assert( content_type_is(content_type) );
 		}
@@ -216,7 +216,7 @@ namespace Ambition.Testing {
 		 * Assert Content Type does not match value.
 		 * @param content_type Content type string.
 		 */
-		[Deprecated( since = "0.2", replacement = "content_type_isnt" )]
+		[Version( deprecated = true, deprecated_since = "0.2", replacement = "content_type_isnt" )]
 		public void assert_content_type_isnt( string content_type ) {
 			assert( content_type_isnt(content_type) );
 		}
@@ -225,7 +225,7 @@ namespace Ambition.Testing {
 		 * Assert Content Type contains value (case insensitive).
 		 * @param content_type Content type string.
 		 */
-		[Deprecated( since = "0.2", replacement = "content_type_like" )]
+		[Version( deprecated = true, deprecated_since = "0.2", replacement = "content_type_like" )]
 		public void assert_content_type_like( string content_type ) {
 			assert( content_type_like(content_type) );
 		}
@@ -234,7 +234,7 @@ namespace Ambition.Testing {
 		 * Assert Content Type does not contain value (case insensitive).
 		 * @param content_type Content type string.
 		 */
-		[Deprecated( since = "0.2", replacement = "content_type_unlike" )]
+		[Version( deprecated = true, deprecated_since = "0.2", replacement = "content_type_unlike" )]
 		public void assert_content_type_unlike( string content_type ) {
 			assert( content_type_unlike(content_type) );
 		}
@@ -243,7 +243,7 @@ namespace Ambition.Testing {
 		 * Assert result content matches value.
 		 * @param content Content string.
 		 */
-		[Deprecated( since = "0.2", replacement = "content_is" )]
+		[Version( deprecated = true, deprecated_since = "0.2", replacement = "content_is" )]
 		public void assert_content_is( string content ) {
 			assert( content_is(content) );
 		}
@@ -252,7 +252,7 @@ namespace Ambition.Testing {
 		 * Assert result content does not match value.
 		 * @param content Content string.
 		 */
-		[Deprecated( since = "0.2", replacement = "content_isnt" )]
+		[Version( deprecated = true, deprecated_since = "0.2", replacement = "content_isnt" )]
 		public void assert_content_isnt( string content ) {
 			assert( content_isnt(content) );
 		}
@@ -261,7 +261,7 @@ namespace Ambition.Testing {
 		 * Assert result content contains value (case sensitive).
 		 * @param content Content string.
 		 */
-		[Deprecated( since = "0.2", replacement = "content_like" )]
+		[Version( deprecated = true, deprecated_since = "0.2", replacement = "content_like" )]
 		public void assert_content_like( string content ) {
 			assert( content_like(content) );
 		}
@@ -270,7 +270,7 @@ namespace Ambition.Testing {
 		 * Assert result content does not contain value (case sensitive).
 		 * @param content Content string.
 		 */
-		[Deprecated( since = "0.2", replacement = "content_unlike" )]
+		[Version( deprecated = true, deprecated_since = "0.2", replacement = "content_unlike" )]
 		public void assert_content_unlike( string content ) {
 			assert( result_content.contains(content) == false );
 		}
