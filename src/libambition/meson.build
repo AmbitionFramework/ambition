@@ -1,0 +1,120 @@
+sources = [
+  'Application.vala',
+  'App.vala',
+  'Build.vala',
+  'Component.vala',
+  'Config.vala',
+  'ControllerMethod.vala',
+  'Cookie.vala',
+  'DispatcherUtils.vala',
+  'Dispatcher.vala',
+  'HttpMethod.vala',
+  'Logger.vala',
+  'RequestFile.vala',
+  'Request.vala',
+  'Response.vala',
+  'Result.vala',
+  'Route.vala',
+  'Stash.vala',
+  'State.vala',
+  'TemplateCompiler.vala',
+  'Authorization/Authorize.vala',
+  'Authorization/Builder.vala',
+  'Authorization/IAuthorizer.vala',
+  'Authorization/IPasswordType.vala',
+  'Authorization/IUser.vala',
+  'Authorization/Authorizer/Flat.vala',
+  'Authorization/Authorizer/Htpasswd.vala',
+  'Authorization/PasswordType/Hashed.vala',
+  'Authorization/PasswordType/MD5.vala',
+  'Authorization/PasswordType/SHA1.vala',
+  'Authorization/PasswordType/SHA256.vala',
+  'Authorization/User/Flat.vala',
+  'Authorization/User/Htpasswd.vala',
+  'Controller/Static.vala',
+  'CoreView/File.vala',
+  'CoreView/JSON.vala',
+  'CoreView/None.vala',
+  'CoreView/RawString.vala',
+  'CoreView/Redirect.vala',
+  'CoreView/Template.vala',
+  'Engine/Base.vala',
+  'Engine/Raw.vala',
+  'Engine/Test.vala',
+  'Form/Button.vala',
+  'Form/CheckboxGroupInput.vala',
+  'Form/FieldRenderer.vala',
+  'Form/FormDefinition.vala',
+  'Form/GroupInput.vala',
+  'Form/HiddenInput.vala',
+  'Form/PasswordInput.vala',
+  'Form/RadioGroupInput.vala',
+  'Form/ResetButton.vala',
+  'Form/SelectGroupInput.vala',
+  'Form/SubmitButton.vala',
+  'Form/Tag.vala',
+  'Form/Textarea.vala',
+  'Form/TextInput.vala',
+  'Form/Validator.vala',
+  'Plugin/HttpPluginService.vala',
+  'Plugin/IPluginService.vala',
+  'Plugin/LocalPluginService.vala',
+  'Plugin/PluginManifest.vala',
+  'Plugin/PluginResult.vala',
+  'PluginSupport/IPlugin.vala',
+  'PluginSupport/PluginLoader.vala',
+  'Serializer/ErrorMessage.vala',
+  'Serializer/HTML.vala',
+  'Serializer/ISerializer.vala',
+  'Serializer/JSONNode.vala',
+  'Serializer/JSON.vala',
+  'Serializer/ResponseHelper.vala',
+  'Session/Interface.vala',
+  'Session/IStorable.vala',
+  'Session/SessionPlugin.vala',
+  'Session/StorableFile.vala',
+  'Session/StorableMemory.vala',
+  'Testing/AbstractTestCase.vala',
+  'Testing/Helper.vala',
+  'Testing/TestResponse.vala',
+  'Utility/Clean.vala',
+  'Utility/Creator.vala',
+  'Utility/IUtility.vala',
+  'Utility/Monitor.vala',
+  'Utility/Plugin.vala',
+  'Utility/Run.vala',
+  'Utility/ScaffoldManifest.vala',
+  'Utility/Scaffold.vala',
+  'Utility/UtilityLoader.vala',
+  'Utility/Utility.vala'
+]
+
+deps = [default_dependencies]
+
+vala_args = [default_vala_options]
+
+ambition_lib = shared_library(
+    library_name,
+    sources: sources,
+    dependencies: deps,
+    vala_args: vala_args,
+    install: true,
+    install_dir: [true, true, true]
+)
+
+lib_dep = declare_dependency(
+    sources: sources
+)
+
+import('pkgconfig').generate(
+    libraries: ambition_lib,
+    version: meson.project_version(),
+    name: library_name,
+    filebase: library_name,
+    description : 'Ambition Web Framework for Vala and/or GObject.'
+)
+
+install_data(
+    library_name + '.deps',
+    install_dir: join_paths(get_option('datadir'), 'vala', 'vapi')
+)
