@@ -1,0 +1,33 @@
+name: Build
+
+on:
+  push:
+    branches: [ "main", "rethink-refresh" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v1
+
+      - name: Install dependencies
+        run: sudo apt-get -y install software-properties-common build-essential wget git valac libglib2.0-dev libgee-0.8-dev libjson-glib-dev libreadline-dev libsoup2.4-dev meson ninja-build
+
+      - uses: actions/checkout@v3
+        with:
+          repository: nmelnick/log4vala
+          path: log4vala
+
+      - name: Install log4vala
+        run: cd log4vala && meson --prefix=/usr builddir && cd builddir && ninja && sudo ninja install
+
+      - uses: BSFishy/meson-build@v1.0.3
+        with:
+          action: test
