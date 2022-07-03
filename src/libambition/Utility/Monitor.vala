@@ -142,11 +142,7 @@ namespace Ambition.Utility {
 			}
 
 			var build = new Build();
-			if ( build.setup_build_directory() != 0 ) {
-				re_monitor();
-				return -1;
-			}
-			if ( build.cmake_project() != 0 ) {
+			if ( build.meson_project() != 0 ) {
 				re_monitor();
 				return -1;
 			}

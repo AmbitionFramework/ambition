@@ -73,13 +73,13 @@ namespace Ambition.Utility {
 			int exit_status;
 			try {
 				Process.spawn_command_line_sync(
-					"make clean",
+					"ninja clean",
 					out standard_output,
 					out standard_error,
 					out exit_status
 				);
 			} catch (SpawnError se) {
-				logger.error( "Unable to run make clean", se );
+				logger.error( "Unable to run ninja clean", se );
 				return -1;
 			}
 			if ( exit_status != 0 ) {
@@ -95,7 +95,7 @@ namespace Ambition.Utility {
 			int exit_status;
 			try {
 				Process.spawn_command_line_sync(
-					"rm -rf src test CMakeFiles Makefile CMakeCache.txt cmake_install.cmake CTestTestfile.cmake",
+					"rm -rf src test build.ninja meson-*",
 					out standard_output,
 					out standard_error,
 					out exit_status

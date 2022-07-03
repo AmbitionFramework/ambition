@@ -26,20 +26,13 @@
 		"scgi.threads = 10"
 	],
 	"creates": [
-		"CMakeLists.txt",
-		"build",
-		"cmake",
-		"cmake/AddCompilerFlags.cmake",
-		"cmake/FindVala.cmake",
-		"cmake/FindValadoc.cmake",
-		"cmake/OSFlags.cmake",
-		"cmake/ValaHelper.cmake",
+		"meson.build",
 		"config",
 		"config/build.conf",
 		"config/log4vala.conf",
 		"config/plugins.conf",
 		"src",
-		"src/CMakeLists.txt",
+		"src/meson.build",
 		"src/Application.vala",
 		"src/Main.vala",
 		"src/Controller",
@@ -52,7 +45,7 @@
 		"src/View/Template/Root/index.vtmpl",
 		"static",
 		"test",
-		"test/CMakeLists.txt",
+		"test/meson.build",
 		"test/InitializeTests.vala",
 		"test/ApplicationTest.vala"
 	]

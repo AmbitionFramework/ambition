@@ -39,27 +39,27 @@ namespace Ambition.Utility {
 			return null;
 		}
 
-		// Get appname from CMakeLists.txt
-		var cmakelists = File.new_for_path("CMakeLists.txt");
-		if ( !cmakelists.query_exists() ) {
-			logger().error( "Fatal: Unable to load CMakeLists.txt." );
+		// Get appname from meson.build
+		var mesonbuild = File.new_for_path("meson.build");
+		if ( !mesonbuild.query_exists() ) {
+			logger().error( "Fatal: Unable to load meson.build." );
 			return null;
 		}
 		try {
-			var input_stream = new DataInputStream( cmakelists.read() );
+			var input_stream = new DataInputStream( mesonbuild.read() );
 			string line;
 			while ( ( line = input_stream.read_line(null) ) != null ) {
-				if ( "set (APPNAME " in line ) {
-					int start = line.index_of("NAME ") + 5;
+				if ( "app_name = '" in line ) {
+					int start = line.index_of("= '") + 3;
 					string app_name = line.substring(
 						start,
-						line.index_of(")") - start
+						line.index_of("'", start) - start
 					);
 					return app_name;
 				}
 			}
 		} catch ( Error e ) {
-			logger().error( "Fatal: Unable to read CMakeLists.txt" );
+			logger().error( "Fatal: Unable to read meson.build" );
 			return null;
 		}
 

@@ -4,7 +4,7 @@
  * The Ambition Web Framework
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2014 Sensical, Inc.
+ * Copyright 2012-2022 Nick Melnick
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -100,10 +100,7 @@ namespace Ambition {
 			if ( plugin.resolve_plugins() == false ) {
 				return RESULT_FAIL;
 			}
-			if ( setup_build_directory() != RESULT_SUCCESS ) {
-				return RESULT_FAIL;
-			}
-			if ( cmake_project() != RESULT_SUCCESS ) {
+			if ( meson_project() != RESULT_SUCCESS ) {
 				return RESULT_FAIL;
 			}
 			if ( build_project() != RESULT_SUCCESS ) {
@@ -113,47 +110,33 @@ namespace Ambition {
 		}
 
 		/**
-		 * Prepare/create build directory
+		 * Run meson on current application.
 		 */
-		internal int setup_build_directory() {
-			try {
-				var build_directory = File.new_for_path("build");
-				if ( ! build_directory.query_exists() ) {
-					build_directory.make_directory();
-				}
-			} catch (Error e) {
-				logger.error( "Unable to create or query build directory: %s".printf( e.message ) );
-				return -1;
-			}
-			if ( Environment.set_current_dir("build") == -1 ) {
-				logger.error( "Unable to change to build directory" );
-				return -1;
-			}
-			return 0;
-		}
-
-		/**
-		 * Run cmake on current application.
-		 */
-		internal int cmake_project() {
+		internal int meson_project() {
 			string standard_output, standard_error;
 			int exit_status;
 
-			logger.info( "Running cmake..." );
+			File file = File.new_for_path("build/build.ninja");
+			if ( file.query_exists() ) {
+				logger.info("Build directory already exists");
+				return 0;
+			}
+
+			logger.info( "Running meson..." );
 			try {
 				Process.spawn_command_line_sync(
-					"cmake ..",
+					"meson build",
 					out standard_output,
 					out standard_error,
 					out exit_status
 				);
 			} catch (SpawnError se) {
-				logger.error( "Unable to run cmake: %s".printf( se.message ) );
+				logger.error( "Unable to run meson: %s".printf( se.message ) );
 				return_home();
 				return -1;
 			}
 			if ( exit_status != 0 ) {
-				logger.error( "Error building project files via cmake:\n%s".printf(standard_error) );
+				logger.error( "Error building project files via meson:\n%s".printf(standard_error) );
 				return_home();
 				return -1;
 			}
@@ -169,15 +152,19 @@ namespace Ambition {
 			int exit_status;
 
 			logger.info( "Building project..." );
+			if ( Environment.set_current_dir("build") == -1 ) {
+				logger.error( "Unable to change to build directory" );
+				return -1;
+			}
 			try {
 				Process.spawn_command_line_sync(
-					"make",
+					"ninja",
 					out standard_output,
 					out standard_error,
 					out exit_status
 				);
 			} catch (SpawnError se) {
-				logger.error( "Unable to run make: %s".printf( se.message ) );
+				logger.error( "Unable to run ninja: %s".printf( se.message ) );
 				return_home();
 				return -1;
 			}

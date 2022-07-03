@@ -32,6 +32,10 @@ sources = [
   'assets/serializer-test-classes.vala',
 ]
 
+# Resolve for this later, we are reading app_name from meson.build which happens
+# to be here.
+app_name = 'test'
+
 deps = [
   default_dependencies,
   declare_dependency(

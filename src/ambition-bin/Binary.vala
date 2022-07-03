@@ -254,8 +254,7 @@ public static void usage( string? method = null, bool as_interactive = false ) {
 			"Create and scaffold a new application. Provide a name for the "
 			+ "application, and it will also be used as the default namespace "
 			+ "for the new app. After the name, you may add additional "
-			+ "profiles, which are added by plugins or optional features. By "
-			+ "default, you may use 'cmake' for a CMake project.\n"
+			+ "profiles, which are added by plugins or optional features.\n"
 		);
 	}
 	if ( !as_interactive && (method == null || method == "shell" ) ) {
