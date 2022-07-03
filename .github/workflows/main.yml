@@ -18,9 +18,13 @@ jobs:
       - uses: actions/setup-python@v1
 
       - name: Install dependencies
-        run: sudo apt-get -y install software-properties-common build-essential wget git valac libglib2.0-dev libgee-0.8-dev libjson-glib-dev libreadline-dev libsoup2.4-dev meson ninja-build
+        run: sudo apt-get -y install software-properties-common build-essential wget git valac libglib2.0-dev libgee-0.8-dev libjson-glib-dev libreadline-dev libsoup2.4-dev ninja-build
 
-      - uses: actions/checkout@v3
+      - name: Install Meson
+        run: sudo pip install meson
+
+      - name: Check out log4vala
+        uses: actions/checkout@v3
         with:
           repository: nmelnick/log4vala
           path: log4vala
@@ -28,6 +32,16 @@ jobs:
       - name: Install log4vala
         run: cd log4vala && meson --prefix=/usr builddir && cd builddir && ninja && sudo ninja install
 
-      - uses: BSFishy/meson-build@v1.0.3
+      - name: Build and test
+        uses: BSFishy/meson-build@v1.0.3
         with:
           action: test
+
+      - name: Report
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Tests
+          path: build/meson-logs/*.xml
+          reporter: java-junit
+          fail-on-error: true
