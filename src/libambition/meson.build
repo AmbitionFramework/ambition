@@ -94,27 +94,27 @@ deps = [default_dependencies]
 vala_args = [default_vala_options]
 
 ambition_lib = shared_library(
-    library_name,
-    sources: sources,
-    dependencies: deps,
-    vala_args: vala_args,
-    install: true,
-    install_dir: [true, true, true]
+  library_name,
+  sources: sources,
+  dependencies: deps,
+  vala_args: vala_args,
+  install: true,
+  install_dir: [true, true, true]
 )
 
 lib_dep = declare_dependency(
-    sources: sources
+  sources: sources
 )
 
 import('pkgconfig').generate(
-    libraries: ambition_lib,
-    version: meson.project_version(),
-    name: library_name,
-    filebase: library_name,
-    description : 'Ambition Web Framework for Vala and/or GObject.'
+  libraries: ambition_lib,
+  version: meson.project_version(),
+  name: library_name,
+  filebase: library_name,
+  description : 'Ambition Web Framework for Vala and/or GObject.'
 )
 
 install_data(
-    library_name + '.deps',
-    install_dir: join_paths(get_option('datadir'), 'vala', 'vapi')
+  library_name + '.deps',
+  install_dir: join_paths(get_option('datadir'), 'vala', 'vapi')
 )

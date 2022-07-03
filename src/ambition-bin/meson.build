@@ -20,10 +20,10 @@ vala_args = [
 ]
 
 ambition_bin = executable(
-    'ambition',
-    sources: sources,
-    dependencies: deps,
-    vala_args: vala_args,
-    install: true,
-    install_dir: [true]
+  'ambition',
+  sources: sources,
+  dependencies: deps,
+  vala_args: vala_args,
+  install: true,
+  install_dir: [true]
 )

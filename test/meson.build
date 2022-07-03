@@ -43,11 +43,11 @@ deps = [
 vala_args = [default_vala_options]
 
 ambition_test = executable(
-    'test-ambition',
-    sources: sources,
-    dependencies: deps,
-    vala_args: vala_args,
-    install: false
+  'test-ambition',
+  sources: sources,
+  dependencies: deps,
+  vala_args: vala_args,
+  install: false
 )
 
 test('ambition test', ambition_test,
