@@ -31,7 +31,7 @@ namespace Ambition.Engine {
 
 		protected static HashMap<int,string> STATUS_TEXT = new HashMap<int,string>();
 		
-		static construct {
+		construct {
 			STATUS_TEXT[100] = "Continue";
 			STATUS_TEXT[101] = "Switching Protocols";
 			STATUS_TEXT[200] = "OK";

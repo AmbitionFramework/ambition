@@ -24,10 +24,10 @@ namespace Ambition.Session {
 	 * Represents session functionality on top of a session storage engine.
 	 */
 	public class Interface : Object {
-		private static const string VER = "as1";
-		private static const string HEAD_SEP = "ƍ|";
-		private static const string RECORD_SEP = "ƍƆ|/";
-		private static const string VAL_SEP = "Ɔ|ƕ";
+		private const string VER = "as1";
+		private const string HEAD_SEP = "ƍ|";
+		private const string RECORD_SEP = "ƍƆ|/";
+		private const string VAL_SEP = "Ɔ|ƕ";
 
 		public HashMap<string,string> string_params;
 

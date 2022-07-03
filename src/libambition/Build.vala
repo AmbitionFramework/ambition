@@ -23,8 +23,8 @@ namespace Ambition {
 	 * Build engine.
 	 */
 	public class Build : Object {
-		private static const int RESULT_SUCCESS = 0;
-		private static const int RESULT_FAIL = -1;
+		private const int RESULT_SUCCESS = 0;
+		private const int RESULT_FAIL = -1;
 
 		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Build");
 		internal string application_name;

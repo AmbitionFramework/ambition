@@ -21,7 +21,7 @@ using Gee;
 using Ambition.Authorization;
 
 namespace Ambition {
-	public static const string VERSION = "0.2";
+	public const string VERSION = "0.2";
 
 	/**
 	 * Retrieve framework version as an int.

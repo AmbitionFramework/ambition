@@ -23,8 +23,8 @@ extern void exit(int code);
 
 namespace Ambition.Engine {
 
-	static const int NUM_THREADS = 10;
-	private static const uint16 PORT = 8099;
+	const int NUM_THREADS = 10;
+	private const uint16 PORT = 8099;
 	
 	/**
 	 * Raw engine, implemented using sockets.

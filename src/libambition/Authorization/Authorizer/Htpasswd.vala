@@ -29,7 +29,7 @@ namespace Ambition.Authorization.Authorizer {
 		private HashMap<string,string> cache { get; set; default = new HashMap<string,string>(); }
 		private string file_path { get; set; }
 
-		private static const string sixtyfour = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+		private const string sixtyfour = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 		public void init( HashMap<string,string> config ) {
 			this.config = config;

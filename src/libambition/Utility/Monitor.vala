@@ -28,7 +28,7 @@ namespace Ambition.Utility {
 	public class Monitor : Object {
 #if !WIN32
 		private Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Utility.Monitor");
-		private static const int timeout = 1000;
+		private const int timeout = 1000;
 		private HashMap<string,FileMonitorEvent> changed_files { get; set; default = new HashMap<string,FileMonitorEvent>(); }
 		private ArrayList<FileMonitor> monitor_list = null;
 		private unowned Pid running_pid { get; set; }
