@@ -49,6 +49,14 @@ docker build --tag ambition:latest .
 docker run -it ambition:latest
 ```
 
+## Linting
+
+TBD, but:
+
+```
+docker run -v "$PWD":/app valalang/lint:latest /usr/bin/io.elementary.vala-lint -c vala-lint.conf .
+```
+
 ## Links
 
 * http://www.ambitionframework.org
