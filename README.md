@@ -49,9 +49,15 @@ docker build --tag ambition:latest .
 docker run -it ambition:latest
 ```
 
-## Linting
+## Hacking and Recommendations
 
 TBD, but:
+
+### Development Environment
+
+Highly recommend the [Vala Language Server](https://github.com/vala-lang/vala-language-server) and something along the lines of the [Vala plugin for VS Code](https://marketplace.visualstudio.com/items?itemName=prince781.vala).
+
+### Linting
 
 ```
 docker run -v "$PWD":/app valalang/lint:latest /usr/bin/io.elementary.vala-lint -c vala-lint.conf .
