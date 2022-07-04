@@ -22,6 +22,8 @@ namespace Ambition.Plugin {
 	 * Container for a Plugin manifest.json file.
 	 */
 	public class PluginManifest : Object {
+		private static Log4Vala.Logger logger = Log4Vala.Logger.get_logger("Ambition.Plugin.PluginManifest");
+
 		public string directory { get; set; }
 
 		public string? name { get; set; }
@@ -52,7 +54,7 @@ namespace Ambition.Plugin {
 					return manifest;
 				}
 			} catch ( Error e ) {
-				Log4Vala.Logger.get_logger("Ambition.Plugin.PluginManifest").error( "Fatal: Unable to load manifest from '%s'".printf( plugin_directory ), e );
+				logger.error( "Fatal: Unable to load manifest from '%s'".printf( plugin_directory ), e );
 			}
 			return null;
 		}

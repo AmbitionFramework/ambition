@@ -226,7 +226,7 @@ namespace %s.Form%s {
 			}
 
 			logger.info( "Created '%s'.".printf(full_path) );
-			alter_cmakelists();
+			alter_mesonbuild();
 			return 0;
 		}
 
@@ -260,57 +260,57 @@ namespace %s.Form%s {
 		}
 
 		/**
-		 * Add the created class to the project's CMakeLists.txt file.
+		 * Add the created class to the project's meson.build file.
 		 */
-		private bool alter_cmakelists() {
-			var cmakelists = File.new_for_path("src/CMakeLists.txt");
+		private bool alter_mesonbuild() {
+			var mesonbuild = File.new_for_path("src/meson.build");
 			var builder = new StringBuilder();
 
-			if ( !cmakelists.query_exists() ) {
-				logger.error( "Fatal: Unable to load CMakeLists.txt." );
+			if ( !mesonbuild.query_exists() ) {
+				logger.error( "Fatal: Unable to load meson.build." );
 				return false;
 			}
 			try {
-				var input_stream = new DataInputStream( cmakelists.read() );
+				var input_stream = new DataInputStream( mesonbuild.read() );
 				string line;
 				while ( ( line = input_stream.read_line(null) ) != null ) {
 					builder.append(line);
 					builder.append("\n");
 				}
 			} catch ( Error e ) {
-				logger.error( "Fatal: Unable to read CMakeLists.txt", e );
+				logger.error( "Fatal: Unable to read meson.build", e );
 				return false;
 			}
 
 			try {
-				var output_stream = cmakelists.replace( null, false, FileCreateFlags.REPLACE_DESTINATION );
+				var output_stream = mesonbuild.replace( null, false, FileCreateFlags.REPLACE_DESTINATION );
 				bool in_source_files = false;
 				string last_section = "";
 				foreach ( string line in builder.str.split("\n") ) {
 					if ( in_source_files ) {
-						string section = line.substring( 0, line.index_of("/") ).chug();
+						int start = line.index_of("'") + 1;
+						string section = line.substring( start, line.index_of("/") - start ).chug();
 						if ( last_section == "Controller" ) {
 							if ( section != last_section ) {
-								string new_line = full_path.replace( "src/", "    " ) + "\n";
+								string new_line = full_path.replace( "src/", "  '" ) + "',\n";
 								output_stream.write( new_line.data );
 							}
 						}
 						last_section = section;
 					}
-					if ( line == ")" ) {
+					if ( line == "]" ) {
 						in_source_files = false;
 					}
-					if ( "SET( APP_VALA_FILES" in line ) {
+					if ( "sources = [" in line ) {
 						in_source_files = true;
 					}
 					output_stream.write( line.data );
 					output_stream.write( "\n".data );
 				}
 			} catch ( Error e ) {
-				logger.error( "Fatal: Unable to write CMakeLists.txt", e );
+				logger.error( "Fatal: Unable to write meson.build", e );
 				return false;
 			}
-
 
 			return true;
 		}

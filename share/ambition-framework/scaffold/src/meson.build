@@ -1,5 +1,5 @@
 sources = [
-  'Controller/Root.vala'
+  'Controller/Root.vala',
 ]
 
 deps = [
