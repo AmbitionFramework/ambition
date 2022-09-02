@@ -28,6 +28,9 @@ At minimum, the following libraries are required:
 
 ## Installation
 
+The `main` branch is the current development branch, and may not be as stable
+as a release tag. For production, choose a release tag and build from there.
+
 To install the project from the Git repository, you will need Vala 0.54 or
 higher, and the Meson build system. Check out the repository, enter the
 repository directory, and enter the following:
