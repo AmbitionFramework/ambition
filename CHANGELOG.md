@@ -1,7 +1,11 @@
-# Change Log
+# Changelog
 
-## [0.2.0] - 2016-07
-- Incremented library version from 0.1 to 0.2
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+
+## [Unreleased] 0.2.0
+### Added
 - New Routing
   - Renamed Actions to Routes
   - Removed actions.conf and the parsing of actions.conf
@@ -15,7 +19,19 @@
   - Alter scaffold to support new Routes
   - Controller methods are now static methods, and can be one of four method
     signatures depending on input/output
+
+### Changed
+- Incremented library version from 0.1 to 0.2
+- Now requires Vala >= 0.54
+- Now requires log4vala 0.2
+- Migrated from CMake to Meson
+
+### Fixed
+
+### Removed/Deprecated
 - Deprecate assert_* methods in Testing library, as using those makes it more
   difficult to determine which test failed. Methods exist without the assert_
   prefix, and recommendation is now to call assert( content_is(foo) ) instead of
   assert_content_is(foo)
+
+[Unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.1.0...HEAD
