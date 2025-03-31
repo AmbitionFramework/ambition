@@ -1,5 +1,7 @@
 # Ambition Framework 0.2
 
+## This project is archived.
+
 ## What is the Ambition Web Framework?
 
 Ambition is a next-generation MVC web application framework, empowering
